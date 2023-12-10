@@ -11,6 +11,55 @@
 #include "../include/DataStructures/Functions.h"
 
 
+int parser_reservations(const char * string, Almanac * box){
+    initialize_catalog_functions();
+    initialize_utilities();
+// char * id, *name, *birth_date, *sex, *country_code, *account_status, *account_creation;
+// char * email, *phone, *passport, *address, *payment_method;
+    char * copy = strdup(string);
+    char * copy_origin = copy;
+    int res = 0;
+    char ** list = malloc(sizeof(char *)*14);
+    char *token = NULL;
+    
+    for(int i = 0;token = strsep(&copy, ";");i++)
+    list[i] = strdup(token);
+    
+    if(Util.validations.string(list[0])
+    && Util.validations.string(list[1])){
+        User * user = Catalog.user.get.user(box,list[1]);
+        if(user != NULL){
+            Data.user.free(user);
+        if(Util.validations.string(list[2])
+        && Util.validations.string(list[3])
+        && Util.validations.string(list[4]) && Util.validations.number(1,list[4],5)
+        && Util.validations.string(list[5]) && Util.validations.number(0,list[5],1000)
+        && Util.validations.string(list[6])
+        && Util.validations.string(list[7]) && Util.validations.date(list[7],0)
+        && Util.validations.string(list[8]) && Util.validations.date(list[8],0)  && ((strcmp(list[8],list[7]))>0)
+        && Util.validations.string(list[9]) && Util.validations.number(0,list[9],1000000)
+        && Util.validations. breakfast(list[10])
+        && Util.validations.string(list[11]) && Util.validations.rating(list[11])){
+            // User * user = Data.user.set(list[0],list[1],list[4],list[5],list[7],list[11],list[9]);
+            // Catalog.user.insert(box,user);
+            res ++;
+            }
+        }
+    }
+
+    for(int i = 0; i < 14; i++){
+        // printf("%s/",list[i]);
+        free(list[i]);
+    }
+
+    // printf("\n");
+    free(list);
+    free(copy_origin);
+    free(token);
+
+    return res;
+}
+
 
 int parser_users(const char * string, Almanac * box){
     initialize_catalog_functions();
@@ -100,6 +149,24 @@ int parser_flight(const char * string, Almanac * box){
             flight = Data.flight.new(list[0]);
             Data.flight.set(flight,list[1],list[2],list[4],list[5],list[6],list[8],list[7]);
             Catalog.flight.insert(box,flight);
+
+            // Catalog.user.add.flight(box,id,flight,begin);
+            SList * a = Catalog.flight.get.passengers(box,id_num);
+
+            int amount = Data.slist.get.amount(a);
+            char ** listA = Data.slist.get.listA(a);
+            char ** listB = Data.slist.get.listB(a);
+
+            for(int i = 0; i < amount; i++){
+                Catalog.user.add.flight(box,listA[i],listB[i],list[6]);
+                free(listA[i]);
+                free(listB[i]);
+            }
+
+            free(listA);
+            free(listB);
+            Data.slist.free(a);
+
         }
     }
 

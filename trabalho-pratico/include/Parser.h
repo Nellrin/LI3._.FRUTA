@@ -5,6 +5,7 @@ typedef struct flight Flight;
 typedef struct almanac Almanac;
 
 
+int parser_reservations(const char * string, Almanac * box);
 int parser_users(const char * string, Almanac * box);
 int parser_flight(const char * string, Almanac * box);
 int parser_passengers(const char * string, Almanac * box);
