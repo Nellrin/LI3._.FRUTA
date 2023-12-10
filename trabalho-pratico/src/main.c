@@ -293,6 +293,7 @@ Almanac * u = new_almanac();
         parser(argv[1],"users",u,parser_users);
         parser(argv[1],"passengers",u,count_passengers);
         parser(argv[1],"flights",u,parser_flight);
+        parser(argv[1],"passengers",u,parser_passengers);
         break;
 
     case 1:

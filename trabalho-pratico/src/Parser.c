@@ -117,45 +117,42 @@ int parser_flight(const char * string, Almanac * box){
     return res;
 }
 
-// int parser_passengers(const char * string, Almanac * box){
-//     initialize_utilities();
-//     initialize_functions();
+int parser_passengers(const char * string, Almanac * box){
+
+    initialize_utilities();
+    initialize_functions();
+    
+    char * copy = strdup(string);
+    char * copy_origin = copy;
+    int res = 0;
+    char ** list = malloc(sizeof(char *)*2);
+    char *token = NULL;
+    
+    for(int i = 0;token = strsep(&copy, ";");i++)
+    list[i] = strdup(token);
 
     
-//     char * copy = strdup(string);
-//     char * copy_origin = copy;
-//     char ** list = malloc(sizeof(char *)*2);
-//     char *token = NULL;
-    
-//     for(int i = 0;token = strsep(&copy, ";");i++)
-//     list[i] = strdup(token);
+    if(Util.validations.string(list[0])&& Util.validations.string(list[1])){
+        User * user = Catalog.user.get.user(box,list[1]);
+        if(user!=NULL){
+            Data.user.free(user);
+            Flight * flight = Catalog.flight.get.flight(box,list[0],1);
+            if(flight!=NULL){
+                Data.flight.free(flight);
+                res++;
+            }
+        }
+    }
 
-    
-//     if(Util.validations.string(list[0])&& Util.validations.string(list[1])){
-//         User * user = find_user(box->users->users,list[1]);
-//         if(user!=NULL){
-//         Flight * flight = find_flight(box->flights,list[0]);
-        
-//         if(flight == NULL){
-//             flight = Data.flight.new(list[0]);
-//             add_catalog_flight(box,flight,list[0]);
-//         }
+    for(int i = 0; i < 2; i++)
+    free(list[i]);
 
-//         else
-//         Data.flight.add_passenger(flight);
-//         }
-//     }   
+    free(list);
+    free(copy_origin);
+    free(token);
 
-
-//     for(int i = 0; i < 2; i++)
-//     free(list[i]);
-
-//     free(list);
-//     free(copy_origin);
-//     free(token);
-
-//     return 0;
-// }
+    return res;
+}
 
 int count_passengers(const char * string, Almanac * box){
     initialize_utilities();
@@ -192,7 +189,6 @@ int count_passengers(const char * string, Almanac * box){
 void parser(char * path,char * type,Almanac * box, int (*f)(const char *, Almanac *)){
     initialize_catalog_functions();
 
-
     char * name = malloc(sizeof(char)*200);
 
     int take_nl,amount = 0;
@@ -204,7 +200,9 @@ void parser(char * path,char * type,Almanac * box, int (*f)(const char *, Almana
 
     name = malloc(sizeof(char)*200);
     snprintf(name, 200, "Resultados/%s_errors.csv", type);
-    FILE * errors = create_file(name,"a");
+
+
+    FILE * errors = create_file(name,"w");
 
 
     char *head = NULL;
@@ -212,7 +210,7 @@ void parser(char * path,char * type,Almanac * box, int (*f)(const char *, Almana
     if(getline(&head, &len, file));
     write_line(errors,head);
     
-    int i = 0;
+    
     while (getline(&head, &len, file) != -1) {
         char *line = strdup(head);
         take_nl = strlen(head)-1;
@@ -221,14 +219,13 @@ void parser(char * path,char * type,Almanac * box, int (*f)(const char *, Almana
         if(f(head,box))
         amount++;
 
-        else{
-        // printf("%s",line);
+        else
         write_line(errors,line);
-        }
         // printf("%s\n",head);
+        
+        
         free(line);
-
-        i ++;
+        // free(type_file);
         // printf(" [%d] ",i);
     }
 
