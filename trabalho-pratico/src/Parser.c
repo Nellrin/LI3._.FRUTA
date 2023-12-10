@@ -6,12 +6,14 @@
 #include "../include/Utilities.h"
 #include "../include/Output.h"
 // #include "../include/Catalogs/Flight_Catalog.h"
-#include "../include/Catalogs/User_Catalog.h"
+// #include "../include/Catalogs/User_Catalog.h"
+#include "../include/Catalogs/Catalog_Functions.h"
 #include "../include/DataStructures/Functions.h"
 
 
 
-int parser_users(const char * string, Almanac_Users * box){
+int parser_users(const char * string, Almanac * box){
+    initialize_catalog_functions();
     initialize_utilities();
 // char * id, *name, *birth_date, *sex, *country_code, *account_status, *account_creation;
 // char * email, *phone, *passport, *address, *payment_method;
@@ -37,9 +39,8 @@ int parser_users(const char * string, Almanac_Users * box){
     && Util.validations.string(list[10])
     && Util.validations.string(list[11]) && Util.validations.account_status(list[11])
     && Util.validations.email(list[2])){
-
         User * user = Data.user.set(list[0],list[1],list[4],list[5],list[7],list[11],list[9]);
-        insert_user(box,user);
+        Catalog.user.insert(box,user);
         res ++;
     }
 
@@ -56,65 +57,65 @@ int parser_users(const char * string, Almanac_Users * box){
     return res;
 }
 
-// int parser_flight(const char * string, Almanac * box){
-//     initialize_utilities();
+int parser_flight(const char * string, Almanac * box){
+    initialize_utilities();
+    initialize_catalog_functions();
 
-// // real_departure_date real_arrival_date pilot copilot notes
+// real_departure_date real_arrival_date pilot copilot notes
 
-//     char * copy = strdup(string);
-//     char * copy_origin = copy;
-//     int res = 0;
-//     char ** list = malloc(sizeof(char *)*13);
-//     char *token = NULL;
-//     Flight * flight;
+    char * copy = strdup(string);
+    char * copy_origin = copy;
+    int res = 0;
+    char ** list = malloc(sizeof(char *)*13);
+    char *token = NULL;
+    Flight * flight;
     
-//     for(int i = 0;token = strsep(&copy, ";");i++)
-//     list[i] = strdup(token);
+    for(int i = 0;token = strsep(&copy, ";");i++)
+    list[i] = strdup(token);
     
-//     if(Util.validations.string(list[0])
-//     && Util.validations.string(list[1])
-//     && Util.validations.string(list[2])
-//     && Util.validations.string(list[3])){
+    if(Util.validations.string(list[0])
+    && Util.validations.string(list[1])
+    && Util.validations.string(list[2])
+    && Util.validations.string(list[3])){
 
-//         int amount = atoi(list[3]),seats = 0;
+        int amount = atoi(list[3]),seats = 0, id_num = atoi(list[0]);
         
-//         flight = find_flight(box->flights,list[0]);
+        SList * x = Catalog.flight.get.passengers(box,id_num);
         
-//         if(flight != NULL)
-//         seats = Data.flight.get.passengers(flight);
+        seats = Data.slist.get.amount(x);
 
-//         printf("%s %d<%d\n",list[0], amount, seats);
+        Data.slist.free(x);
+        printf("%s (available %d) < (%d true)\n",list[0], amount, seats);
     
-//         if(amount>=seats 
-//         && Util.validations.string(list[4]) && Util.validations.airport(list[4])
-//         && Util.validations.string(list[5]) && Util.validations.airport(list[5])  && (strcmp(list[4], list[5]) != 0)
-//         && Util.validations.string(list[6]) && Util.validations.date(list[6],1)
-//         && Util.validations.string(list[7]) && Util.validations.date(list[7],1) && strcmp(list[7],list[6])
-//         && Util.validations.string(list[8]) && Util.validations.date(list[8],1) && ((strcmp(list[8],list[6]))>=0)
-//         && Util.validations.string(list[9]) && Util.validations.date(list[9],1) && ((strcmp(list[9],list[7]))>=0)
-//         && Util.validations.string(list[10])
-//         && Util.validations.string(list[11])
-//         && Util.validations.string(list[12])){
-//             res ++;
-//             Data.flight.set(flight,list[1],list[2],list[4],list[5],list[6],list[8],list[7],seats);
-//             add_catalog_flight(box,flight,list[8]);
-//             printf ("%s\n",list[0]);
-//         }
-//     }
+        if(amount>=seats 
+        && Util.validations.string(list[4]) && Util.validations.airport(list[4])
+        && Util.validations.string(list[5]) && Util.validations.airport(list[5])  && (strcmp(list[4], list[5]) != 0)
+        && Util.validations.string(list[6]) && Util.validations.date(list[6],1)
+        && Util.validations.string(list[7]) && Util.validations.date(list[7],1) && strcmp(list[7],list[6])
+        && Util.validations.string(list[8]) && Util.validations.date(list[8],1) && ((strcmp(list[8],list[6]))>=0)
+        && Util.validations.string(list[9]) && Util.validations.date(list[9],1) && ((strcmp(list[9],list[7]))>=0)
+        && Util.validations.string(list[10])
+        && Util.validations.string(list[11])){
+            res ++;
+            flight = Data.flight.new(list[0]);
+            Data.flight.set(flight,list[1],list[2],list[4],list[5],list[6],list[8],list[7]);
+            Catalog.flight.insert(box,flight);
+        }
+    }
 
-//     for(int i = 0; i < 13; i++){
-//         // printf("%s/",list[i]);
-//         free(list[i]);
-//         }
+    for(int i = 0; i < 13; i++){
+        // printf("%s/",list[i]);
+        free(list[i]);
+        }
 
-//     // printf("\n");
-//     free(list);
-//     free(copy_origin);
-//     free(token);
+    // printf("\n");
+    free(list);
+    free(copy_origin);
+    free(token);
 
 
-//     return res;
-// }
+    return res;
+}
 
 // int parser_passengers(const char * string, Almanac * box){
 //     initialize_utilities();
@@ -156,42 +157,41 @@ int parser_users(const char * string, Almanac_Users * box){
 //     return 0;
 // }
 
-// int count_passengers(const char * string, Almanac * box){
-//     initialize_utilities();
-//     initialize_functions();
+int count_passengers(const char * string, Almanac * box){
+    initialize_utilities();
+    initialize_functions();
     
-//     char * copy = strdup(string);
-//     char * copy_origin = copy;
-//     int res = 1;
-//     char ** list = malloc(sizeof(char *)*2);
-//     char *token = NULL;
+    char * copy = strdup(string);
+    char * copy_origin = copy;
+    int res = 1;
+    char ** list = malloc(sizeof(char *)*2);
+    char *token = NULL;
     
-//     for(int i = 0;token = strsep(&copy, ";");i++)
-//     list[i] = strdup(token);
+    for(int i = 0;token = strsep(&copy, ";");i++)
+    list[i] = strdup(token);
 
     
-//     if(Util.validations.string(list[0])&& Util.validations.string(list[1])){
-//         User * user = find_user(box->users->users,list[1]);
-//         if(user!=NULL){
-//             Flight * a = find_flight(box->flights,list[0]);
+    if(Util.validations.string(list[0])&& Util.validations.string(list[1])){
+        User * user = Catalog.user.get.user(box,list[1]);
+        if(user!=NULL){
+            Data.user.free(user);
+            Catalog.flight.add_passenger(box,list[1],list[0]);
+        }
+    }
 
-//             if(a!=NULL)
-//             Data.flight.add_passenger(a);
-//         }
+    for(int i = 0; i < 2; i++)
+    free(list[i]);
 
-//     }
+    free(list);
+    free(copy_origin);
+    free(token);
 
-//     for(int i = 0; i < 2; i++)
-//     free(list[i]);
+    return res;
+}
 
-//     free(list);
-//     free(copy_origin);
-//     free(token);
+void parser(char * path,char * type,Almanac * box, int (*f)(const char *, Almanac *)){
+    initialize_catalog_functions();
 
-//     return res;
-// }
-
-void parser(char * path,char * type,Almanac_Users * box, int (*f)(const char *, Almanac_Users *)){
 
     char * name = malloc(sizeof(char)*200);
 
@@ -212,6 +212,7 @@ void parser(char * path,char * type,Almanac_Users * box, int (*f)(const char *, 
     if(getline(&head, &len, file));
     write_line(errors,head);
     
+    int i = 0;
     while (getline(&head, &len, file) != -1) {
         char *line = strdup(head);
         take_nl = strlen(head)-1;
@@ -226,6 +227,9 @@ void parser(char * path,char * type,Almanac_Users * box, int (*f)(const char *, 
         }
         // printf("%s\n",head);
         free(line);
+
+        i ++;
+        // printf(" [%d] ",i);
     }
 
     printf("\n\n%d\n\n",amount);

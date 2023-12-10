@@ -3,8 +3,6 @@
 
 typedef struct String_list SList;
 typedef struct user User;
-typedef struct Collection Almanac;
-
 
 typedef struct almanac_users Almanac_Users;
 

@@ -81,14 +81,18 @@ void prefix_sort(Almanac_Users * box){
 ////////////////////////////////////////////////////////
 static int key_finder(Almanac_Users * box, char * id){
     int key = hash_user(id);
+    if(box->list_users[key]==NULL)
+    return -1;
 
     char * new_id = Data.user.get.id(box->list_users[key]);
     for(int i = 0; strcmp(new_id,id)!=0; i++){
         free(new_id);
 
-            if(i >500)
+            if(i >50000)
             return -1;
 
+        key = (key + 1) % 10000000;
+        while(box->list_users[key]==NULL)
         key = (key + 1) % 10000000;
         new_id = Data.user.get.id(box->list_users[key]);
     }
@@ -106,7 +110,7 @@ User * almanac_users_user_getter(Almanac_Users * box, char * id){
 
     int key = key_finder(box,id);
 
-    if(key == -1)
+    if(key == -1 || box->list_users[key] == NULL)
     return NULL;
 
     User * a = Data.user.get.user(box->list_users[key]);

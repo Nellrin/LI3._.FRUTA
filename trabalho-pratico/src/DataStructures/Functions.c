@@ -55,6 +55,7 @@ static Flight_Functions create_flight_functions(){
         flight.get.schedule_arrival = flight_schedule_arrival_date_getter;
         flight.get.passengers = flight_passengers_getter;
         flight.get.delay = flight_delay_date_getter;
+        flight.get.flight = flight_flight_getter;
         
         flight.free = free_flight;
 
@@ -132,6 +133,7 @@ static Airport_Functions create_airport_functions(){
     airport.get.id = airport_id_getter;
     airport.get.median = airport_median_getter;
     airport.get.passengers_year = airport_passenger_year_getter;
+    airport.get.airport = get_airport;
     airport.sort = sort_airport_slists;
 
     return airport;

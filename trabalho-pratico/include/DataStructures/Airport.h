@@ -24,6 +24,7 @@ SList * airport_dates_flights_getter(Airport *a);
 int airport_flights_amount_getter(Airport *a);
 char ** airport_flights_getter(Airport *a);
 char ** airport_dates_getter(Airport *a);
+Airport * get_airport(Airport * a);
 ////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////

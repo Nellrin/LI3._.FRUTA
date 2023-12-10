@@ -61,6 +61,7 @@ typedef struct airport Airport;
         char * (*destination)(Flight *);
         char * (*schedule_departure)(Flight *);
         char * (*schedule_arrival)(Flight *);
+        Flight * (*flight)(Flight *,int);
         
         int (*passengers)(Flight *);
         int (*delay)(Flight *);
@@ -70,7 +71,7 @@ typedef struct airport Airport;
         Flight * (*new)(char *);
         void (*set)(Flight *,char *,char *, char *, char *, char *, char *,char *);
         Flight_Functions_Getters get;
-        void (*add_passenger)(Flight *);
+        void (*add_passenger)(Flight *, int);
         void (*free) (Flight *);
         void (*print) (Flight *);
     }Flight_Functions;
@@ -130,6 +131,7 @@ typedef struct airport Airport;
         int (*flights_amount)(Airport *);        
         char ** (*flights)(Airport *);        
         char ** (*dates)(Airport *);        
+        Airport * (*airport)(Airport *);        
     }Airport_Functions_Getters;
 
     typedef struct airport_f {

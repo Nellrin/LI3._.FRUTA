@@ -221,4 +221,18 @@ char ** airport_dates_getter(Airport *a){
 void sort_airport_slists(Airport * a){
     slist_sort(a->dates_flights);
 }
+Airport * get_airport(Airport * a){
+    Airport * x = malloc(sizeof(Airport));
+    x->dates_flights = airport_dates_flights_getter(a);
+    x->id = airport_id_getter(a);
+    x->median = malloc(sizeof(int));
+    x->median[0] = airport_median_getter(a);
+    x->years = a->years;
+    x->passengers = malloc(sizeof(int) * a->years);
+
+    for(int i = 0; i < x->years;i++)
+    x->passengers[i] = a->passengers[i];
+
+    return x;
+}
 ////////////////////////////////////////////////////////

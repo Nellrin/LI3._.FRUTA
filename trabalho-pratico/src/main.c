@@ -3,7 +3,9 @@
 #include <string.h>
 // #include <glib.h>
 #include "../include/DataStructures/Functions.h"
-#include "../include/Catalogs/User_Catalog.h"
+// #include "../include/Catalogs/User_Catalog.h"
+#include "../include/Catalogs/Catalog.h"
+#include "../include/Catalogs/Catalog_Functions.h"
 #include "../include/Utilities.h"
 #include "../include/Parser.h"
 
@@ -26,6 +28,7 @@
 
 Functions Data;
 Utilities Util;
+Catalog_Functions Catalog;
 
 void test_user(){
     // Functions Data = create_functions();
@@ -102,43 +105,43 @@ void test_user_catalog(){
     
     Data.user.sort(a);
 
-    Almanac_Users * u = new_user_almanac();
+    Almanac * u = new_almanac();
 
-    insert_user(u,a);
-    almanac_users_remove_flight(u,"124969824","4567");
-    almanac_users_remove_flight(u,"124969824","2000");
-    almanac_users_remove_flight(u,"124969824","2000");
-    almanac_users_remove_flight(u,"124969824","1234");
-    almanac_users_remove_flight(u,"124969824","2323");
-    almanac_users_remove_flight(u,"124969824","2000");
-    almanac_users_remove_flight(u,"124969824","2000");
-    almanac_users_remove_flight(u,"124969824","1234");
+    // insert_user(u,a);
+    // almanac_users_remove_flight(u,"124969824","4567");
+    // almanac_users_remove_flight(u,"124969824","2000");
+    // almanac_users_remove_flight(u,"124969824","2000");
+    // almanac_users_remove_flight(u,"124969824","1234");
+    // almanac_users_remove_flight(u,"124969824","2323");
+    // almanac_users_remove_flight(u,"124969824","2000");
+    // almanac_users_remove_flight(u,"124969824","2000");
+    // almanac_users_remove_flight(u,"124969824","1234");
     
     
-    insert_user(u,b);
-    insert_user(u,c);
+    // insert_user(u,b);
+    // insert_user(u,c);
 
-    prefix_sort(u);
-
-
-    almanac_users_add_flight(u,"1234","HOY","");
-    almanac_users_add_flight(u,"124969824","HOY","");
-    almanac_users_add_flight(u,"124969824","HOY","2020/12/10");
-    User * p = almanac_users_user_getter(u,"124969824");
-
-    Data.user.print(p);
-    Data.user.free(p);
+    // prefix_sort(u);
 
 
+    // almanac_users_add_flight(u,"1234","HOY","");
+    // almanac_users_add_flight(u,"124969824","HOY","");
+    // almanac_users_add_flight(u,"124969824","HOY","2020/12/10");
+    // User * p = almanac_users_user_getter(u,"124969824");
 
-    User * r = almanac_users_user_getter(u,"1234");
-    User * e = almanac_users_user_getter(u,"4");
+    // Data.user.print(p);
+    // Data.user.free(p);
 
-    Data.user.print(r);
-    Data.user.free(r);
-    Data.user.free(e);
 
-    destroy_user_almanac(u);
+
+    // User * r = almanac_users_user_getter(u,"1234");
+    // User * e = almanac_users_user_getter(u,"4");
+
+    // Data.user.print(r);
+    // Data.user.free(r);
+    // Data.user.free(e);
+
+    // destroy_user_almanac(u);
 } 
 void test_reservation(){
     
@@ -168,12 +171,12 @@ void test_flight(){
     Data.flight.set(a,"Moist Airlines","Dope","Florida","Anywhere","2023/11/12 12:30:00","2023/11/12 12:45:00","2023/11/12 14:30:00");
 
 
-    Data.flight.add_passenger(a);
-    Data.flight.add_passenger(a);
-    Data.flight.add_passenger(a);
-    Data.flight.add_passenger(a);
-    Data.flight.add_passenger(a);
-    Data.flight.add_passenger(a);
+    Data.flight.add_passenger(a,500);
+    Data.flight.add_passenger(a,599);
+    Data.flight.add_passenger(a,500);
+    Data.flight.add_passenger(a,500);
+    Data.flight.add_passenger(a,600);
+    Data.flight.add_passenger(a,600);
 
     Data.flight.print(a);
 
@@ -257,8 +260,8 @@ void test_airport(){
 
     User * u = Data.user.set("124969824","Frank Sinatra", "1932/12/11", "F", "PT", "active","1932/12/11");
 
-    Data.flight.add_passenger(f);
-    Data.flight.add_passenger(f);
+    Data.flight.add_passenger(f,500);
+    Data.flight.add_passenger(f,300);
     
     Airport * a = Data.airport.set(f);
     
@@ -273,6 +276,7 @@ void test_airport(){
 int main(int argc, char *argv[]) {
     initialize_functions();
     initialize_utilities();
+    initialize_catalog_functions();
 
 
     // test_flight();
@@ -282,13 +286,13 @@ int main(int argc, char *argv[]) {
     // test_airport();
     // test_user_catalog();
 
-Almanac_Users * u = new_user_almanac();
+Almanac * u = new_almanac();
 
     switch (argc){
     case 3:
         parser(argv[1],"users",u,parser_users);
-        // parser(argv[1],"passengers",box,count_passengers);
-        // parser(argv[1],"flights",box,parser_flight);
+        parser(argv[1],"passengers",u,count_passengers);
+        parser(argv[1],"flights",u,parser_flight);
         break;
 
     case 1:
@@ -300,7 +304,9 @@ Almanac_Users * u = new_user_almanac();
         break;
     }
 
-destroy_user_almanac(u);
+    
+
+    destroy_almanac(u);
 
 
     return 0;

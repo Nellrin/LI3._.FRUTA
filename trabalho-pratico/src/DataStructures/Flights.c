@@ -43,8 +43,8 @@ Flight * new_flight(char * id){
 
     return a;
 }
-void add_passenger(Flight * a){
-    a->passengers++;
+void add_passenger(Flight * a, int x){
+    a->passengers+= x;
 }
 void flight_setter(Flight * a,char * airline, char * plane_model, char * origin, char * destination, char * schedule_departure_date,char * real_departure_date, char * schedule_arrival_date){    
     initialize_utilities();
@@ -104,16 +104,41 @@ int flight_delay_date_getter(Flight * a){
 
     return delay;
 }
+Flight * flight_flight_getter(Flight * a, int num){
+    
+    if(a != NULL){
+
+        Flight * x = malloc(sizeof(Flight));
+        x->id = flight_id_getter(a);
+        x->passengers = a->passengers;
+        
+        if(num){
+            x->airline = flight_airline_getter(a);
+            x->delay = a->delay;
+            x->destination = flight_destination_getter(a);
+            x->origin = flight_origin_getter(a);
+            x->plane_model = flight_plane_model_getter(a);
+            x->schedule_arrival_date = flight_schedule_arrival_date_getter(a);
+            x->schedule_departure_date = flight_schedule_departure_date_getter(a);
+        }
+    
+        return x;
+    }
+
+    return NULL;
+}
 ////////////////////////////////////////////////////////
 void free_flight(Flight *a) {
     if (a != NULL) {
         free(a->id);
-        free(a->airline);
-        free(a->plane_model);
-        free(a->origin);
-        free(a->destination);
-        free(a->schedule_departure_date);
-        free(a->schedule_arrival_date);
+        if(a->airline!=NULL){
+            free(a->airline);
+            free(a->plane_model);
+            free(a->origin);
+            free(a->destination);
+            free(a->schedule_departure_date);
+            free(a->schedule_arrival_date);
+        }
 
         free(a);
     }

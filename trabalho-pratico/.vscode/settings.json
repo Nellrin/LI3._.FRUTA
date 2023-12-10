@@ -7,6 +7,11 @@
         "functions.h": "c",
         "utilities.h": "c",
         "parser.h": "c",
-        "output.h": "c"
+        "output.h": "c",
+        "catalog.h": "c",
+        "flight_catalog.h": "c",
+        "flights.h": "c",
+        "stdlib.h": "c",
+        "catalog_functions.h": "c"
     }
 }

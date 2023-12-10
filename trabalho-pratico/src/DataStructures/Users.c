@@ -87,6 +87,9 @@ User * user_setter(char * id,char * name, char * birth_date, char * sex, char * 
 }
 ////////////////////////////////////////////////////////
 char * user_id_getter(User * a){
+    if(a==NULL)
+    return NULL;
+    
     char * id = strdup(a->id);
 
     return id;
