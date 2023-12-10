@@ -5,7 +5,7 @@
 #include "../include/DataStructures/Functions.h"
 #include "../include/Catalogs/User_Catalog.h"
 #include "../include/Utilities.h"
-// #include "../include/Parser.h"
+#include "../include/Parser.h"
 
 // #include "../include/DataStructures/SLists.h"
 // #include "../include/DataStructures/Airport.h"
@@ -280,11 +280,13 @@ int main(int argc, char *argv[]) {
     // test_reservation();
     // test_Hotel();
     // test_airport();
-test_user_catalog();
+    // test_user_catalog();
+
+Almanac_Users * u = new_user_almanac();
 
     switch (argc){
     case 3:
-        // parser(argv[1],"users",box,parser_users);
+        parser(argv[1],"users",u,parser_users);
         // parser(argv[1],"passengers",box,count_passengers);
         // parser(argv[1],"flights",box,parser_flight);
         break;
@@ -298,6 +300,7 @@ test_user_catalog();
         break;
     }
 
+destroy_user_almanac(u);
 
 
     return 0;
