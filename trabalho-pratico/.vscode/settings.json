@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "user_catalog.h": "c",
+        "slists.h": "c",
+        "users.h": "c",
+        "string.h": "c",
+        "functions.h": "c",
+        "utilities.h": "c"
+    }
+}

@@ -27,6 +27,7 @@ char * user_account_status_getter(User * a);
 double user_total_spent_getter(User * a);
 SList * user_flight_getter(User * a);
 SList * user_reservation_getter(User * a);
+User * user_copy(User * a);
 ////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////

@@ -139,6 +139,27 @@ SList * user_reservation_getter(User * a){
     slist_copy(x,a->reservations_done);
     return x;
 }
+
+User * user_copy(User * a){
+    User * res = malloc(sizeof(User));
+
+    res->id = strdup(a->id);
+    res->name = strdup(a->name);
+    res->birth_date = strdup(a->birth_date);
+    res->sex = strdup(a->sex);
+    res->country_code = strdup(a->country_code);
+    res->account_status = strdup(a->account_status);
+    res->account_creation = strdup(a->account_creation);
+    res->total_spent = a->total_spent;
+
+    res->flights_went = slist_setter();
+    res->reservations_done = slist_setter();
+
+    slist_copy(res->flights_went,a->flights_went);
+    slist_copy(res->reservations_done,a->reservations_done);
+
+    return res;
+}
 ////////////////////////////////////////////////////////
 void free_user(User *a) {
     if (a != NULL) {
@@ -163,10 +184,11 @@ void user_add_flight(User * a, char * id, char * date){
         return;
     int amount = slists_amount_getter(a->flights_went);
     
+    if(!strcmp("",date))
     insert_slistB(a->flights_went,id);
 
-    if(strcmp("",date)!=0)
-        insert_slistA(a->flights_went,date,id);
+    else
+    insert_slistA(a->flights_went,date,id);
     
 }
 void user_add_reservation(User * a, char * id, char * date, float amount_spent){

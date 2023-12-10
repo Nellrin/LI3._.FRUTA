@@ -3,6 +3,7 @@
 #include <string.h>
 // #include <glib.h>
 #include "../include/DataStructures/Functions.h"
+#include "../include/Catalogs/User_Catalog.h"
 #include "../include/Utilities.h"
 // #include "../include/Parser.h"
 
@@ -81,6 +82,63 @@ void test_user(){
 
     
     Data.user.free(a);
+} 
+void test_user_catalog(){
+    // Functions Data = create_functions();
+    User * a = Data.user.set("124969824","Frank Sinatra", "1932/12/11", "F", "PT", "active","1932/12/11");
+    User * b = Data.user.set("1234","BRANK BINATRA", "1932/12/11", "F", "PT", "active","1932/12/11");
+    User * c = Data.user.set("4","crank cinacra", "1932/12/11", "F", "PT", "active","1932/12/11");
+    
+    Data.user.add.flight(a,"4567","2023/12/10");
+    Data.user.add.flight(a,"1234","2023/12/10");
+    Data.user.add.flight(a,"2000","2023/12/10");
+    Data.user.add.flight(a,"2323","2021/12/10");
+    Data.user.add.flight(a,"9999","2020/12/10");
+
+    
+    Data.user.add.reservation(a,"AAAA","2018/12/10",10.200);
+    Data.user.add.reservation(a,"VVVV","2012/12/10",100.200);
+    Data.user.add.reservation(a,"BBBB","2011/12/10",299.200);
+    
+    Data.user.sort(a);
+
+    Almanac_Users * u = new_user_almanac();
+
+    insert_user(u,a);
+    almanac_users_remove_flight(u,"124969824","4567");
+    almanac_users_remove_flight(u,"124969824","2000");
+    almanac_users_remove_flight(u,"124969824","2000");
+    almanac_users_remove_flight(u,"124969824","1234");
+    almanac_users_remove_flight(u,"124969824","2323");
+    almanac_users_remove_flight(u,"124969824","2000");
+    almanac_users_remove_flight(u,"124969824","2000");
+    almanac_users_remove_flight(u,"124969824","1234");
+    
+    
+    insert_user(u,b);
+    insert_user(u,c);
+
+    prefix_sort(u);
+
+
+    almanac_users_add_flight(u,"1234","HOY","");
+    almanac_users_add_flight(u,"124969824","HOY","");
+    almanac_users_add_flight(u,"124969824","HOY","2020/12/10");
+    User * p = almanac_users_user_getter(u,"124969824");
+
+    Data.user.print(p);
+    Data.user.free(p);
+
+
+
+    User * r = almanac_users_user_getter(u,"1234");
+    User * e = almanac_users_user_getter(u,"4");
+
+    Data.user.print(r);
+    Data.user.free(r);
+    Data.user.free(e);
+
+    destroy_user_almanac(u);
 } 
 void test_reservation(){
     
@@ -222,7 +280,7 @@ int main(int argc, char *argv[]) {
     // test_reservation();
     // test_Hotel();
     // test_airport();
-
+test_user_catalog();
 
     switch (argc){
     case 3:

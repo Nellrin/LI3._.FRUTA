@@ -32,6 +32,7 @@ typedef struct airport Airport;
         
         SList * (*flights)(User *);
         SList * (*reservations)(User *);
+        User * (*user)(User *);
     }User_Functions_Getters;
 
 

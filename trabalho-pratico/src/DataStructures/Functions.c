@@ -26,6 +26,7 @@ static User_Functions create_user_functions(){
         
         user.get.flights = user_flight_getter;
         user.get.reservations = user_reservation_getter;
+        user.get.user = user_copy;
 
     user.free = free_user;
     user.sort = sort_user_slists;

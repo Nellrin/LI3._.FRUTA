@@ -84,23 +84,39 @@ void free_slists(SList * a) {
         free(a);
     }
 }
-void remove_element(SList *a, char * str) {    
+void remove_element(SList *a, char * str) {
+    if(a->amount>0){
+
     int x;
     for(x = 0; x < a->amount; x++){
         if(!strcmp(a->listB[x],str)){
+            if(a->listA[x]!=NULL)
             free(a->listA[x]);
+
+            if(x!=a->amount-1)
+            a->listA[x] = strdup(a->listA[x+1]);
+
+            if(a->listB[x]!=NULL)
             free(a->listB[x]);
-        }    
+
+            if(x!=a->amount-1)
+            a->listB[x] = strdup(a->listB[x+1]);
+        }
     }
 
-    // Shift the remaining elements to fill the gap
     for (int i = x; i < a->amount - 1; i++) {
         a->listA[i] = a->listA[i + 1];
         a->listB[i] = a->listB[i + 1];
     }
 
-    // Decrement the number of elements
+            if(a->listA[a->amount-1]!=NULL)
+            free(a->listA[a->amount-1]);
+
+            if(a->listB[a->amount-1]!=NULL)
+            free(a->listB[a->amount-1]);
+
     a->amount--;
+    }    
 }
 ////////////////////////////////////////////////////////
 static void swapStrings(char **str1, char **str2) {
