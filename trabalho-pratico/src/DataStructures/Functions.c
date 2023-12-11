@@ -112,6 +112,7 @@ static Hotel_Functions create_hotel_functions(){
     hotel.get.reservation = hotel_reservation_getter;
     hotel.get.dates = hotel_dates_getter;
     hotel.get.revenue = hotel_revenue_getter;
+    hotel.get.hotel = hotel_copy;
 
     return hotel;
 }

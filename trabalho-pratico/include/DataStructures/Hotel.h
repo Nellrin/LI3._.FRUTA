@@ -22,6 +22,7 @@ double hotel_ppn_getter(Hotel * a);
 SList * hotel_reservation_getter(Hotel * a);
 SList * hotel_dates_getter(Hotel * a);
 double hotel_revenue_getter(Hotel * a,char * begin, char * end);
+Hotel * hotel_copy(Hotel * a);
 ////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////

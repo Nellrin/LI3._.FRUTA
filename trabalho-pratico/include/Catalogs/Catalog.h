@@ -46,5 +46,14 @@ SList * almanac_Almanac_passengers_getter(Almanac * box, int x);
 
 
 
+////////////////////////////////////////////////////////
+void almanac_insert_reservation(Almanac * box,Reservation * a, char * ppn, char * rating);
+void almanac_hotel_sort(Almanac * box);
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+Hotel * almanac_Almanac_hotel_getter(Almanac * box, char * id);
+Reservation * almanac_Almanac_reservations_getter(Almanac * box, char * id);
+////////////////////////////////////////////////////////
+
 
 #endif

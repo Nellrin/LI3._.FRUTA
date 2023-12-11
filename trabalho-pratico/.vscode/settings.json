@@ -12,6 +12,8 @@
         "flight_catalog.h": "c",
         "flights.h": "c",
         "stdlib.h": "c",
-        "catalog_functions.h": "c"
+        "catalog_functions.h": "c",
+        "reservation_catalog.h": "c",
+        "reservations.h": "c"
     }
 }

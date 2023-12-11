@@ -4,6 +4,7 @@
 
 #include "../../include/Catalogs/User_Catalog.h"
 #include "../../include/Catalogs/Flight_Catalog.h"
+#include "../../include/Catalogs/Reservation_Catalog.h"
 #include "../../include/Catalogs/Catalog.h"
 #include "../../include/DataStructures/Functions.h"
 
@@ -11,6 +12,7 @@
 typedef struct almanac{
     Almanac_Users * user;
     Almanac_Flights * flight;
+    Almanac_Reservation * reservation;
 }Almanac;
 ////////////////////////////////////////////////////////
 
@@ -22,7 +24,7 @@ void almanac_insert_user(Almanac * box,User * a){
 void destroy_almanac(Almanac * box){
     destroy_user_almanac(box->user);
     destroy_flight_almanac(box->flight);
-
+    destroy_reservation_almanac(box->reservation);
     free(box);
 }
 Almanac * new_almanac(){
@@ -30,6 +32,7 @@ Almanac * new_almanac(){
     
     a->user = new_user_almanac();
     a->flight = new_flight_almanac();
+    a->reservation = new_reservation_almanac();
 
     return a;
 }
@@ -102,5 +105,27 @@ Flight * almanac_Almanac_flight_getter(Almanac * box, char * id, int x){
 }
 SList * almanac_Almanac_passengers_getter(Almanac * box, int x){
     SList * a = almanac_flights_passengers_getter(box->flight,x);
+}
+////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
+void almanac_insert_reservation(Almanac * box,Reservation * a, char * ppn, char * rating){
+    insert_reservation(box->reservation,a,ppn,rating);
+}
+void almanac_hotel_sort(Almanac * box){
+    hotel_sort(box->reservation);
+}
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+Hotel * almanac_Almanac_hotel_getter(Almanac * box, char * id){
+    Hotel * a = almanac_reservations_hotel_getter(box->reservation,id);
+    
+    return a;
+}
+Reservation * almanac_Almanac_reservations_getter(Almanac * box, char * id){
+    Reservation * a = almanac_reservations_reservations_getter(box->reservation,id);
+
+    return a;
 }
 ////////////////////////////////////////////////////////

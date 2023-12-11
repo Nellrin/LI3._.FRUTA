@@ -127,6 +127,19 @@ double hotel_revenue_getter(Hotel * a,char * begin, char * end){
 
     return total;
 }
+Hotel * hotel_copy(Hotel * a){
+    Hotel * b = malloc(sizeof(Hotel));
+    b->hotel_id = strdup(a->hotel_id);
+    
+    b->amount_of_ratings = a->amount_of_ratings;
+
+    b->sum_rating = a->sum_rating;
+
+    b->price_per_night = a->price_per_night;
+    b->reservation_list = hotel_reservation_getter(a);
+    b->begin_end = hotel_dates_getter(a);
+    return b;
+}
 ////////////////////////////////////////////////////////
 static void insert_reservation(Hotel * a, char *begin, char *id){
 
@@ -139,7 +152,6 @@ static void insert_reservation(Hotel * a, char *begin, char *id){
     free(c);
     free(b);
 }
-
 static void insert_begin_end(Hotel * a, char *begin,char * end){
     char * c = strdup(begin);
     char * b = strdup(end);
@@ -178,9 +190,11 @@ void sort_hotels_slists(Hotel * a){
 ////////////////////////////////////////////////////////
 void free_hotel(Hotel *a) {
 
-        free(a->hotel_id);
-        free_slists(a->reservation_list);
-        free_slists(a->begin_end);
-        free(a);
+        if(a!=NULL){
+            free(a->hotel_id);
+            free_slists(a->reservation_list);
+            free_slists(a->begin_end);
+            free(a);
+        }
 }
 ////////////////////////////////////////////////////////

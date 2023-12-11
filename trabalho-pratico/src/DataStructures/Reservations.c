@@ -129,6 +129,8 @@ double reservation_total_price_getter(Reservation * a){
 }
 ////////////////////////////////////////////////////////
 void free_reservation(Reservation *a) {
+    if(a!=NULL){
+
         free(a->id);
         free(a->id_hotel);
         free(a->user_id);
@@ -143,5 +145,6 @@ void free_reservation(Reservation *a) {
         free(a->rating);
         
         free(a);
+    }
 }
 ////////////////////////////////////////////////////////

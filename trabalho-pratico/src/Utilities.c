@@ -151,7 +151,11 @@ int includes_breafast_validation(char * string){
 }
 
 int rating_validation(char * string){
-    return !((!strcmp(string,""))||general_number_validation(1,string,5));
+    if((!strcmp(string,"")))
+    return 1;
+
+
+    return (general_number_validation(1,string,5));
 }
 
 int general_string_validation(char * string){

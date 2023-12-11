@@ -41,6 +41,18 @@ static Flight_Catalog create_flight_catalog_f(){
     return f;
 }
 
+static Reservation_Catalog create_reservation_catalog_f(){
+    Reservation_Catalog f;
+
+        f.insert = almanac_insert_reservation;
+        f.hotel_sort = almanac_hotel_sort;
+
+        f.get.hotel = almanac_Almanac_hotel_getter;
+        f.get.reservation = almanac_Almanac_reservations_getter;
+
+    return f;
+}
+
 Catalog_Functions create_catalog_functions(){
     Catalog_Functions f;
         
@@ -48,6 +60,7 @@ Catalog_Functions create_catalog_functions(){
         f.new_catalog = new_almanac;
         f.user = create_user_catalog_f();
         f.flight = create_flight_catalog_f();
+        f.reservation = create_reservation_catalog_f();
 
     return f;
 }

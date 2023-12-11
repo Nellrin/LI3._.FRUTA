@@ -109,6 +109,7 @@ typedef struct airport Airport;
         double (*ppn)(Hotel *);
         SList * (*reservation)(Hotel *);
         SList * (*dates)(Hotel *);
+        Hotel * (*hotel)(Hotel *);
         double (*revenue)(Hotel *,char *,char *);        
     }Hotel_Functions_Getters;
 

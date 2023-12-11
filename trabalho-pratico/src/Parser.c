@@ -39,11 +39,16 @@ int parser_reservations(const char * string, Almanac * box){
         && Util.validations.string(list[8]) && Util.validations.date(list[8],0)  && ((strcmp(list[8],list[7]))>0)
         && Util.validations.string(list[9]) && Util.validations.number(0,list[9],1000000)
         && Util.validations. breakfast(list[10])
-        && Util.validations.string(list[11]) && Util.validations.rating(list[11])){
+        && Util.validations.string(list[11]) && Util.validations.rating(list[12])){
             // User * user = Data.user.set(list[0],list[1],list[4],list[5],list[7],list[11],list[9]);
             // Catalog.user.insert(box,user);
-            res ++;
+
+// Reservation * reservation_setter(char * id,char * id_hotel, char * user_id, char * hotel_name, char * hotel_stars, char * begin_date, char * end_date, char * includes_breakfast, char * rating, char * ppn, char * city_tax){
+                Reservation * reservation = Data.reservation.set(list[0],list[2],list[1],list[3],list[4],list[7],list[8],list[10],list[12],list[9],list[5]);
+                Catalog.reservation.insert(box,reservation,list[9],list[12]);
+                res ++;
             }
+            
         }
     }
 
@@ -59,7 +64,6 @@ int parser_reservations(const char * string, Almanac * box){
 
     return res;
 }
-
 
 int parser_users(const char * string, Almanac * box){
     initialize_catalog_functions();
@@ -94,11 +98,9 @@ int parser_users(const char * string, Almanac * box){
     }
 
     for(int i = 0; i < 12; i++){
-        // printf("%s/",list[i]);
         free(list[i]);
     }
 
-    // printf("\n");
     free(list);
     free(copy_origin);
     free(token);

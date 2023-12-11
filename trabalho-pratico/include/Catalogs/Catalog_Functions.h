@@ -7,6 +7,9 @@ typedef struct user User;
 typedef struct almanac Almanac;
 typedef struct flight Flight;
 typedef struct airport Airport;
+typedef struct reservation Reservation;
+typedef struct hotel Hotel;
+typedef struct almanac_reservation Almanac_Reservation;
 typedef struct almanac_flight Almanac_Flights;
 typedef struct almanac_users Almanac_Users;
 typedef struct almanac Almanac;
@@ -58,6 +61,21 @@ typedef struct almanac Almanac;
 
 
 ////////////////////////////////////////////////////////
+    typedef struct reservation_c_g{
+        Hotel * (*hotel)(Almanac *, char *);
+        Reservation * (*reservation)(Almanac *, char *);
+    }Reservation_Catalog_Getter;
+
+    typedef struct reservation_c_f {
+        void (*insert)(Almanac *,Reservation *, char *, char *);
+        void (*hotel_sort)(Almanac *);
+
+        Reservation_Catalog_Getter get;
+    }Reservation_Catalog;
+////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
     typedef struct c_f
     {
         Almanac * (*new_catalog)();
@@ -65,6 +83,7 @@ typedef struct almanac Almanac;
 
         Flight_Catalog flight;
         User_Catalog user;
+        Reservation_Catalog reservation;
     }Catalog_Functions;
     
 ////////////////////////////////////////////////////////
