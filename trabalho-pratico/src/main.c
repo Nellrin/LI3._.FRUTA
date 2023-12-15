@@ -1,133 +1,56 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <dirent.h>
+// #include <glib.h>
+#include "../include/Catalogs/Catalog.h"
+#include "../include/Catalogs/Catalog_Functions.h"
+#include "../include/Utilities.h"
+#include "../include/Parser.h"
 
-void copyFile(const char *srcPath, const char *destPath) {
-    FILE *srcFile = fopen(srcPath, "rb");
-    FILE *destFile = fopen(destPath, "wb");
+// #include "../include/DataStructures/SLists.h"
+// #include "../include/DataStructures/Airport.h"
+// #include "../include/DataStructures/Users.h"
+// #include "../include/DataStructures/Reservations.h"
+// #include "../include/DataStructures/Flights.h"
+// #include "../include/DataStructures/Counting_Calendar.h"
+// #include "../include/DataStructures/Hotel.h"
 
-    if (srcFile == NULL || destFile == NULL) {
-        perror("Error opening file");
-        exit(EXIT_FAILURE);
-    }
+#define CURRENT_DATE "2023/10/01"
 
-    char buffer[1024];
-    size_t bytesRead;
+#define token_user 0
+#define token_reservation 1
+#define token_passenger 2
+#define token_flight 3
+#define token_unique_passenger 4
+#define token_not_unique_passenger 5
 
-    while ((bytesRead = fread(buffer, 1, sizeof(buffer), srcFile)) > 0) {
-        fwrite(buffer, 1, bytesRead, destFile);
-    }
-
-    fclose(srcFile);
-    fclose(destFile);
-}
-
-void copyDirectory(const char *srcDir, const char *destDir) {
-    DIR *dir = opendir(srcDir);
-
-    if (dir == NULL) {
-        perror("Error opening directory");
-        exit(EXIT_FAILURE);
-    }
-
-    struct dirent *entry;
-
-    while ((entry = readdir(dir)) != NULL) {
-        if (entry->d_type == DT_REG) {
-            char srcPath[PATH_MAX];
-            char destPath[PATH_MAX];
-
-            snprintf(srcPath, sizeof(srcPath), "%s/%s", srcDir, entry->d_name);
-            snprintf(destPath, sizeof(destPath), "%s/%s", destDir, entry->d_name);
-
-            copyFile(srcPath, destPath);
-        }
-    }
-
-    closedir(dir);
-}
-
-int countLines(const char *filePath) {
-    FILE *file = fopen(filePath, "r");
-
-    if (file == NULL) {
-        perror("Error opening file");
-        return -1;
-    }
-
-    int lineCount = 0;
-    char buffer[1024];
-
-    while (fgets(buffer, sizeof(buffer), file) != NULL) {
-        lineCount++;
-    }
-
-    fclose(file);
-
-    return lineCount;
-}
-
+Catalog_Functions Catalog;
 
 int main(int argc, char *argv[]) {
 
-    /* 
-        esta variante do projeto só 
-        serve para testar a eficiencia 
-        de transferencia de ficheiros 
-        de 1 diretoria para outra
-    */
-
-    int ** x = malloc(sizeof(int *) * 1000);
-    for(int i = 0; i < 1000; i++){
-        x[i] = malloc(sizeof(int)*10*((countLines(argv[2])<200)?100:5000));
-    }
 
 
-    for(int i = 0; i < 1000; i++){
-        free(x[i]);
-    }
+Almanac * u = new_almanac();
 
-    free(x);
+    switch (argc){
+    case 3:
+        parser(argv[1],"users",u,parser_users);
 
+        break;
 
-        const char *destDir = "Resultados";
-
-    if(countLines(argv[2])< 200){
-
-        const char *sourceDir = "src/S";
-
-        copyDirectory(sourceDir, destDir);
-
-
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-
-        return 0;
-    }
-
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
-    for(int i = 0; i < 2000000000; i++);
+    case 1:
+        /* code */
+        break;
     
-        const char *sourceDir = "src/L";
+    default:
+        printf("Número de argumentos inválidos\n");
+        break;
+    }
 
-        copyDirectory(sourceDir, destDir);
+    
+
+    destroy_almanac(u);
+
 
     return 0;
 }
