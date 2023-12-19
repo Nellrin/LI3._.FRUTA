@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////
@@ -22,8 +23,10 @@ struct reservation {
     char * ppn;
 
     char * rating;
-    
 };
+////////////////////////////////////////////////////////
+
+
 ////////////////////////////////////////////////////////
 void print_reservation(Reservation * a){
     printf("\n----------------------------------------------------\n");
@@ -39,6 +42,9 @@ void print_reservation(Reservation * a){
     printf("----------------------------------------------------\n");
 
 }
+////////////////////////////////////////////////////////
+
+
 ////////////////////////////////////////////////////////
 Reservation * set_reservation(char * id,char * id_hotel, char * user_id, char * hotel_name, char * hotel_stars, char * begin_date, char * end_date, char * includes_breakfast, char * rating, char * ppn, char * city_tax){
     Reservation * a = malloc(sizeof(Reservation));
@@ -60,6 +66,9 @@ Reservation * set_reservation(char * id,char * id_hotel, char * user_id, char * 
 
     return a;
 }
+////////////////////////////////////////////////////////
+
+
 ////////////////////////////////////////////////////////
 char * get_reservationID(Reservation * a){
     char * id = strdup(a->id);
@@ -107,8 +116,23 @@ char * get_reservationRATING(Reservation * a){
     return rating;
 }
 ////////////////////////////////////////////////////////
-void free_reservation(Reservation *a) {
-    if(a!=NULL){
+
+
+////////////////////////////////////////////////////////
+int compare_reservation(const char *id, const void *info){
+    const Reservation *reservation = (const Reservation *)info;
+    return (strcmp(id, reservation->id) == 0);
+}
+////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
+void free_reservation(void *reservation){
+
+    if(reservation!=NULL){
+
+        Reservation *a = (Reservation *)reservation;
+
 
         free(a->id);
         free(a->id_hotel);
@@ -125,7 +149,6 @@ void free_reservation(Reservation *a) {
 
         free(a->ppn);
         free(a->city_tax);
-
         
         free(a);
     }

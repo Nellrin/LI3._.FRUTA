@@ -3,7 +3,10 @@
 #include <stdio.h>
 #include <ctype.h>
 
+
 #include "../include/Utilities.h"
+#include "../include/Catalogs/Catalog.h"
+#include "../include/DataStructures/Users.h"
 
 ///////////////////////////////////////////////////////////////
 static int string_to_tm(char * format, char *date) {
@@ -28,9 +31,8 @@ int string_to_time(char *format, char *date1, char *date2) {
 ///////////////////////////////////////////////////////////////
 
 
-
 ///////////////////////////////////////////////////////////////
-int validate_hours(const char *date_string){
+static int validate_hours(const char *date_string){
     if (strlen(date_string) != 19)
     return 0;
     
@@ -47,7 +49,7 @@ int validate_hours(const char *date_string){
     return 1;
 }
 
-int validate_days(const char *date_string){
+static int validate_days(const char *date_string){
     if (strlen(date_string) != 10)
     return 0;
     
@@ -64,7 +66,7 @@ int validate_days(const char *date_string){
     return 1;
 }
 
-int email_validation(char * string){
+static int email_validation(char * string){
     const char *at_symbol = strchr(string, '@');
     const char *dot_symbol = at_symbol ? strchr(at_symbol, '.') : NULL;
 
@@ -81,14 +83,14 @@ int email_validation(char * string){
     return 0;
 }
 
-int country_code_validation(char * string){
+static int country_code_validation(char * string){
     if(strlen(string)==2)
     return (isalpha(string[0])&&isalpha(string[1]));
 
     return 0;
 }
 
-int account_status_validation(char * string){
+static int account_status_validation(char * string){
     char * copy = strdup(string);
     for(int i = 0; i < strlen(string); i++)
         copy[i] = toupper(copy[i]);
@@ -102,13 +104,13 @@ int account_status_validation(char * string){
     return 0;
 }
 
-int total_seats_validation(char * total_seats, int amount){
+static int total_seats_validation(char * total_seats, int amount){
     int x = atoi(total_seats);
 
     return (x>=amount);
 }
 
-int airport_validation(char * string){
+static int airport_validation(char * string){
     if(strlen(string) == 3){
         for(int i = 0; i < strlen(string); i++)
             if(!isalpha(string[i]))
@@ -119,14 +121,14 @@ int airport_validation(char * string){
     return 0;
 }
 
-int general_number_validation(int li,char * string,int ls){
+static int general_number_validation(int li,char * string,int ls){
     double x = strtod(string,NULL);
 
     return((double)(int)x == x && x>=li && x<=ls); 
 
 }
 
-int includes_breafast_validation(char * string){
+static int includes_breafast_validation(char * string){
     
     char * x = strdup(string);
 
@@ -144,7 +146,7 @@ int includes_breafast_validation(char * string){
     return 0;
 }
 
-int rating_validation(char * string){
+static int rating_validation(char * string){
     if((!strcmp(string,"")))
     return 1;
 
@@ -152,11 +154,166 @@ int rating_validation(char * string){
     return (general_number_validation(1,string,5));
 }
 
-int general_string_validation(char * string){
+static int general_string_validation(char * string){
     char * copy = strdup(string);
     int x = strlen(copy);
     free(copy);
 
     return(x>0);
+}
+///////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////
+int valid_passenger(Almanac * a, const char * string){
+    
+    char * copy = strdup(string);
+    char * copy_origin = copy;
+    int res = 0;
+    char ** list = malloc(sizeof(char *)*2);
+    char *token = NULL;
+    
+    for(int i = 0;token = strsep(&copy, ";");i++)
+    list[i] = strdup(token);
+
+
+    //muito incompleta
+
+    if(general_string_validation(list[0])&&general_string_validation(list[1]))
+    if(almanac_get_user(a,list[1])!=NULL)
+    if(almanac_get_flight(a,list[0])!=NULL)
+        res++;
+            
+
+    for(int i = 0; i < 2; i++)
+    free(list[i]);
+
+    free(list);
+    free(copy_origin);
+    free(token);
+
+    return res;
+}
+int valid_flight(Almanac * a, const char * string){
+
+    char * copy = strdup(string);
+    char * copy_origin = copy;
+    char ** list = malloc(sizeof(char *)*13);
+    char *token = NULL;
+    int res = 0;
+
+    
+    for(int i = 0;token = strsep(&copy, ";");i++)
+    list[i] = strdup(token);
+    
+    if(general_string_validation(list[0])
+    && general_string_validation(list[1])
+    && general_string_validation(list[2])
+    && general_string_validation(list[3]) && atoi(list[3]) >= almanac_get_seats(a,atoi(list[0])-1)
+    && general_string_validation(list[4]) && airport_validation(list[4])
+        && general_string_validation(list[5]) && airport_validation(list[5])  && (strcmp(list[4], list[5]) != 0)
+        && general_string_validation(list[6]) && validate_hours(list[6])
+        && general_string_validation(list[7]) && validate_hours(list[7]) && ((strcmp(list[6],list[7]))<0)
+        && general_string_validation(list[8]) && validate_hours(list[8])
+        && general_string_validation(list[9]) && validate_hours(list[9]) && ((strcmp(list[8],list[9]))<0)
+        && general_string_validation(list[10])
+        && general_string_validation(list[11])){
+            almanac_add_flight(a,list[0],list[0],list[0],list[0],list[0],list[0],list[0],list[0],list[0]);
+            res ++;
+        }
+
+
+        // schedule_departure_date;schedule_arrival_date;real_departure_date;real_arrival_date
+
+        // schedule_departure_date;real_departure_date;schedule_arrival_date;real_arrival_date
+
+
+    for(int i = 0; i < 13; i++)
+    free(list[i]);
+
+    free(list);
+    free(copy_origin);
+    free(token);
+
+
+    return res;
+}
+int valid_user(Almanac * a, const char * string){
+// char * id, *name, *birth_date, *sex, *country_code, *account_status, *account_creation;
+// char * email, *phone, *passport, *address, *payment_method;
+    char * copy = strdup(string);
+    char * copy_origin = copy;
+    int res = 0;
+    char ** list = malloc(sizeof(char *)*12);
+    char *token = NULL;
+    
+    for(int i = 0;token = strsep(&copy, ";");i++)
+    list[i] = strdup(token);
+    
+    if(general_string_validation(list[0])
+    && general_string_validation(list[1])
+    && general_string_validation(list[2])
+    && general_string_validation(list[3])
+    && general_string_validation(list[4]) && validate_days(list[4])
+    && general_string_validation(list[5])
+    && general_string_validation(list[6])
+    && general_string_validation(list[7]) && country_code_validation(list[7])
+    && general_string_validation(list[8])
+    && general_string_validation(list[9]) && validate_hours(list[9]) && ((strcmp(list[9],list[4]))>0)
+    && general_string_validation(list[10])
+    && general_string_validation(list[11]) && account_status_validation(list[11])
+    && email_validation(list[2])){
+        almanac_add_user(a,list[0],list[1],list[2],list[3],list[4],list[5],list[6]);
+        res ++;
+    }
+
+    for(int i = 0; i < 12; i++)
+    free(list[i]);
+    
+
+    free(list);
+    free(copy_origin);
+    free(token);
+
+    return res;
+}
+int valid_reservation(Almanac * a, const char * string){
+    char * copy = strdup(string);
+    char * copy_origin = copy;
+    int res = 0;
+    char ** list = malloc(sizeof(char *)*14);
+    char *token = NULL;
+    
+    for(int i = 0;token = strsep(&copy, ";");i++)
+    list[i] = strdup(token);
+    
+
+    
+    if(general_string_validation(list[0])
+    && general_string_validation(list[1]))
+        if(almanac_get_user(a,list[1]) != NULL)
+        if(general_string_validation(list[2])
+        && general_string_validation(list[3])
+        && general_string_validation(list[4]) && general_number_validation(1,list[4],5)
+        && general_string_validation(list[5]) && general_number_validation(0,list[5],1000)
+        && general_string_validation(list[6])
+        && general_string_validation(list[7]) && validate_days(list[7])
+        && general_string_validation(list[8]) && validate_days(list[8])  && ((strcmp(list[8],list[7]))>0)
+        && general_string_validation(list[9]) && general_number_validation(0,list[9],1000000)
+        && includes_breafast_validation(list[10])
+        && general_string_validation(list[11]) && rating_validation(list[12])){
+            almanac_add_reservation(a,list[0],list[0],list[0],list[0],list[0],list[0],list[0],list[0],list[0],list[0],list[0]);
+            res++;
+            }
+
+    for(int i = 0; i < 14; i++)
+    free(list[i]);
+
+
+    free(list);
+    free(copy_origin);
+    free(token);
+
+    return res;
 }
 ///////////////////////////////////////////////////////////////

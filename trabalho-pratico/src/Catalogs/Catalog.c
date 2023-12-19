@@ -2,141 +2,139 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../../include/Catalogs/User_Catalog.h"
-#include "../../include/Catalogs/Flight_Catalog.h"
-#include "../../include/Catalogs/Reservation_Catalog.h"
+#include "../../include/DataStructures/Users.h"
+#include "../../include/DataStructures/Flights.h"
+#include "../../include/DataStructures/Reservations.h"
+#include "../../include/DataStructures/FHash.h"
 #include "../../include/Catalogs/Catalog.h"
-#include "../../include/DataStructures/Functions.h"
 
 
+////////////////////////////////////////////////////////
 typedef struct almanac{
-    Almanac_Users * user;
-    Almanac_Flights * flight;
-    Almanac_Reservation * reservation;
+    FHash * user;
+    FHash * flight;
+    FHash * reservation;
+    unsigned int * passenger;
 }Almanac;
 ////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////
-void almanac_insert_user(Almanac * box,User * a){
-    insert_user(box->user,a);
-}
-void destroy_almanac(Almanac * box){
-    destroy_user_almanac(box->user);
-    destroy_flight_almanac(box->flight);
-    destroy_reservation_almanac(box->reservation);
-    free(box);
-}
-Almanac * new_almanac(){
+Almanac * init_almanac(){
     Almanac * a = malloc(sizeof(Almanac));
+
+    a->passenger = malloc(sizeof(unsigned int) * amount_flights);
+    a->user = fhash_init(amount_users);
+    a->flight = fhash_init(amount_flights);
+    a->reservation = fhash_init(amount_reservations);
+
+    return a;
+}
+void free_almanac(Almanac * a){
+    free_fhash(a->flight,free_flight);
+    free_fhash(a->reservation,free_reservation);
+    free_fhash(a->user,free_user);
+    free(a->passenger);
+
+    free(a);
+}
+////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
+void nulls(Almanac * a, char * string){
+    check_nulls(a->user);
+    check_nulls(a->flight);
+    check_nulls(a->reservation);
+}
+
+void almanac_add_passengers(Almanac *almanac,char * path){
+
+    FILE *file = fopen(path, "r");
     
-    a->user = new_user_almanac();
-    a->flight = new_flight_almanac();
-    a->reservation = new_reservation_almanac();
+    char * line = NULL;
+    char *flight_id = NULL;
+    char *user_id = NULL;
+    size_t len = 0;
+    
+    for(int i = 0; i < amount_flights; i++)
+    almanac->passenger[i] = 0;
 
-    return a;
-}
-void user_prefix_sort(Almanac * box){
-    prefix_sort(box->user);
-}
-void user_user_sort(Almanac * box){
-    user_sort(box->user);
-}
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-SList * almanac_prefix_getter(Almanac * box){
-    SList * a = almanac_users_prefix_getter(box->user);
-    return a;
-}
-User * almanac_user_getter(Almanac * box, char * id){
+    while (getline(&line, &len, file) != -1) {
 
-    User * a = almanac_users_user_getter(box->user,id);
+        flight_id = NULL;
+        user_id = NULL;
 
-    return a;
-}
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-void almanac_add_reservation_of_user(Almanac * box, char * id, char * hotel_id, char * date, float money){
+
+        flight_id = strsep(&line, ";");
+        user_id = strsep(&line, ";");
+
+
+        if(strlen(user_id)>0){
+            user_id[strlen(user_id)-1] = '\0';
+            if(almanac_get_user(almanac,user_id) != NULL){
+
+                if(strlen(flight_id)> 0){
+                    almanac->passenger[atoi(flight_id)-1]++;
+
+                }
+            }
+        }
+                if(flight_id!=NULL)
+                free(flight_id);
+                // if(user_id!=NULL)
+                // free(user_id);
         
-    almanac_users_add_reservation(box->user,id,hotel_id,date,money);
+    }
+        // free(user_id);
+        // free(flight_id);
 
+            printf("\n\nSAFE\n\n");
+
+            
+    for(int i = 0; i < amount_flights; i++)
+    printf("\n%d",almanac->passenger[i]);
+
+
+    fclose(file);
+
+
+    // if(line!=NULL)
+    free(line);
 }
-void almanac_add_flight_to_user(Almanac * box, char * id, char * flight, char * date){
+void almanac_add_user(Almanac *almanac,char * id, char *name, char *birth_date, char *sex, char *country_code, char *account_status, char *account_creation){
+    User * a = set_user(id, name, birth_date, sex, country_code, account_status, account_creation);
     
-    almanac_users_add_flight(box->user,id,flight,date);
+    fhash_add(almanac->user,id,(void *)a, 1);
+}
+void almanac_add_flight(Almanac *almanac,char * id,char * airline, char * plane_model, char * origin, char * destination, char * schedule_departure_date,char * real_departure_date, char * schedule_arrival_date, char * passengers){
+
+    Flight * a = set_flight(id,airline, plane_model, origin, destination, schedule_departure_date,real_departure_date, schedule_arrival_date, passengers);
+
+    fhash_add(almanac->flight,id,a, 0);
+}
+void almanac_add_reservation(Almanac *almanac,char *id, char *id_hotel, char *user_id, char *hotel_name, char *hotel_stars, char *begin_date, char *end_date, char *includes_breakfast, char *rating, char *ppn, char *city_tax){
     
-}
-void almanac_remove_flight_of_users(Almanac * box, char * id, char * flight){
+    Reservation * a = set_reservation(id, id_hotel, user_id, hotel_name, hotel_stars, begin_date, end_date, includes_breakfast, rating, ppn, city_tax);
     
-    almanac_users_remove_flight(box->user,id,flight);
-    
-}
-////////////////////////////////////////////////////////
-
-
-
-
-
-
-////////////////////////////////////////////////////////
-void almanac_add_passenger(Almanac * box, char * id ,char * x){
-    catalog_add_passenger(box->flight,id,x);
-}
-void almanac_insert_flight(Almanac * box,Flight * a){
-    insert_flight(box->flight,a);
-}
-void almanac_complement_flight(Almanac * box,Flight * a){
-    complement_flight(box->flight,a);
-}
-void almanac_airport_sort(Almanac * box){
-    airport_sort(box->flight);
-}
-void almanac_remove_flight_catalog(Almanac * box, char * id){
-    remove_flight_catalog(box->flight,id);
-}
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-Airport * almanac_Almanac_airport_getter(Almanac * box, char * id){
-    Airport * a = almanac_flights_airport_getter(box->flight,id);
-    
-    return a;
-}
-Flight * almanac_Almanac_flight_getter(Almanac * box, char * id, int x){
-    Flight * a = almanac_flights_flight_getter(box->flight,id,x);
-
-    return a;
-}
-SList * almanac_Almanac_passengers_getter(Almanac * box, int x){
-    SList * a = almanac_flights_passengers_getter(box->flight,x);
+    fhash_add(almanac->reservation,id,(void *)a, 0);
 }
 ////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////
-void almanac_insert_reservation(Almanac * box,Reservation * a, char * ppn, char * rating){
-    insert_reservation(box->reservation,a,ppn,rating);
+unsigned int almanac_get_seats(Almanac *almanac, int target){
+    return almanac->passenger[target];
 }
-void almanac_hotel_sort(Almanac * box){
-    hotel_sort(box->reservation);
+void * almanac_get_user(Almanac *almanac, char * target){
+    return fhash_get(almanac->user,target,1,compare_user);
 }
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-Hotel * almanac_Almanac_hotel_getter(Almanac * box, char * id){
-    Hotel * a = almanac_reservations_hotel_getter(box->reservation,id);
-    
-    return a;
+void * almanac_get_flight(Almanac *almanac, char * target){
+    void * flight = fhash_get(almanac->flight,target,0,compare_flight);
+    return flight;
 }
-Reservation * almanac_Almanac_reservations_getter(Almanac * box, char * id){
-    Reservation * a = almanac_reservations_reservations_getter(box->reservation,id);
-
-    return a;
+void * almanac_get_reservation(Almanac *almanac, char * target){
+    void * reservation =fhash_get(almanac->reservation,target,0,compare_reservation);
+    return reservation;
 }
 ////////////////////////////////////////////////////////
-
-
-void sort_almanac(Almanac * box){
-    almanac_airport_sort(box);
-    user_prefix_sort(box);
-    user_user_sort(box);
-    destroy_passengers_almanac(box->flight);
-}

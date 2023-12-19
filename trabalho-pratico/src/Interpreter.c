@@ -68,23 +68,3 @@ void freeArguments(Argument *arguments) {
         arguments = nextArg;
     }
 }
-
-int main() {
-    // Example usage
-    const char *line = "3 F 3 HTL1201";
-    Query query;
-    parseLine(line, &query);
-
-    // Print the parsed data
-    printf("Type: %d, hasF: %c, Num Arguments: %d\n", query.type, query.hasF, query.numArguments);
-    Argument *arg = query.arguments;
-    while (arg != NULL) {
-        printf("Argument: %s\n", arg->value);
-        arg = arg->next;
-    }
-
-    // Free allocated memory
-    freeArguments(query.arguments);
-
-    return 0;
-}

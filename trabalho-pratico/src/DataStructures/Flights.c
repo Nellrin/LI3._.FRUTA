@@ -2,7 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+////////////////////////////////////////////////////////
 
+
+////////////////////////////////////////////////////////
 struct flight {
     char *id;
     char *airline;
@@ -15,6 +18,9 @@ struct flight {
 
     int passengers;
 };
+////////////////////////////////////////////////////////
+
+
 ////////////////////////////////////////////////////////
 void print_flight(Flight * a){
     
@@ -31,6 +37,9 @@ void print_flight(Flight * a){
 
     printf("----------------------------------------------------\n");
 }
+////////////////////////////////////////////////////////
+
+
 ////////////////////////////////////////////////////////
 void add_flightPASSENGER(Flight * a, int x){
     a->passengers = x;
@@ -52,6 +61,9 @@ Flight * set_flight(char * id,char * airline, char * plane_model, char * origin,
     return a;
 
 }
+////////////////////////////////////////////////////////
+
+
 ////////////////////////////////////////////////////////
 char * get_flightID(Flight * a){
     char * id = strdup(a->id);
@@ -99,10 +111,25 @@ int get_flightPASSENGERS(Flight * a){
     return x;
 }
 ////////////////////////////////////////////////////////
-void free_flight(Flight *a) {
-    if (a != NULL) {
+
+
+////////////////////////////////////////////////////////
+int compare_flight(const char *id, const void *info){
+    const Flight *flight = (const Flight *)info;
+    return (strcmp(id, flight->id) == 0);
+}
+////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
+void free_flight(void  * flight){
+
+    if (flight != NULL) {
+
+    Flight *a = (Flight *)flight;
+
         free(a->id);
-        if(a->airline!=NULL){
+        
             free(a->airline);
             free(a->plane_model);
             free(a->origin);
@@ -110,8 +137,7 @@ void free_flight(Flight *a) {
             free(a->schedule_departure_date);
             free(a->schedule_arrival_date);
             free(a->real_departure_date);
-        }
-
+        
         free(a);
     }
 }

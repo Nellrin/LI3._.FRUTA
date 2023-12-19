@@ -19,15 +19,17 @@ struct user {
 
 ////////////////////////////////////////////////////////
 void print_user(User * a){
-    printf("\n----------------------------------------------------\n");
-    printf("[ID]: %s\n",a->id);
-    printf("[NAME]: %s\n",a->name);
-    printf("[BIRTH DATE]: %s\n",a->birth_date);
-    printf("[SEX]: %s\n",a->sex);
-    printf("[COUNTRY CODE]: %s\n",a->country_code);
-    printf("[ACCOUNT STATUS]: %s\n",a->account_status);
+    if(a != NULL){
+        printf("\n----------------------------------------------------\n");
+        printf("[ID]: %s\n",a->id);
+        printf("[NAME]: %s\n",a->name);
+        printf("[BIRTH DATE]: %s\n",a->birth_date);
+        printf("[SEX]: %s\n",a->sex);
+        printf("[COUNTRY CODE]: %s\n",a->country_code);
+        printf("[ACCOUNT STATUS]: %s\n",a->account_status);
 
-    printf("----------------------------------------------------\n");
+        printf("----------------------------------------------------\n");
+    }
 }
 ////////////////////////////////////////////////////////
 
@@ -95,8 +97,19 @@ char * get_userACREATION(User * a){
 
 
 ////////////////////////////////////////////////////////
-void free_user(User *a) {
-    if (a != NULL) {
+int compare_user(const char *id, const void *info) {
+    const User *user = (const User *)info;
+    return (strcmp(id, user->id) == 0);
+}
+////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
+void free_user(void * user) {
+    if (user != NULL) {
+
+        User *a = (User *)user;
+
         free(a->id);
         free(a->name);
         free(a->birth_date);
