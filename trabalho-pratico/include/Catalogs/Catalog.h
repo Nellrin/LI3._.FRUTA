@@ -11,9 +11,9 @@ typedef struct h FHash;
 
 typedef struct almanac Almanac;
 ////////////////////////////////////////
-#define amount_flights 200000
-#define amount_users 1000000
-#define amount_reservations 6000000
+#define amount_flights 2000
+#define amount_users 10000
+#define amount_reservations 60000
 ////////////////////////////////////////////////////////
 
 
