@@ -19,6 +19,8 @@
         "fhash.h": "c",
         "stdio.h": "c",
         "malloc.h": "c",
-        "ctype.h": "c"
+        "ctype.h": "c",
+        "typeinfo": "c",
+        "1query.h": "c"
     }
 }

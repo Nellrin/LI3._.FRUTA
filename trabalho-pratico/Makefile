@@ -6,23 +6,27 @@ SRC_DIR = src
 OBJ_DIR = obj
 OBJ_DIR_DS = $(OBJ_DIR)/DataStructures
 OBJ_DIR_C = $(OBJ_DIR)/Catalogs
+OBJ_DIR_Q = $(OBJ_DIR)/Queries
 
 SRCS = $(wildcard $(SRC_DIR)/*.c)
 SRCS_DATA = $(wildcard $(SRC_DIR)/DataStructures/*.c)
 SRCS_CATALOG = $(wildcard $(SRC_DIR)/Catalogs/*.c)
+SRCS_QUERY = $(wildcard $(SRC_DIR)/Queries/*.c)
 
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS)) 
 OBJS_DATA = $(patsubst $(SRC_DIR)/DataStructures/%.c, $(OBJ_DIR_DS)/%.o, $(SRCS_DATA))
 OBJS_CATALOG = $(patsubst $(SRC_DIR)/Catalogs/%.c, $(OBJ_DIR_C)/%.o, $(SRCS_CATALOG))
+OBJS_QUERY = $(patsubst $(SRC_DIR)/Queries/%.c, $(OBJ_DIR_Q)/%.o, $(SRCS_QUERY))
 TARGET = programa-principal
 
 all: $(TARGET)
 
-$(TARGET): $(OBJS) $(OBJS_DATA) $(OBJS_CATALOG)
+$(TARGET): $(OBJS) $(OBJS_DATA) $(OBJS_CATALOG) $(OBJS_QUERY)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS) -g
 	rm -rf $(OBJ_DIR)
 	rm -rf $(OBJ_DIR_DS)
 	rm -rf $(OBJ_DIR_C)
+	rm -rf $(OBJ_DIR_Q)
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
@@ -33,6 +37,9 @@ $(OBJ_DIR_DS):
 $(OBJ_DIR_C):
 	mkdir -p $(OBJ_DIR_C)
 
+$(OBJ_DIR_Q):
+	mkdir -p $(OBJ_DIR_Q)
+
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
@@ -40,6 +47,9 @@ $(OBJ_DIR_DS)/%.o: $(SRC_DIR)/DataStructures/%.c | $(OBJ_DIR_DS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 $(OBJ_DIR_C)/%.o: $(SRC_DIR)/Catalogs/%.c | $(OBJ_DIR_C)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(OBJ_DIR_Q)/%.o: $(SRC_DIR)/Queries/%.c | $(OBJ_DIR_Q)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 valgrind: $(TARGET)

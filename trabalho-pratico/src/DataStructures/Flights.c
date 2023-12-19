@@ -44,7 +44,7 @@ void print_flight(Flight * a){
 void add_flightPASSENGER(Flight * a, int x){
     a->passengers = x;
 }
-Flight * set_flight(char * id,char * airline, char * plane_model, char * origin, char * destination, char * schedule_departure_date,char * real_departure_date, char * schedule_arrival_date, char * passengers){    
+Flight * set_flight(char * id,char * airline, char * plane_model, char * origin, char * destination, char * schedule_departure_date,char * real_departure_date, char * schedule_arrival_date, unsigned int passengers){    
     Flight * a = malloc(sizeof(Flight));
     
     a->id = strdup(id);
@@ -56,7 +56,7 @@ Flight * set_flight(char * id,char * airline, char * plane_model, char * origin,
     a->schedule_arrival_date = strdup(schedule_arrival_date);
     a->real_departure_date = strdup(real_departure_date);
 
-    a->passengers = atoi(passengers);
+    a->passengers = (passengers);
 
     return a;
 

@@ -107,16 +107,22 @@ void almanac_add_user(Almanac *almanac,char * id, char *name, char *birth_date, 
     
     fhash_add(almanac->user,id,(void *)a, 1);
 }
-void almanac_add_flight(Almanac *almanac,char * id,char * airline, char * plane_model, char * origin, char * destination, char * schedule_departure_date,char * real_departure_date, char * schedule_arrival_date, char * passengers){
+void almanac_add_flight(Almanac *almanac,char * id,char * airline, char * plane_model, char * origin, char * destination, char * schedule_departure_date,char * real_departure_date, char * schedule_arrival_date, unsigned int passengers){
 
     Flight * a = set_flight(id,airline, plane_model, origin, destination, schedule_departure_date,real_departure_date, schedule_arrival_date, passengers);
 
     fhash_add(almanac->flight,id,a, 0);
 }
-void almanac_add_reservation(Almanac *almanac,char *id, char *id_hotel, char *user_id, char *hotel_name, char *hotel_stars, char *begin_date, char *end_date, char *includes_breakfast, char *rating, char *ppn, char *city_tax){
+void almanac_add_reservation(Almanac *almanac,char *id, char *id_hotel, char *user_id, char *hotel_name, char *hotel_stars, char *begin_date, char *end_date, int includes_breakfast, char *rating, char *ppn, char *city_tax){
     
-    Reservation * a = set_reservation(id, id_hotel, user_id, hotel_name, hotel_stars, begin_date, end_date, includes_breakfast, rating, ppn, city_tax);
-    
+    Reservation * a; 
+
+    if(includes_breakfast == 1)
+    a = set_reservation(id, id_hotel, user_id, hotel_name, hotel_stars, begin_date, end_date, "True", rating, ppn, city_tax);
+
+    else    
+    a = set_reservation(id, id_hotel, user_id, hotel_name, hotel_stars, begin_date, end_date, "False", rating, ppn, city_tax);
+
     fhash_add(almanac->reservation,id,(void *)a, 0);
 }
 ////////////////////////////////////////////////////////

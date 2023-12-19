@@ -28,6 +28,10 @@ int string_to_time(char *format, char *date1, char *date2) {
 
     return diff;
 }
+
+float total_pay(float ppn, float tax, int nights){
+    return (ppn * nights + ((ppn*nights)/100)*tax);
+}
 ///////////////////////////////////////////////////////////////
 
 
@@ -130,19 +134,17 @@ static int general_number_validation(int li,char * string,int ls){
 
 static int includes_breafast_validation(char * string){
     
-    char * x = strdup(string);
+    for(int i = 0; i < strlen(string);i++)
+    string[i] = tolower(string[i]);
 
-    if(!isdigit(x));
-
-    for(int i = 0; i < strlen(x);i++)
-    x[i] = tolower(x[i]);
-
-    if ((!strcmp(x,""))||(!strcmp(x,"t"))||(!strcmp(x,"true"))||(!strcmp(x,"1"))||(!strcmp(x,"f"))||(!strcmp(x,"false"))||(!strcmp(x,"0"))){
-        free(x);
+    if ((!strcmp(string,"t"))||(!strcmp(string,"true"))||(!strcmp(string,"1"))){
         return 1;
     }
 
-    free(x);
+    if ((!strcmp(string,"f"))||(!strcmp(string,"false"))||(!strcmp(string,"0"))||(!strcmp(string,""))){
+        return -1;
+    }
+
     return 0;
 }
 
@@ -218,8 +220,13 @@ int valid_flight(Almanac * a, const char * string){
         && general_string_validation(list[9]) && validate_hours(list[9]) && ((strcmp(list[8],list[9]))<0)
         && general_string_validation(list[10])
         && general_string_validation(list[11])){
-            almanac_add_flight(a,list[0],list[0],list[0],list[0],list[0],list[0],list[0],list[0],list[0]);
+            almanac_add_flight(a,list[0],list[1],list[2],list[4],list[5],list[6],list[8],list[7],almanac_get_seats(a,atoi(list[0])-1));
             res ++;
+
+
+            // id;airline;plane_model;total_seats;origin;destination;schedule_departure_date;schedule_arrival_date;real_departure_date;real_arrival_date;pilot;copilot;notes
+
+            // char *id, char *airline, char *plane_model, char *origin, char *destination, char *schedule_departure_date, char *real_departure_date, char *schedule_arrival_date, char *passengers
         }
 
 
@@ -263,9 +270,12 @@ int valid_user(Almanac * a, const char * string){
     && general_string_validation(list[10])
     && general_string_validation(list[11]) && account_status_validation(list[11])
     && email_validation(list[2])){
-        almanac_add_user(a,list[0],list[1],list[2],list[3],list[4],list[5],list[6]);
+        almanac_add_user(a,list[0],list[1],list[4],list[5],list[7],list[11],list[9]);
         res ++;
     }
+
+    // id;name;email;phone_number;birth_date;sex;passport;country_code;address;account_creation;pay_method;account_status
+    // char *id, char *name, char *birth_date, char *sex, char *country_code, char *account_status, char *account_creation
 
     for(int i = 0; i < 12; i++)
     free(list[i]);
@@ -286,6 +296,8 @@ int valid_reservation(Almanac * a, const char * string){
     
     for(int i = 0;token = strsep(&copy, ";");i++)
     list[i] = strdup(token);
+
+    // char * bekfast
     
 
     
@@ -300,11 +312,14 @@ int valid_reservation(Almanac * a, const char * string){
         && general_string_validation(list[7]) && validate_days(list[7])
         && general_string_validation(list[8]) && validate_days(list[8])  && ((strcmp(list[8],list[7]))>0)
         && general_string_validation(list[9]) && general_number_validation(0,list[9],1000000)
-        && includes_breafast_validation(list[10])
+        && includes_breafast_validation(list[10]) != 0
         && general_string_validation(list[11]) && rating_validation(list[12])){
-            almanac_add_reservation(a,list[0],list[0],list[0],list[0],list[0],list[0],list[0],list[0],list[0],list[0],list[0]);
+            almanac_add_reservation(a,list[0],list[2],list[1],list[3],list[4],list[7],list[8],includes_breafast_validation(list[10]),list[12],list[9],list[5]);
             res++;
             }
+
+            // id;user_id;hotel_id;hotel_name;hotel_stars;city_tax;address;begin_date;end_date;price_per_night;includes_breakfast;room_details;rating;comment
+            // char *id, char *id_hotel, char *user_id, char *hotel_name, char *hotel_stars, char *begin_date, char *end_date, char *includes_breakfast, char *rating, char *ppn, char *city_tax
 
     for(int i = 0; i < 14; i++)
     free(list[i]);

@@ -2,69 +2,107 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_ARGUMENTS 10
+#include "../include/Catalogs/Catalog.h"
+#include "../include/Queries/1Query.h"
+#include "../include/Output.h"
+///////////////////////////////////////////////////////////////
 
-typedef struct Argument {
-    char *value;
-    struct Argument *next;
-} Argument;
 
-typedef struct Query {
-    short type;
-    char hasF;
-    Argument *arguments;
-    int numArguments;
-    struct Query *next;
-} Query;
+///////////////////////////////////////////////////////////////
+static void filter_querys(Almanac * box, char * line, int number){
 
-// Parse a line and populate a Query struct
-void parseLine(const char *line, Query *query) {
-    // Assuming the line format is: <type> <hasF> <numArguments> <arg1> <arg2> ...
-    sscanf(line, "%hd %c %d", &query->type, &query->hasF, &query->numArguments);
+    char * title = malloc(sizeof(char) * 200);
+    snprintf(title, 200, "Resultados/command%d_output.txt", number);
+    FILE * file = create_file(title,"w");
 
-    // Process the arguments
-    char *token;
-    char *rest = strdup(line);  // Duplicate the line because strsep modifies the string
-    char *saveptr;
+    char * answear;
+    char * token = strsep(&line, " ");
 
-    for (int i = 0; i < query->numArguments; ++i) {
-        token = strtok_r(rest, " ", &saveptr);
-        if (token == NULL) {
-            fprintf(stderr, "Error parsing arguments in line: %s\n", line);
-            break;
-        }
+        if (token != NULL) {
 
-        Argument *arg = malloc(sizeof(Argument));
-        if (!arg) {
-            fprintf(stderr, "Memory allocation error\n");
-            exit(1);
-        }
+            char * type = strdup(token);
+            token = strsep(&line, " ");
 
-        arg->value = strdup(token);
-        arg->next = NULL;
+                switch (atoi(type)){
+                    case 1:
+                        
+                        answear = query1(box,token,(strchr(type,'F')!=NULL));
+                        
+                        if(answear!=NULL){
+                            write_line(file,answear);
+                            free(answear);
+                        }
 
-        if (i == 0) {
-            query->arguments = arg;
-        } else {
-            Argument *lastArg = query->arguments;
-            while (lastArg->next != NULL) {
-                lastArg = lastArg->next;
+                        break;
+                    
+                    case 2:
+                        /* code */
+                        break;
+                    
+                    case 3:
+                        /* code */
+                        break;
+                    
+                    case 4:
+                        /* code */
+                        break;
+                    
+                    case 5:
+                        /* code */
+                        break;
+                    
+                    case 6:
+                        /* code */
+                        break;
+                    
+                    case 7:
+                        /* code */
+                        break;
+                    
+                    case 8:
+                        /* code */
+                        break;
+                    
+                    case 9:
+                        /* code */
+                        break;
+                    
+                    case 10:
+                        /* code */
+                        break;
+
+                    default:
+                        break;
             }
-            lastArg->next = arg;
+
+        
+        free(type);
+        free(title);
+        fclose(file);
         }
+}
+///////////////////////////////////////////////////////////////
 
-        rest = NULL;  // For subsequent calls to strtok_r
+
+///////////////////////////////////////////////////////////////
+void read_query_file(Almanac * box, char * path){
+
+    FILE * file = create_file(path,"r");
+
+    char *line = NULL;
+    size_t len = 0;
+    
+    
+    for(int i = 1;getline(&line, &len, file) != -1;i++) {
+        line[strlen(line)-1] = '\0';
+
+
+        printf("%s\n",line);
+
+        filter_querys(box,line,i);
     }
 
-    free(rest);  // Free duplicated string
+    free(line);
+    fclose(file);
 }
-
-// Free memory allocated for arguments
-void freeArguments(Argument *arguments) {
-    while (arguments != NULL) {
-        Argument *nextArg = arguments->next;
-        free(arguments->value);
-        free(arguments);
-        arguments = nextArg;
-    }
-}
+///////////////////////////////////////////////////////////////

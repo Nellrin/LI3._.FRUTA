@@ -110,6 +110,16 @@ char * get_reservationBREAKFAST(Reservation * a){
 
     return includes_breakfast;
 }
+char * get_reservationPPN(Reservation * a){
+    char * ppn = strdup(a->ppn);
+
+    return ppn;
+}
+char * get_reservationTAX(Reservation * a){
+    char * tax = strdup(a->city_tax);
+
+    return tax;
+}
 char * get_reservationRATING(Reservation * a){
     char * rating = strdup(a->rating);
 

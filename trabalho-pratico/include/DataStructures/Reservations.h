@@ -26,6 +26,8 @@ char * get_reservationBEGIN(Reservation * a);
 char * get_reservationEND(Reservation * a);
 char * get_reservationBREAKFAST(Reservation * a);
 char * get_reservationRATING(Reservation * a);
+char * get_reservationPPN(Reservation * a);
+char * get_reservationTAX(Reservation * a);
 ////////////////////////////////////////////////////////
 
 
