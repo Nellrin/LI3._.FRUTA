@@ -1,13 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <malloc.h>
 
 #include "../include/Catalogs/Catalog.h"
 #include "../include/Utilities.h"
 #include "../include/Parser.h"
 #include "../include/Interpreter.h"
 
-#define CURRENT_DATE "2023/10/01"
+
+
+void printMemoryInfo() {
+    struct mallinfo info = mallinfo();
+    printf("\n\nTotal allocated space: %u bytes\n", info.uordblks);
+    printf("Total free space: %u bytes\n", info.fordblks);
+}
 
 int main(int argc, char *argv[]) {
 
@@ -24,7 +31,7 @@ int main(int argc, char *argv[]) {
         parser(argv[1],"users",u,valid_user);
         parser(argv[1],"reservations",u,valid_reservation);
         
-        almanac_add_passengers(u,passengers);
+        almanac_count_passengers(u,passengers);
         free(passengers);
 
         parser(argv[1],"flights",u,valid_flight);
@@ -43,8 +50,9 @@ int main(int argc, char *argv[]) {
         printf("Número de argumentos inválidos\n");
         break;
     }
-
+    printMemoryInfo();
     free_almanac(u);
+    printMemoryInfo();
 
     return 0;
 }

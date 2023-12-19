@@ -1,4 +1,5 @@
 #include "../../include/DataStructures/Reservations.h"
+#include "../../include/Utilities.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -129,9 +130,23 @@ char * get_reservationRATING(Reservation * a){
 
 
 ////////////////////////////////////////////////////////
+float total_got_from_reservation(const void * info){
+    Reservation * a = (Reservation *) info;
+    float ppn = strtod(a->ppn,NULL);
+    float tax = strtod(a->city_tax,NULL);
+    int nights = string_to_time("%d/%d/%d",a->begin_date,a->end_date);
+
+    return (ppn * nights + ((ppn*nights)/100)*tax);
+}
 int compare_reservation(const char *id, const void *info){
     const Reservation *reservation = (const Reservation *)info;
     return (strcmp(id, reservation->id) == 0);
+}
+int compare_reservation_date(const void *a, const void *b) {
+    const Reservation *reservationA = (const Reservation *)a;
+    const Reservation *reservationB = (const Reservation *)b;
+    
+    return strcmp(reservationA->begin_date, reservationB->begin_date);
 }
 ////////////////////////////////////////////////////////
 

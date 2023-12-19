@@ -33,6 +33,7 @@ int get_flightPASSENGERS(Flight * a);
 
 ////////////////////////////////////////////////////////
 int compare_flight(const char *id, const void *info);
+int compare_flight_date(const void *a, const void *b);
 ////////////////////////////////////////////////////////
 
 

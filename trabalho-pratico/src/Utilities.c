@@ -6,7 +6,7 @@
 
 #include "../include/Utilities.h"
 #include "../include/Catalogs/Catalog.h"
-#include "../include/DataStructures/Users.h"
+// #include "../include/DataStructures/Users.h"
 
 ///////////////////////////////////////////////////////////////
 static int string_to_tm(char * format, char *date) {
@@ -27,10 +27,6 @@ int string_to_time(char *format, char *date1, char *date2) {
 
 
     return diff;
-}
-
-float total_pay(float ppn, float tax, int nights){
-    return (ppn * nights + ((ppn*nights)/100)*tax);
 }
 ///////////////////////////////////////////////////////////////
 
@@ -182,9 +178,11 @@ int valid_passenger(Almanac * a, const char * string){
     //muito incompleta
 
     if(general_string_validation(list[0])&&general_string_validation(list[1]))
-    if(almanac_get_user(a,list[1])!=NULL)
-    if(almanac_get_flight(a,list[0])!=NULL)
+    if(almanac_get_user_node(a,list[1])!=NULL)
+    if(almanac_get_flight(a,list[0])!=NULL){
+        almanac_add_passengers(a,list[1],list[0]);
         res++;
+    }
             
 
     for(int i = 0; i < 2; i++)
@@ -270,7 +268,7 @@ int valid_user(Almanac * a, const char * string){
     && general_string_validation(list[10])
     && general_string_validation(list[11]) && account_status_validation(list[11])
     && email_validation(list[2])){
-        almanac_add_user(a,list[0],list[1],list[4],list[5],list[7],list[11],list[9]);
+        almanac_add_user(a,list[0],list[1],list[4],list[5],list[7],list[11],list[9],list[6]);
         res ++;
     }
 
@@ -303,7 +301,7 @@ int valid_reservation(Almanac * a, const char * string){
     
     if(general_string_validation(list[0])
     && general_string_validation(list[1]))
-        if(almanac_get_user(a,list[1]) != NULL)
+        if(almanac_get_user_node(a,list[1]) != NULL)
         if(general_string_validation(list[2])
         && general_string_validation(list[3])
         && general_string_validation(list[4]) && general_number_validation(1,list[4],5)

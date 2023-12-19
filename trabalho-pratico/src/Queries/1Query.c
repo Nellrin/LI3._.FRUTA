@@ -6,6 +6,8 @@
 #include "../../include/Catalogs/Catalog.h"
 #include "../../include/Utilities.h"
 
+#include "../../include/DataStructures/Users.h"
+#include "../../include/DataStructures/BTree.h"
 #include "../../include/DataStructures/Flights.h"
 #include "../../include/DataStructures/Reservations.h"
 #include "../../include/Queries/1Query.h"
@@ -42,11 +44,7 @@ char * query1(Almanac * box, char * string, short F){
                     char * includes_breakfast = get_reservationBREAKFAST(entity);
 
                     int nights = string_to_time("%d/%d/%d",begin_date,end_date);
-                    char * char_ppn = get_reservationPPN(entity);
-                    float ppn = strtod(char_ppn,NULL);
-                    char * char_tax = get_reservationTAX(entity);
-                    float tax = strtod(char_tax,NULL);
-                    float total_price = total_pay(ppn,tax,nights);
+                    float total_price = total_got_from_reservation(entity);
 
                                     if(F)
                                     snprintf(result, MAX_RESULT ,
@@ -76,20 +74,71 @@ char * query1(Almanac * box, char * string, short F){
                     free(begin_date);
                     free(end_date);
                     free(includes_breakfast);
-                    free(char_ppn);
-                    free(char_tax);
 
-                return result;      
+                return result;
             }
     }
     
-    if(!user(string)){
-        void * entity = almanac_get_user(box,string);
+//     if(!user(string)){
+//         void * entity = almanac_get_user(box,string);
             
-            if(entity!=NULL){
+//             if(entity!=NULL){
+//         printf("HERE\n");
+// // (name;sex;age;country_code;number_of_flights;number_of_reservations;total_spent)
+//                     char * name = get_userNAME(entity);
+//                     char * sex = get_userSEX(entity);
+//                     char * age = get_userBDAY(entity);
+//                     char * country = get_userCOUNTRY(entity);
+//                     char * passport = get_userPASSPORT(entity);
+//                     int number_of_flights = 0;
+//                     int number_of_reservations = 0;
 
-            }
-    }
+//                     float total_spent = 0;
+
+//                     int idade = string_to_time("%d/%d/%d",age,CURRENT_DATE);
+
+//                                     if(F)
+//                                     snprintf(result, MAX_RESULT ,
+//                                             "--- 1 ---\n"
+//                                             "name: %s\n"
+//                                             "sex: %s\n"
+//                                             "age: %d\n"
+//                                             "country_code: %s\n"
+//                                             "passport: %s\n"
+//                                             "number_of_flights: %d\n"
+//                                             "number_of_reservations: %d\n"
+//                                             "total_spent: %.3f\n",
+//                                         name, sex, idade, country,
+//                                         passport, number_of_flights, 
+//                                         number_of_reservations, total_spent);
+
+
+// // name: Lia Garcia
+// // sex: F
+// // age: 27
+// // country_code: PT
+// // passport: RQ468696
+// // number_of_flights: 11
+// // number_of_reservations: 6
+// // total_spent: 3034.800
+
+
+//                                     else
+//                                     snprintf(result, MAX_RESULT,
+//                                             "%s;%s;%d;%s;%s;%d;%d;%.3f\n",
+//                                         name, sex, idade, country,
+//                                         passport, number_of_flights, 
+//                                         number_of_reservations, total_spent);
+
+//                     free(name);
+//                     free(sex);
+//                     free(age);
+//                     free(country);
+//                     free(passport);
+
+//                 return result;
+//             }
+//     }
     
     else{
         void * entity = almanac_get_flight(box,string);

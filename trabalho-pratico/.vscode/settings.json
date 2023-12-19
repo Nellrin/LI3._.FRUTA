@@ -21,6 +21,8 @@
         "malloc.h": "c",
         "ctype.h": "c",
         "typeinfo": "c",
-        "1query.h": "c"
+        "1query.h": "c",
+        "btree.h": "c",
+        "interpreter.h": "c"
     }
 }

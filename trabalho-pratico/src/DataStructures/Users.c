@@ -10,6 +10,7 @@ struct user {
     char *name;
     char *birth_date;
     char *sex;
+    char *passport;
     char *country_code;
     char *account_status;
     char *account_creation;
@@ -27,6 +28,7 @@ void print_user(User * a){
         printf("[SEX]: %s\n",a->sex);
         printf("[COUNTRY CODE]: %s\n",a->country_code);
         printf("[ACCOUNT STATUS]: %s\n",a->account_status);
+        printf("[PASSPORT]: %s\n",a->passport);
 
         printf("----------------------------------------------------\n");
     }
@@ -35,7 +37,7 @@ void print_user(User * a){
 
 
 ////////////////////////////////////////////////////////
-User * set_user(char * id,char * name, char * birth_date, char * sex, char * country_code, char * account_status, char * account_creation){
+User * set_user(char * id,char * name, char * birth_date, char * sex, char * country_code, char * account_status, char * account_creation, char * passport){
     User * a = malloc(sizeof(User));
     
     if (a == NULL)
@@ -48,6 +50,7 @@ User * set_user(char * id,char * name, char * birth_date, char * sex, char * cou
     a->country_code = strdup(country_code);
     a->account_status = strdup(account_status);
     a->account_creation = strdup(account_creation);
+    a->passport = strdup(passport);
 
     return a;
 }
@@ -93,6 +96,11 @@ char * get_userACREATION(User * a){
 
     return account_creation;
 }
+char * get_userPASSPORT(User * a){
+    char * passport = strdup(a->passport);
+
+    return passport;
+}
 ////////////////////////////////////////////////////////
 
 
@@ -100,6 +108,12 @@ char * get_userACREATION(User * a){
 int compare_user(const char *id, const void *info) {
     const User *user = (const User *)info;
     return (strcmp(id, user->id) == 0);
+}
+int compare_user_prefix(const void *a, const void *b) {
+    const User *userA = (const User *)a;
+    const User *userB = (const User *)b;
+
+    return strncmp(userA->name, userB->name, strlen(userA->name));
 }
 ////////////////////////////////////////////////////////
 
@@ -117,6 +131,7 @@ void free_user(void * user) {
         free(a->country_code);
         free(a->account_status);
         free(a->account_creation);
+        free(a->passport);
 
         free(a);
     }
