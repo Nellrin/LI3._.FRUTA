@@ -83,7 +83,7 @@ void user_almanac_add_flight(User_Almanac *almanac,char * id, void * flight){
 }
 void user_almanac_add_reservation(User_Almanac *almanac,char *id, void * reservation){
     Node * node = fhash_get(almanac->global_user,id,1,compare_node);
-    insert(&(node->flight),reservation,compare_reservation_date);
+    insert(&(node->reservation),reservation,compare_reservation_date);
 }
 ////////////////////////////////////////////////////////
 
@@ -98,6 +98,15 @@ void * user_almanac_get_user(User_Almanac *almanac, char * target){
 void * user_almanac_get_individual_user(User_Almanac *almanac, char * target){
     Node * a = (Node *)user_almanac_get_user(almanac,target);
     return a->user;
+}
+
+int user_almanac_get_flights(User_Almanac *almanac, char * target){
+    Node * a = (Node *)user_almanac_get_user(almanac,target);
+    return (int) do_something(a->flight,exists);
+}
+int user_almanac_get_reservations(User_Almanac *almanac, char * target){
+    Node * a = (Node *)user_almanac_get_user(almanac,target);
+    return (int) do_something(a->reservation,exists);
 }
 
 float user_almanac_get_total_spent(User_Almanac * box, char *target, float (*f)(const void *info)){

@@ -11,8 +11,13 @@
 ///////////////////////////////////////////////////////////////
 static int string_to_tm(char * format, char *date) {
     int year = 0, month = 0, day = 0, hours = 0, minutes = 0, seconds = 0;
-    if (sscanf(date, format, &year, &month, &day, &hours, &minutes, &seconds) != (!strcmp(format,"%d/%d/%d")?3:6)){}
 
+    if(!strcmp(format,"%d/%d/%d")){
+        if (sscanf(date, format, &year, &month, &day) != 3){}
+        return (year * 365) + (month * 30) + day;
+    }
+
+    if (sscanf(date, format, &year, &month, &day, &hours, &minutes, &seconds) != (!strcmp(format,"%d/%d/%d")?3:6)){}
     return seconds + 60*(minutes+60*(hours+24*(day+31*(month + 12 * year))));
 }
 ///////////////////////////////////////////////////////////////
@@ -21,9 +26,9 @@ static int string_to_tm(char * format, char *date) {
 int string_to_time(char *format, char *date1, char *date2) {
 
     int x1 = string_to_tm(format, date2), x2 = string_to_tm(format, date1);
-    int diff;
+    int diff = (x1 - x2);
 
-    (!strcmp(format,"%d/%d/%d"))?(diff=(x1 - x2)/(24*60*60)):(diff = (x1 - x2));
+    // (!strcmp(format,"%d/%d/%d"))?(diff=(x1 - x2)/(366 * 60)):(diff = (x1 - x2));
 
 
     return diff;

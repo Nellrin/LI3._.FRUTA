@@ -79,38 +79,41 @@ char * query1(Almanac * box, char * string, short F){
             }
     }
     
-//     if(!user(string)){
-//         void * entity = almanac_get_user(box,string);
+    if(!user(string)){
             
-//             if(entity!=NULL){
-//         printf("HERE\n");
-// // (name;sex;age;country_code;number_of_flights;number_of_reservations;total_spent)
-//                     char * name = get_userNAME(entity);
-//                     char * sex = get_userSEX(entity);
-//                     char * age = get_userBDAY(entity);
-//                     char * country = get_userCOUNTRY(entity);
-//                     char * passport = get_userPASSPORT(entity);
-//                     int number_of_flights = 0;
-//                     int number_of_reservations = 0;
+            if(almanac_get_user_node(box,string)!=NULL){
+                void * entity = almanac_get_user(box,string);
+                char * active = get_userASTATUS(entity);
+                if(!strcmp(active,"active")){
 
-//                     float total_spent = 0;
+                    char * name = get_userNAME(entity);
+                    char * sex = get_userSEX(entity);
+                    char * age = get_userBDAY(entity);
+                    char * country = get_userCOUNTRY(entity);
+                    char * passport = get_userPASSPORT(entity);
+                    int number_of_flights = 0;
+                    int number_of_reservations = 0;
 
-//                     int idade = string_to_time("%d/%d/%d",age,CURRENT_DATE);
+                            almanac_get_user_reservations_flights(box,string,&number_of_flights,&number_of_reservations);
 
-//                                     if(F)
-//                                     snprintf(result, MAX_RESULT ,
-//                                             "--- 1 ---\n"
-//                                             "name: %s\n"
-//                                             "sex: %s\n"
-//                                             "age: %d\n"
-//                                             "country_code: %s\n"
-//                                             "passport: %s\n"
-//                                             "number_of_flights: %d\n"
-//                                             "number_of_reservations: %d\n"
-//                                             "total_spent: %.3f\n",
-//                                         name, sex, idade, country,
-//                                         passport, number_of_flights, 
-//                                         number_of_reservations, total_spent);
+                    float total_spent = total_spent_by_a_user_overall(box,string);
+
+                    int idade = (string_to_time("%d/%d/%d",age,CURRENT_DATE))/(365);
+
+                                    if(F)
+                                    snprintf(result, MAX_RESULT ,
+                                            "--- 1 ---\n"
+                                            "name: %s\n"
+                                            "sex: %s\n"
+                                            "age: %d\n"
+                                            "country_code: %s\n"
+                                            "passport: %s\n"
+                                            "number_of_flights: %d\n"
+                                            "number_of_reservations: %d\n"
+                                            "total_spent: %.3f\n",
+                                        name, sex, idade, country,
+                                        passport, number_of_flights, 
+                                        number_of_reservations, total_spent);
 
 
 // // name: Lia Garcia
@@ -123,22 +126,26 @@ char * query1(Almanac * box, char * string, short F){
 // // total_spent: 3034.800
 
 
-//                                     else
-//                                     snprintf(result, MAX_RESULT,
-//                                             "%s;%s;%d;%s;%s;%d;%d;%.3f\n",
-//                                         name, sex, idade, country,
-//                                         passport, number_of_flights, 
-//                                         number_of_reservations, total_spent);
+                                    else
+                                    snprintf(result, MAX_RESULT,
+                                            "%s;%s;%d;%s;%s;%d;%d;%.3f\n",
+                                        name, sex, idade, country,
+                                        passport, number_of_flights, 
+                                        number_of_reservations, total_spent);
 
-//                     free(name);
-//                     free(sex);
-//                     free(age);
-//                     free(country);
-//                     free(passport);
+                    free(name);
+                    free(sex);
+                    free(age);
+                    free(country);
+                    free(passport);
+                    free(active);
 
-//                 return result;
-//             }
-//     }
+                    return result;
+                }
+
+            free(active);
+            }
+    }
     
     else{
         void * entity = almanac_get_flight(box,string);

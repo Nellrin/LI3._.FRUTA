@@ -40,6 +40,7 @@ void * almanac_get_user_node(Almanac *almanac, char * target);
 void * almanac_get_user(Almanac *almanac, char * target);
 void * almanac_get_flight(Almanac *almanac, char * target);
 void * almanac_get_reservation(Almanac *almanac, char * target);
+void almanac_get_user_reservations_flights(Almanac * almanac, char * target, int * n_flights, int * n_reservations);
 ////////////////////////////////////////////////////////
 
 

@@ -28,6 +28,10 @@ void user_almanac_add_reservation(User_Almanac *almanac,char *id, void * reserva
 
 ////////////////////////////////////////////////////////
 float user_almanac_get_total_spent(User_Almanac * box, char *target, float (*f)(const void *info));
+
+int user_almanac_get_flights(User_Almanac *almanac, char * target);
+int user_almanac_get_reservations(User_Almanac *almanac, char * target);
+
 void * user_almanac_get_user(User_Almanac *almanac, char * target);
 void * user_almanac_get_individual_user(User_Almanac *almanac, char * target);
 ////////////////////////////////////////////////////////

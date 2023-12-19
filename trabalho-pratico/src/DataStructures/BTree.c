@@ -53,6 +53,7 @@ void free_tree(BTree *root){
 
 
 ////////////////////////////////////////////////////////
+
 BTree *search(BTree *root, char *key, int (*compare)(const void *, const char *)) {
     if (root == NULL || compare(key, root->data) == 0)
     return root;

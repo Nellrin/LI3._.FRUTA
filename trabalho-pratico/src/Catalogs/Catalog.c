@@ -147,4 +147,8 @@ void * almanac_get_reservation(Almanac *almanac, char * target){
     void * reservation =fhash_get(almanac->reservation,target,0,compare_reservation);
     return reservation;
 }
+void almanac_get_user_reservations_flights(Almanac * almanac, char * target, int * n_flights, int * n_reservations){
+    *n_flights = user_almanac_get_flights(almanac->user,target);
+    *n_reservations = user_almanac_get_reservations(almanac->user,target);
+}
 ////////////////////////////////////////////////////////
