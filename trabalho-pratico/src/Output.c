@@ -16,5 +16,6 @@ FILE * create_file(char * title,char * type){
 }
 
 void write_line(FILE * file, char * line){
+    if (line != NULL)
     fprintf(file, "%s",line);
 }

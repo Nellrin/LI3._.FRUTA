@@ -138,6 +138,10 @@ float total_got_from_reservation(const void * info){
 
     return (ppn * nights + ((ppn*nights)/100)*tax);
 }
+////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
 int compare_reservation(const char *id, const void *info){
     const Reservation *reservation = (const Reservation *)info;
     return (strcmp(id, reservation->id) == 0);
@@ -146,7 +150,7 @@ int compare_reservation_date(const void *a, const void *b) {
     const Reservation *reservationA = (const Reservation *)a;
     const Reservation *reservationB = (const Reservation *)b;
     
-    return strcmp(reservationA->begin_date, reservationB->begin_date);
+    return strcmp(reservationB->begin_date, reservationA->begin_date);
 }
 ////////////////////////////////////////////////////////
 

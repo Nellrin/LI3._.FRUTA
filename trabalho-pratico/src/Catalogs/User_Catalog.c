@@ -69,7 +69,7 @@ static int compare_node(const char * id, const void * info){
 
 
 ////////////////////////////////////////////////////////
-void user_almanac_add_user(User_Almanac *almanac,char * id, char *name, char *birth_date, char *sex, char *country_code, char *account_status, char *account_creation,char * passport){
+void user_almanac_add_user(User_Almanac *almanac,char * id, char *name, char *birth_date, char *sex, char *country_code, short account_status, char *account_creation,char * passport){
     void * user = set_user(id, name, birth_date, sex, country_code, account_status, account_creation,passport);
     Node * a = init_node(user);
 
@@ -84,6 +84,7 @@ void user_almanac_add_flight(User_Almanac *almanac,char * id, void * flight){
 void user_almanac_add_reservation(User_Almanac *almanac,char *id, void * reservation){
     Node * node = fhash_get(almanac->global_user,id,1,compare_node);
     insert(&(node->reservation),reservation,compare_reservation_date);
+
 }
 ////////////////////////////////////////////////////////
 
@@ -100,19 +101,14 @@ void * user_almanac_get_individual_user(User_Almanac *almanac, char * target){
     return a->user;
 }
 
-int user_almanac_get_flights(User_Almanac *almanac, char * target){
+void * user_almanac_use_flights(User_Almanac *almanac, char * target){
     Node * a = (Node *)user_almanac_get_user(almanac,target);
-    return (int) do_something(a->flight,exists);
+    return a->flight;
 }
-int user_almanac_get_reservations(User_Almanac *almanac, char * target){
+void * user_almanac_use_reservations(User_Almanac *almanac, char * target){
     Node * a = (Node *)user_almanac_get_user(almanac,target);
-    return (int) do_something(a->reservation,exists);
+    return a->reservation;
 }
-
-float user_almanac_get_total_spent(User_Almanac * box, char *target, float (*f)(const void *info)){
-    Node * a = (Node *)user_almanac_get_user(box,target);
-    return do_something(a->reservation, f);
-};
 
 // void * almanac_get_flight(Almanac *almanac, char * target){
 //     void * flight = fhash_get(almanac->flight,target,0,compare_flight);

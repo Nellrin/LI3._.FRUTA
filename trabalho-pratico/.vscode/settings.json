@@ -23,6 +23,7 @@
         "typeinfo": "c",
         "1query.h": "c",
         "btree.h": "c",
-        "interpreter.h": "c"
+        "interpreter.h": "c",
+        "2query.h": "c"
     }
 }

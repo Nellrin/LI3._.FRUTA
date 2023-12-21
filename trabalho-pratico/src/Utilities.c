@@ -33,6 +33,11 @@ int string_to_time(char *format, char *date1, char *date2) {
 
     return diff;
 }
+void swap_strings(char ** s1, char ** s2){
+    char *temp = *s1;
+    *s1 = *s2;
+    *s2 = temp;
+}
 ///////////////////////////////////////////////////////////////
 
 
@@ -100,9 +105,14 @@ static int account_status_validation(char * string){
     for(int i = 0; i < strlen(string); i++)
         copy[i] = toupper(copy[i]);
      
-    if((!strcmp(copy,"ACTIVE"))||(!strcmp(copy,"INACTIVE"))){
+    if(!strcmp(copy,"ACTIVE")){
         free(copy);
         return 1;
+    }
+
+    if(!strcmp(copy,"INACTIVE")){
+        free(copy);
+        return 2;
     }
 
     free(copy);
@@ -273,7 +283,7 @@ int valid_user(Almanac * a, const char * string){
     && general_string_validation(list[10])
     && general_string_validation(list[11]) && account_status_validation(list[11])
     && email_validation(list[2])){
-        almanac_add_user(a,list[0],list[1],list[4],list[5],list[7],list[11],list[9],list[6]);
+        almanac_add_user(a,list[0],list[1],list[4],list[5],list[7],account_status_validation(list[11]),list[9],list[6]);
         res ++;
     }
 

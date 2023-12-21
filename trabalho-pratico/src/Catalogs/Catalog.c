@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "../../include/DataStructures/Users.h"
+#include "../../include/DataStructures/BTree.h"
 #include "../../include/DataStructures/Flights.h"
 #include "../../include/DataStructures/Reservations.h"
 #include "../../include/DataStructures/FHash.h"
@@ -87,8 +88,8 @@ void almanac_count_passengers(Almanac *almanac,char * path){
             printf("\n\nSAFE\n\n");
 
             
-    for(int i = 0; i < amount_flights; i++)
-    printf("\n%d",almanac->passenger[i]);
+    // for(int i = 0; i < amount_flights; i++)
+    // printf("\n%d",almanac->passenger[i]);
 
 
     fclose(file);
@@ -100,7 +101,7 @@ void almanac_count_passengers(Almanac *almanac,char * path){
 void almanac_add_passengers(Almanac * almanac, char * user_id, char * flight_id){
     user_almanac_add_flight(almanac->user,user_id,almanac_get_flight(almanac,flight_id));
 }
-void almanac_add_user(Almanac *almanac,char * id, char *name, char *birth_date, char *sex, char *country_code, char *account_status, char *account_creation, char * passport){
+void almanac_add_user(Almanac *almanac,char * id, char *name, char *birth_date, char *sex, char *country_code, short account_status, char *account_creation, char * passport){
     user_almanac_add_user(almanac->user,id, name, birth_date, sex, country_code, account_status, account_creation, passport);
 }
 void almanac_add_flight(Almanac *almanac,char * id,char * airline, char * plane_model, char * origin, char * destination, char * schedule_departure_date,char * real_departure_date, char * schedule_arrival_date, unsigned int passengers){
@@ -130,9 +131,6 @@ void almanac_add_reservation(Almanac *almanac,char *id, char *id_hotel, char *us
 unsigned int almanac_get_seats(Almanac *almanac, int target){
     return almanac->passenger[target];
 }
-float total_spent_by_a_user_overall(Almanac *almanac, char * target){
-    return user_almanac_get_total_spent(almanac->user,target,total_got_from_reservation);
-}
 void * almanac_get_user(Almanac *almanac, char * target){
     return user_almanac_get_individual_user(almanac->user,target);
 }
@@ -147,8 +145,21 @@ void * almanac_get_reservation(Almanac *almanac, char * target){
     void * reservation =fhash_get(almanac->reservation,target,0,compare_reservation);
     return reservation;
 }
+
+
+void * almanac_get_user_flights(Almanac * almanac, char * target){
+    return user_almanac_use_flights(almanac->user, target);
+}
+void * almanac_get_user_reservations(Almanac * almanac, char * target){
+    return user_almanac_use_reservations(almanac->user, target);
+}
+
 void almanac_get_user_reservations_flights(Almanac * almanac, char * target, int * n_flights, int * n_reservations){
-    *n_flights = user_almanac_get_flights(almanac->user,target);
-    *n_reservations = user_almanac_get_reservations(almanac->user,target);
+
+    void * x = user_almanac_use_flights(almanac->user,target);
+    void * y = user_almanac_use_reservations(almanac->user,target);
+
+    *n_flights = (int) do_something(x,exists);
+    *n_reservations = (int) do_something(y,exists);
 }
 ////////////////////////////////////////////////////////

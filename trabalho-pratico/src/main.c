@@ -4,6 +4,7 @@
 #include <malloc.h>
 
 #include "../include/Catalogs/Catalog.h"
+#include "../include/DataStructures/Users.h"
 #include "../include/Utilities.h"
 #include "../include/Parser.h"
 #include "../include/Interpreter.h"
@@ -50,6 +51,9 @@ int main(int argc, char *argv[]) {
         printf("Número de argumentos inválidos\n");
         break;
     }
+
+
+
     printMemoryInfo();
     free_almanac(u);
     printMemoryInfo();

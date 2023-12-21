@@ -22,10 +22,6 @@ BTree *createNode(void *data) {
     newNode->left = newNode->right = NULL;
     return newNode;
 }
-
-float exists(const void * info){
-    return(info != NULL);
-}
 void insert(BTree **root, void *data, int (*compare)(const void *, const void *)) {
     if (*root == NULL)
     *root = createNode(data);
@@ -53,7 +49,13 @@ void free_tree(BTree *root){
 
 
 ////////////////////////////////////////////////////////
+float exists(const void * info){
+    return(info != NULL);
+}
+////////////////////////////////////////////////////////
 
+
+////////////////////////////////////////////////////////
 BTree *search(BTree *root, char *key, int (*compare)(const void *, const char *)) {
     if (root == NULL || compare(key, root->data) == 0)
     return root;
@@ -69,5 +71,15 @@ float do_something(BTree *root, float (*f)(const void *)){
     return 0;
 
     return (do_something(root->left,f)) + (f(root->data)) + (do_something(root->right,f));
+}
+void get_tlines(BTree * root, char *** list_id,char *** list_dates, int * n, void (*f)(void *, char ***,char ***, int *)){
+
+    if(root->left!=NULL)
+    get_tlines(root->left,list_id,list_dates,n,f);
+    
+    f(root->data,list_id,list_dates,n);
+
+    if(root->right!=NULL)    
+    get_tlines(root->right,list_id,list_dates,n,f);
 }
 ////////////////////////////////////////////////////////

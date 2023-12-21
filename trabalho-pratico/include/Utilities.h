@@ -9,7 +9,7 @@ typedef struct almanac Almanac;
 
 ///////////////////////////////////////////////////////////////
 int string_to_time(char *format, char *date1, char *date2);
-// float total_pay(float ppn, float tax, int nights);
+void swap_strings(char ** s1, char ** s2);
 ///////////////////////////////////////////////////////////////
 
 

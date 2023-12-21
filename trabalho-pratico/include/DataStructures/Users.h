@@ -13,7 +13,7 @@ void print_user(User * a);
 
 
 ////////////////////////////////////////////////////////
-User * set_user(char * id,char * name, char * birth_date, char * sex, char * country_code, char * account_status, char * account_creation, char * passport);
+User * set_user(char * id,char * name, char * birth_date, char * sex, char * country_code, short account_status, char * account_creation, char * passport);
 ////////////////////////////////////////////////////////
 
 
@@ -23,7 +23,7 @@ char * get_userNAME(User * a);
 char * get_userBDAY(User * a);
 char * get_userSEX(User * a);
 char * get_userCOUNTRY(User * a);
-char * get_userASTATUS(User * a);
+short get_userASTATUS(User * a);
 char * get_userACREATION(User * a);
 char * get_userPASSPORT(User * a);
 ////////////////////////////////////////////////////////

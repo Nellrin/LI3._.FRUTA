@@ -12,8 +12,8 @@ struct user {
     char *sex;
     char *passport;
     char *country_code;
-    char *account_status;
     char *account_creation;
+    short account_status;
 };
 ////////////////////////////////////////////////////////
 
@@ -27,7 +27,7 @@ void print_user(User * a){
         printf("[BIRTH DATE]: %s\n",a->birth_date);
         printf("[SEX]: %s\n",a->sex);
         printf("[COUNTRY CODE]: %s\n",a->country_code);
-        printf("[ACCOUNT STATUS]: %s\n",a->account_status);
+        printf("[ACCOUNT STATUS]: %d\n",a->account_status);
         printf("[PASSPORT]: %s\n",a->passport);
 
         printf("----------------------------------------------------\n");
@@ -37,7 +37,7 @@ void print_user(User * a){
 
 
 ////////////////////////////////////////////////////////
-User * set_user(char * id,char * name, char * birth_date, char * sex, char * country_code, char * account_status, char * account_creation, char * passport){
+User * set_user(char * id,char * name, char * birth_date, char * sex, char * country_code, short account_status, char * account_creation, char * passport){
     User * a = malloc(sizeof(User));
     
     if (a == NULL)
@@ -48,7 +48,7 @@ User * set_user(char * id,char * name, char * birth_date, char * sex, char * cou
     a->birth_date = strdup(birth_date);
     a->sex = strdup(sex);
     a->country_code = strdup(country_code);
-    a->account_status = strdup(account_status);
+    a->account_status = (account_status);
     a->account_creation = strdup(account_creation);
     a->passport = strdup(passport);
 
@@ -86,10 +86,8 @@ char * get_userCOUNTRY(User * a){
 
     return country_code;
 }
-char * get_userASTATUS(User * a){
-    char * account_status = strdup(a->account_status);
-
-    return account_status;
+short get_userASTATUS(User * a){
+    return a->account_status;
 }
 char * get_userACREATION(User * a){
     char * account_creation = strdup(a->account_creation);
@@ -129,7 +127,6 @@ void free_user(void * user) {
         free(a->birth_date);
         free(a->sex);
         free(a->country_code);
-        free(a->account_status);
         free(a->account_creation);
         free(a->passport);
 
