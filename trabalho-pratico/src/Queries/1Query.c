@@ -18,13 +18,11 @@
 
 static int user_verifier(const char * id){
 
-    while (*id) {
-        if (!isdigit(*id))
-        return 0;
-    
-        id++;
-    }
-    return 1;
+    for(int i = 0; i < strlen(id); i++)
+        if(isalpha(id[i]))
+        return 1;
+
+    return 0;
 }
 static void query1_reservation(void * entity, char ** result,char F){
         char * hotel_id = get_reservationHOTELID(entity);
@@ -176,7 +174,7 @@ char * query1(Almanac * box, char * string, short F){
         }
     }
     
-    if(!user_verifier(string))
+    if(user_verifier(string))
     if(almanac_get_user_node(box,string)!=NULL){
 
         void * entity = almanac_get_user(box,string);
@@ -192,15 +190,15 @@ char * query1(Almanac * box, char * string, short F){
         }
     }
     
-    else{
         void * entity = almanac_get_flight(box,string);
+        printf("\n%s\n",string);
             
             if(entity!=NULL){
+                char * name = get_flightID(entity);
+                printf("%s\n",name);
                 query1_flight(entity,&result,F);
                 return result;        
             }
-
-    }
 
     free(result);
     return NULL;

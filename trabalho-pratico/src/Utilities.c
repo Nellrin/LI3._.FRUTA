@@ -237,6 +237,8 @@ int valid_flight(Almanac * a, const char * string){
             res ++;
 
 
+            if(!strcmp(list[0],"0000145802"))
+            printf("YES!\n");
             // id;airline;plane_model;total_seats;origin;destination;schedule_departure_date;schedule_arrival_date;real_departure_date;real_arrival_date;pilot;copilot;notes
 
             // char *id, char *airline, char *plane_model, char *origin, char *destination, char *schedule_departure_date, char *real_departure_date, char *schedule_arrival_date, char *passengers

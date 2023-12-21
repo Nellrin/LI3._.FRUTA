@@ -131,13 +131,27 @@ static int compare_prefix(char* a, char* b) {
 }
 
 int compare_user_prefix(const void *a, const void *b) {
-    const User *userA = (const User *)a;
-    const User *userB = (const User *)b;
+    User *userA = (User *)a;
+    User *userB = (User *)b;
 
-    if(strcasecmp(userB->name, userA->name) == 0)
-        return strcasecmp(userB->id,userA->id);
+    char * nameA = get_userNAME(userA);
+    char * nameB = get_userNAME(userB);
 
-    return (strcasecmp(userA->name, userB->name));
+    for(int i = 0; i < strlen(nameA); i++)
+        if(nameA[i]=='-')
+        nameA[i] = ' ';
+
+    for(int i = 0; i < strlen(nameB); i++)
+        if(nameB[i]=='-')
+        nameB[i] = ' ';
+
+    int res = strcasecmp(nameA, nameB);
+    free(nameA);free(nameB);
+    
+    if(!res)
+        return strcasecmp(userA->id,userB->id);
+
+    return (res);
 }
 ////////////////////////////////////////////////////////
 

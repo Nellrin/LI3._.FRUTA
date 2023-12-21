@@ -34,12 +34,13 @@ static void filter_querys(Almanac * box, char * line, int number){
                                                                             if (token != NULL) {
                                                                                 strcat(arguments[n_arguments], " ");
                                                                                 strcat(arguments[n_arguments], token);
-                                                                            }
-                                                                        while(token[strlen(token)-1 ] != '"') {
-                                                                            token = strsep(&line, " ");
-                                                                            if (token != NULL) {
-                                                                                strcat(arguments[n_arguments], " ");
-                                                                                strcat(arguments[n_arguments], token);
+                                                                            
+                                                                            while(token[strlen(token)-1 ] != '"') {
+                                                                                token = strsep(&line, " ");
+                                                                                if (token != NULL) {
+                                                                                    strcat(arguments[n_arguments], " ");
+                                                                                    strcat(arguments[n_arguments], token);
+                                                                                }
                                                                             }
                                                                         }
 
@@ -104,11 +105,11 @@ static void filter_querys(Almanac * box, char * line, int number){
                         break;
                     
                     case 9:
-                        answear = query9(box,arguments[1],(strchr(arguments[0],'F')!=NULL));
-                        if(answear!=NULL){
-                            write_line(file,answear);
-                            free(answear);
-                        }
+                        // answear = query9(box,arguments[1],(strchr(arguments[0],'F')!=NULL));
+                        // if(answear!=NULL){
+                        //     write_line(file,answear);
+                        //     free(answear);
+                        // }
                         break;
                     
                     case 10:
