@@ -21,9 +21,9 @@ static void filter_querys(Almanac * box, char * line, int number){
 
                                 char * answear = NULL;
                                 char * token = NULL;
-                                char ** arguments = malloc(sizeof(char *) * 6);
+                                char ** arguments = malloc(sizeof(char *) * 20);
 
-                                for(int i = 0; i < 6; i++)
+                                for(int i = 0; i < 20; i++)
                                 arguments[i] = NULL;
                                 
                                 int n_arguments;
@@ -31,28 +31,34 @@ static void filter_querys(Almanac * box, char * line, int number){
 
 
                                                                 for (n_arguments = 0; (token = strsep(&line, " ")) != NULL; n_arguments++) {
-                                                                    arguments[n_arguments] = strdup(token);
+                                                                    char * argumento = malloc(sizeof(char) * 1000);
+
+
+                                                                    strcpy(argumento,token);
 
                                                                     if(token[0] == '"'){
                                                                             token = strsep(&line, " ");
                                                                             if (token != NULL) {
-                                                                                strcat(arguments[n_arguments], " ");
-                                                                                strcat(arguments[n_arguments], token);
+                                                                                strcat(argumento, " ");
+                                                                                strcat(argumento, token);
                                                                             
-                                                                            while(token[strlen(token)-1 ] != '"') {
+                                                                            while(token[strlen(token)-1] != '"') {
                                                                                 token = strsep(&line, " ");
                                                                                 if (token != NULL) {
-                                                                                    strcat(arguments[n_arguments], " ");
-                                                                                    strcat(arguments[n_arguments], token);
+                                                                                    strcat(argumento, " ");
+                                                                                    strcat(argumento, token);
                                                                                 }
                                                                             }
                                                                         }
 
+                                                                            for(int i = 0; i < strlen(argumento) - 1; i++)
+                                                                            argumento[i] = argumento[i+1];
+                                                                            argumento[strlen(argumento)-2] = '\0';
+                                                                        }
 
-                                                                        for(int i = 0; i < strlen(arguments[n_arguments]) - 1; i++)
-                                                                        arguments[n_arguments][i] = arguments[n_arguments][i+1];
-                                                                        arguments[n_arguments][strlen(arguments[n_arguments])-2] = '\0';
-                                                                    }
+
+                                                                    arguments[n_arguments] = strdup(argumento);
+                                                                    free(argumento);
                                                                 }
 
 

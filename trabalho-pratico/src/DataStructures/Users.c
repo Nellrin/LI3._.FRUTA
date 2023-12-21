@@ -116,7 +116,6 @@ static void removeSpacesAndHyphens(char *str) {
         return;
     }
 
-    // Iterate through the string and remove spaces and hyphens
     char *src = str;
     char *dst = str;
 
@@ -129,12 +128,12 @@ static void removeSpacesAndHyphens(char *str) {
         src++;
     }
 
-    *dst = '\0'; // Null-terminate the modified string
+    *dst = '\0';
 }
 
 static int compare_prefix(char* a, char* b) {
 
-    setlocale(LC_COLLATE, "en_US.UTF-8"); //Configura a localização
+    setlocale(LC_COLLATE, "en_US.UTF-8"); 
 
     int result = strcoll(a, b);
 
