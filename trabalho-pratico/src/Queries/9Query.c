@@ -14,13 +14,13 @@
 
 
 
-static void line_user(void * a, char *** list_id, char *** list_name, int * n, char * prefix){
+static void line_user(void * b, char *** list_id, char *** list_name, int * n, char * prefix){
+    User * a = (User *)b;
     char * name = get_userNAME(a);
 
-    if(!strncmp(prefix,name,strlen(prefix))&&get_userASTATUS(a)==1){
+    short len = strlen(prefix);
+    if(!strncmp(prefix,name,len)&&get_userASTATUS(a)==1){
         (*list_id)[(*n)] = get_userID(a);
-
-        // printf("%s\n",name);
         (*list_name)[(*n)] = get_userNAME(a);
             
         (*n) ++;
@@ -31,8 +31,8 @@ static void line_user(void * a, char *** list_id, char *** list_name, int * n, c
 
 static char * strcat_list_pre( char ** list_id,char ** list_dates, short F, int n){
 
-    char * line = malloc(sizeof(char) * 200000);
-    char * x = malloc(sizeof(char) * 3);
+    char * line = (char*) malloc(sizeof(char) * 200000);
+    char * x = malloc(sizeof(char) * 300);
     line[0] = '\0';
     
     if(F){
@@ -52,8 +52,9 @@ static char * strcat_list_pre( char ** list_id,char ** list_dates, short F, int 
                 strcat(line, "\n\n");
             }
 
-
-            line[strlen(line)-1] = '\0';
+        if (strlen(line) > 0) {
+            line[strlen(line) - 1] = '\0';
+        }
     }
 
 
@@ -71,90 +72,38 @@ static char * strcat_list_pre( char ** list_id,char ** list_dates, short F, int 
 
 }
 
-static custom_compare(const char *str1, const char *str2){
-       while (*str1 && *str2) {
-        // Convert characters to lowercase for comparison
-        unsigned int c1 = tolower((unsigned int)*str1);
-        unsigned int c2 = tolower((unsigned int)*str2);
-
-        // Compare characters
-        if (c1 < c2) {
-            return -1;
-        } else if (c1 > c2) {
-            return 1;
-        }
-
-        // Move to the next characters
-        str1++;
-        str2++;
-    }
-
-    // Strings are equal up to the shorter length
-    if (*str1 == *str2) {
-        return 0;
-    } else if (*str1) {
-        return 1; // str1 is longer
-    } else {
-        return -1; // str2 is longer
-    }
-}
-
 
 static char * query9_getter(Almanac * box, char * argument ,char F){
     char * result = NULL;
     
-    int nt = 1000;
+    int nt = 2000;
 
     char **list_user_id = malloc(sizeof(char *) * nt);
     char **list_user_name = malloc(sizeof(char *) * nt);
+
+        for(int i = 0; i < 2000; i++){
+            list_user_id[i] = NULL;
+            list_user_name[i] = NULL;
+        }
 
     nt = 0;
 
 
         void * users = almanac_get_prefix(box);
 
-
         get_prefix(users, &list_user_id,&list_user_name, argument,&nt, line_user);
 
-    for(int i = 0; i < nt; i++)
-    for(int j = i; j < nt; j++){
-        char * nameA = strdup(list_user_name[i]);
-        char * nameB = strdup(list_user_name[j]);
-
-        for(int k = 0; k < strlen(nameA); k++)
-        if(nameA[k]=='-')
-        nameA[k] = ' ';
-
-        for(int k = 0; k < strlen(nameB); k++)
-            if(nameB[k]=='-')
-            nameB[k] = ' ';
-
-        int res = custom_compare(nameA, nameB);
-        free(nameA);free(nameB);
-        
-        if(!res)
-        if(strcasecmp(list_user_id[i], list_user_id[j])>0){
-            swap_strings(&list_user_id[i],&list_user_id[j]);
-            swap_strings(&list_user_name[i],&list_user_name[j]);
-        }
-            
-
-        if(res>0){
-            swap_strings(&list_user_name[i],&list_user_name[j]);
-            swap_strings(&list_user_id[i],&list_user_id[j]);
-        }
-    }
 
         result = strcat_list_pre(list_user_id,list_user_name,F,nt);
 
-            // for(int i = 0; i < nt; i++){
-            //     if(list_user_id[i]!=NULL)
-            //     free(list_user_id[i]);
-            //     free(list_user_name[i]);
-            // }
+        for(int i = 0; i < 2000; i++)
+            if(list_user_id[i]!=NULL){
+            free(list_user_id[i]);
+            free(list_user_name[i]);
+        }
 
-            // free(list_user_id);
-            // free(list_user_name);
+            free(list_user_id);
+            free(list_user_name);
 
             return result;
 }

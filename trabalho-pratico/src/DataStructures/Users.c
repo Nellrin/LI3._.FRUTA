@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <locale.h>
 
 ////////////////////////////////////////////////////////
 struct user {
@@ -110,24 +111,34 @@ int compare_user(const char *id, const void *info) {
 }
 
 
-static int compare_prefix(char* a, char* b) {
-
-    for(int i = 0; i < strlen(a) || i < strlen(b); i++){
-        if ((a[i] == ' ' || (a[i]) == '-' )&&(b[i] == '-' || (b[i]) == ' ' )) {
-            continue;
-        } else if (isalpha(a[i]) && isalpha(b[i])) {
-            char charA = tolower(a[i]);
-            char charB = tolower(b[i]);
-
-            if (charA < charB) {
-                return 1;
-            } else if (charA > charB) {
-                return -1;
-            }
-        }
+static void removeSpacesAndHyphens(char *str) {
+    if (str == NULL) {
+        return;
     }
 
-    return 0;
+    // Iterate through the string and remove spaces and hyphens
+    char *src = str;
+    char *dst = str;
+
+    while (*src) {
+        if (*src != ' ' && *src != '-') {
+            *dst = *src;
+            dst++;
+        }
+
+        src++;
+    }
+
+    *dst = '\0'; // Null-terminate the modified string
+}
+
+static int compare_prefix(char* a, char* b) {
+
+    setlocale(LC_COLLATE, "en_US.UTF-8"); //Configura a localização
+
+    int result = strcoll(a, b);
+
+    return result;
 }
 
 int compare_user_prefix(const void *a, const void *b) {
@@ -137,19 +148,15 @@ int compare_user_prefix(const void *a, const void *b) {
     char * nameA = get_userNAME(userA);
     char * nameB = get_userNAME(userB);
 
-    for(int i = 0; i < strlen(nameA); i++)
-        if(nameA[i]=='-')
-        nameA[i] = ' ';
+    removeSpacesAndHyphens(nameA);
+    removeSpacesAndHyphens(nameB);
 
-    for(int i = 0; i < strlen(nameB); i++)
-        if(nameB[i]=='-')
-        nameB[i] = ' ';
 
-    int res = strcasecmp(nameA, nameB);
+    int res = compare_prefix(nameA, nameB);
     free(nameA);free(nameB);
     
     if(!res)
-        return strcasecmp(userA->id,userB->id);
+        return compare_prefix(userA->id,userB->id);
 
     return (res);
 }

@@ -22,6 +22,10 @@ static void filter_querys(Almanac * box, char * line, int number){
                                 char * answear = NULL;
                                 char * token = NULL;
                                 char ** arguments = malloc(sizeof(char *) * 6);
+
+                                for(int i = 0; i < 6; i++)
+                                arguments[i] = NULL;
+                                
                                 int n_arguments;
 
 
@@ -52,32 +56,16 @@ static void filter_querys(Almanac * box, char * line, int number){
                                                                 }
 
 
-                printf("\n\n");
-                        for(int i = 0; i < n_arguments; i++)
-                        printf("%s\n",arguments[i]);
-
-
         if (n_arguments>0) {
+
 
                 switch (atoi(arguments[0])){
                     case 1:
-                        
                         answear = query1(box,arguments[1],(strchr(arguments[0],'F')!=NULL));
-                        if(answear!=NULL){
-                            write_line(file,answear);
-                            free(answear);
-                        }
-
                         break;
                     
                     case 2:
-                    
                         answear = query2(box,arguments,n_arguments,(strchr(arguments[0],'F')!=NULL));
-                        if(answear!=NULL){
-                            write_line(file,answear);
-                            free(answear);
-                        }
-
                         break;
                     
                     case 3:
@@ -105,11 +93,7 @@ static void filter_querys(Almanac * box, char * line, int number){
                         break;
                     
                     case 9:
-                        // answear = query9(box,arguments[1],(strchr(arguments[0],'F')!=NULL));
-                        // if(answear!=NULL){
-                        //     write_line(file,answear);
-                        //     free(answear);
-                        // }
+                        answear = query9(box,arguments[1],(strchr(arguments[0],'F')!=NULL));
                         break;
                     
                     case 10:
@@ -124,7 +108,10 @@ static void filter_querys(Almanac * box, char * line, int number){
 
 
     
-
+                        if(answear!=NULL){
+                            write_line(file,answear);
+                            free(answear);
+                        }
 
 
     for(int i = 0;i<n_arguments;i++)

@@ -179,11 +179,7 @@ char * query1(Almanac * box, char * string, short F){
 
         void * entity = almanac_get_user(box,string);
 
-            char * text = get_userID(entity);
-            if(!strcmp(text,"RodrigGonçalves260"))
-            print_user(entity);
-
-        if(get_userASTATUS(entity)==1){
+            if(get_userASTATUS(entity)==1){
             
             query1_user(box,string,entity,&result,F);
             return result;
@@ -191,11 +187,8 @@ char * query1(Almanac * box, char * string, short F){
     }
     
         void * entity = almanac_get_flight(box,string);
-        printf("\n%s\n",string);
             
             if(entity!=NULL){
-                char * name = get_flightID(entity);
-                printf("%s\n",name);
                 query1_flight(entity,&result,F);
                 return result;        
             }
