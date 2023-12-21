@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 ////////////////////////////////////////////////////////
 struct user {
@@ -107,11 +108,36 @@ int compare_user(const char *id, const void *info) {
     const User *user = (const User *)info;
     return (strcmp(id, user->id) == 0);
 }
+
+
+static int compare_prefix(char* a, char* b) {
+
+    for(int i = 0; i < strlen(a) || i < strlen(b); i++){
+        if ((a[i] == ' ' || (a[i]) == '-' )&&(b[i] == '-' || (b[i]) == ' ' )) {
+            continue;
+        } else if (isalpha(a[i]) && isalpha(b[i])) {
+            char charA = tolower(a[i]);
+            char charB = tolower(b[i]);
+
+            if (charA < charB) {
+                return 1;
+            } else if (charA > charB) {
+                return -1;
+            }
+        }
+    }
+
+    return 0;
+}
+
 int compare_user_prefix(const void *a, const void *b) {
     const User *userA = (const User *)a;
     const User *userB = (const User *)b;
 
-    return strncmp(userA->name, userB->name, strlen(userA->name));
+    if(strcasecmp(userB->name, userA->name) == 0)
+        return strcasecmp(userB->id,userA->id);
+
+    return (strcasecmp(userA->name, userB->name));
 }
 ////////////////////////////////////////////////////////
 

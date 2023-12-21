@@ -96,6 +96,9 @@ void user_almanac_add_reservation(User_Almanac *almanac,char *id, void * reserva
 void * user_almanac_get_user(User_Almanac *almanac, char * target){
     return fhash_get(almanac->global_user,target,1,compare_node);
 }
+void * user_almanac_get_prefix(User_Almanac *almanac){
+    return almanac->prefix;
+}
 void * user_almanac_get_individual_user(User_Almanac *almanac, char * target){
     Node * a = (Node *)user_almanac_get_user(almanac,target);
     return a->user;

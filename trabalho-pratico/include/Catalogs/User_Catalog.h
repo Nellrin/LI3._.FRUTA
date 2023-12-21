@@ -31,6 +31,7 @@ void * user_almanac_use_reservations(User_Almanac *almanac, char * target);
 void * user_almanac_use_flights(User_Almanac *almanac, char * target);
 
 void * user_almanac_get_user(User_Almanac *almanac, char * target);
+void * user_almanac_get_prefix(User_Almanac *almanac);
 void * user_almanac_get_individual_user(User_Almanac *almanac, char * target);
 ////////////////////////////////////////////////////////
 

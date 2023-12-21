@@ -5,6 +5,7 @@
 #include "../include/Catalogs/Catalog.h"
 #include "../include/Queries/1Query.h"
 #include "../include/Queries/2Query.h"
+#include "../include/Queries/9Query.h"
 #include "../include/Output.h"
 #include "../include/Interpreter.h"
 ///////////////////////////////////////////////////////////////
@@ -25,10 +26,34 @@ static void filter_querys(Almanac * box, char * line, int number){
 
 
 
-                    for(n_arguments = 0;token = strsep(&line, " ");n_arguments++)
-                    arguments[n_arguments] = strdup(token);
+                                                                for (n_arguments = 0; (token = strsep(&line, " ")) != NULL; n_arguments++) {
+                                                                    arguments[n_arguments] = strdup(token);
+
+                                                                    if(token[0] == '"'){
+                                                                            token = strsep(&line, " ");
+                                                                            if (token != NULL) {
+                                                                                strcat(arguments[n_arguments], " ");
+                                                                                strcat(arguments[n_arguments], token);
+                                                                            }
+                                                                        while(token[strlen(token)-1 ] != '"') {
+                                                                            token = strsep(&line, " ");
+                                                                            if (token != NULL) {
+                                                                                strcat(arguments[n_arguments], " ");
+                                                                                strcat(arguments[n_arguments], token);
+                                                                            }
+                                                                        }
 
 
+                                                                        for(int i = 0; i < strlen(arguments[n_arguments]) - 1; i++)
+                                                                        arguments[n_arguments][i] = arguments[n_arguments][i+1];
+                                                                        arguments[n_arguments][strlen(arguments[n_arguments])-2] = '\0';
+                                                                    }
+                                                                }
+
+
+                printf("\n\n");
+                        for(int i = 0; i < n_arguments; i++)
+                        printf("%s\n",arguments[i]);
 
 
         if (n_arguments>0) {
@@ -79,7 +104,11 @@ static void filter_querys(Almanac * box, char * line, int number){
                         break;
                     
                     case 9:
-                        /* code */
+                        answear = query9(box,arguments[1],(strchr(arguments[0],'F')!=NULL));
+                        if(answear!=NULL){
+                            write_line(file,answear);
+                            free(answear);
+                        }
                         break;
                     
                     case 10:

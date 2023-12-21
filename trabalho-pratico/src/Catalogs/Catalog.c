@@ -134,6 +134,9 @@ unsigned int almanac_get_seats(Almanac *almanac, int target){
 void * almanac_get_user(Almanac *almanac, char * target){
     return user_almanac_get_individual_user(almanac->user,target);
 }
+void * almanac_get_prefix(Almanac *almanac){
+    return user_almanac_get_prefix(almanac->user);
+}
 void * almanac_get_user_node(Almanac *almanac, char * target){
     return user_almanac_get_user(almanac->user,target);
 }

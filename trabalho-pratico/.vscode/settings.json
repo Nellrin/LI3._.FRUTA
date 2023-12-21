@@ -24,6 +24,7 @@
         "1query.h": "c",
         "btree.h": "c",
         "interpreter.h": "c",
-        "2query.h": "c"
+        "2query.h": "c",
+        "9query.h": "c"
     }
 }

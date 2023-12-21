@@ -82,4 +82,14 @@ void get_tlines(BTree * root, char *** list_id,char *** list_dates, int * n, voi
     if(root->right!=NULL)    
     get_tlines(root->right,list_id,list_dates,n,f);
 }
+void get_prefix(BTree * root, char *** list_id,char *** list_dates, char * prefix, int * n, void (*f)(void *, char ***,char ***, int *, char *)){
+
+    if(root->left!=NULL)
+    get_prefix(root->left,list_id,list_dates,prefix,n,f);
+    
+    f(root->data,list_id,list_dates,n,prefix);
+
+    if(root->right!=NULL)
+    get_prefix(root->right,list_id,list_dates,prefix,n,f);
+}
 ////////////////////////////////////////////////////////
