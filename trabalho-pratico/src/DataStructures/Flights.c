@@ -122,7 +122,9 @@ int compare_flight_date(const void *a, const void *b){
     const Flight *flightA = (const Flight *)a;
     const Flight *flightB = (const Flight *)b;
     
-    // Compare flight numbers (assuming flightNumber is a string)
+    if(!strcmp(flightB->schedule_departure_date, flightA->schedule_departure_date))
+        return strcmp(flightA->id, flightB->id);
+
     return strcmp(flightB->schedule_departure_date, flightA->schedule_departure_date);
 }
 ////////////////////////////////////////////////////////
