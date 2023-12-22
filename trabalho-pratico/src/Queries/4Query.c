@@ -36,7 +36,7 @@ static void str_reservation(FILE * file,void * reservation,int * n, char F){
 
                 else
                 snprintf(result,1000,
-                            "--- %d ---\n"
+                            "\n--- %d ---\n"
                             "id: %s\n"
                             "begin_date: %s\n"
                             "end_date: %s\n"
