@@ -169,17 +169,47 @@ static char * query2_getter(Almanac * box, char ** arguments,int n_arguments,cha
                     memcpy(merge_dates, list_reservations_dates, sizeof(char *) * nr);
                     memcpy(merge_dates + nr, list_flights_dates, sizeof(char *) * nf);
 
-                        for(int repete = 0; repete<2;repete++)
-                        for(int i = 0; i < nt; i++)
-                        for(int j = i+1; j < nt; j++){
-                            if(strcmp(merge_dates[i],merge_dates[j])<0 
-                            ||(strcmp(merge_dates[i],merge_dates[j])==0 && 
-                                    (((merge_id[i][0]==merge_id[j][0]) && (strcmp(merge_id[i],merge_id[j])<0))
-                                    ||(strstr(merge_id[i],"Book")!=NULL)))){
-                                swap_strings(&merge_dates[i],&merge_dates[j]);
-                                swap_strings(&merge_id[i],&merge_id[j]);
+                        for (int i = 0; i < nt; i++)
+                        for (int j = i + 1; j < nt; j++) {
+                            if(
+                                    (strcmp(merge_dates[i], merge_dates[j]) < 0)
+                                    || 
+                                    (
+                                        (!strcmp(merge_dates[i], merge_dates[j]))
+                                        
+                                        && 
+
+                                        (
+                                            ((strstr(merge_id[i], "Book") != NULL) && (strstr(merge_id[j], "Book") == NULL)) 
+                                            
+                                            || 
+                                            
+                                            ((strstr(merge_id[i], "Book") != NULL) && (strstr(merge_id[j], "Book") != NULL) && (strcmp(merge_id[i], merge_id[j])>0))
+                                        )
+                                        
+                                    )
+                                ) {
+                                swap_strings(&merge_dates[i], &merge_dates[j]);
+                                swap_strings(&merge_id[i], &merge_id[j]);
                             }
                         }
+
+                        // for (int i = 0; i < nt; i++)
+                        // for (int j = i + 1; j < nt; j++)
+                        //     if(!strcmp(merge_dates[i], merge_dates[j]))
+                        //     if ((strstr(merge_id[i], "Book") != NULL && strstr(merge_id[j], "Book") == NULL) || strstr(merge_id[i], "Book") != NULL && strstr(merge_id[j], "Book") != NULL && (strcmp(merge_id[i], merge_id[j])>0))
+                        //             swap_strings(&merge_id[i], &merge_id[j]);
+
+                                // (strstr(merge_id[i], "Book") != NULL && strstr(merge_id[j], "Book") != NULL && (strcmp(merge_id[i], merge_id[j])>0))||
+                                // (strstr(merge_id[i], "Book") == NULL && strstr(merge_id[j], "Book") == NULL && (strcmp(merge_id[i], merge_id[j])>0)))
+
+                        // for (int i = 0; i < nt; i++)
+                        // for (int j = i + 1; j < nt; j++)
+                        //     if(!strcmp(merge_dates[i], merge_dates[j]))
+                        //         if()
+                        //             swap_strings(&merge_id[i], &merge_id[j]);
+
+
                             
 
                     result = strcat_list(merge_id,merge_dates,F,nt,1);
