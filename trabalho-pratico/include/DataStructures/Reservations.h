@@ -32,7 +32,7 @@ char * get_reservationTAX(Reservation * a);
 
 
 ////////////////////////////////////////////////////////
-float total_got_from_reservation(const void * info);
+double total_got_from_reservation(const void * info);
 ////////////////////////////////////////////////////////
 
 

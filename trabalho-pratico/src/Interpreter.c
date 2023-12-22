@@ -5,6 +5,7 @@
 #include "../include/Catalogs/Catalog.h"
 #include "../include/Queries/1Query.h"
 #include "../include/Queries/2Query.h"
+#include "../include/Queries/3Query.h"
 #include "../include/Queries/9Query.h"
 #include "../include/Output.h"
 #include "../include/Interpreter.h"
@@ -75,7 +76,7 @@ static void filter_querys(Almanac * box, char * line, int number){
                         break;
                     
                     case 3:
-                        /* code */
+                        answear = query3(box,arguments[1],(strchr(arguments[0],'F')!=NULL));
                         break;
                     
                     case 4:

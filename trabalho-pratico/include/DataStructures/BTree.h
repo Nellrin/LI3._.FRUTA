@@ -16,13 +16,13 @@ void free_tree(BTree *root);
 
 
 ////////////////////////////////////////////////////////
-float exists(const void * info);
+double exists(const void * info);
 ////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////
 BTree *search(BTree *root, char *key, int (*compare)(const void *, const char *));
-float do_something(BTree *root, float (*f)(const void *));
+double do_something(BTree *root, double (*f)(const void *));
 void get_tlines(BTree * root, char *** list_id,char *** list_dates, int * n, void (*f)(void *, char ***,char ***, int *));
 void get_prefix(BTree * root, char *** list_id,char *** list_dates, char * prefix, int * n, void (*f)(void *, char ***,char ***, int *, char *));
 ////////////////////////////////////////////////////////

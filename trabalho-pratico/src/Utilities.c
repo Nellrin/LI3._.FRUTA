@@ -6,7 +6,6 @@
 
 #include "../include/Utilities.h"
 #include "../include/Catalogs/Catalog.h"
-// #include "../include/DataStructures/Users.h"
 
 ///////////////////////////////////////////////////////////////
 static int string_to_tm(char * format, char *date) {

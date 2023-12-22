@@ -49,7 +49,7 @@ void free_tree(BTree *root){
 
 
 ////////////////////////////////////////////////////////
-float exists(const void * info){
+double exists(const void * info){
     return(info != NULL);
 }
 ////////////////////////////////////////////////////////
@@ -66,7 +66,7 @@ BTree *search(BTree *root, char *key, int (*compare)(const void *, const char *)
     else
     return search(root->right, key, compare);
 }
-float do_something(BTree *root, float (*f)(const void *)){
+double do_something(BTree *root, double (*f)(const void *)){
     if (root == NULL)
     return 0;
 

@@ -4,7 +4,6 @@
 #include <malloc.h>
 
 #include "../include/Catalogs/Catalog.h"
-#include "../include/DataStructures/Users.h"
 #include "../include/Utilities.h"
 #include "../include/Parser.h"
 #include "../include/Interpreter.h"
@@ -27,16 +26,16 @@ int main(int argc, char *argv[]) {
     switch (argc){
     case 3:
 
-        // parser(argv[1],"users",u,valid_user);
-        // parser(argv[1],"reservations",u,valid_reservation);
+        parser(argv[1],"users",u,valid_user);
+        parser(argv[1],"reservations",u,valid_reservation);
         
-        // almanac_count_passengers(u,passengers);
+        almanac_count_passengers(u,passengers);
 
-        // parser(argv[1],"flights",u,valid_flight);
-        // parser(argv[1],"passengers",u,valid_passenger);
+        parser(argv[1],"flights",u,valid_flight);
+        parser(argv[1],"passengers",u,valid_passenger);
         
 
-        // read_query_file(u,argv[2]);
+        read_query_file(u,argv[2]);
 
         break;
 

@@ -9,13 +9,14 @@
 #include "../../include/DataStructures/FHash.h"
 #include "../../include/Catalogs/Catalog.h"
 #include "../../include/Catalogs/User_Catalog.h"
+#include "../../include/Catalogs/Reservation_Catalog.h"
 
 
 ////////////////////////////////////////////////////////
 typedef struct almanac{
     User_Almanac * user;
+    Reservation_Almanac * reservation;
     FHash * flight;
-    FHash * reservation;
     unsigned int * passenger;
 }Almanac;
 ////////////////////////////////////////////////////////
@@ -27,14 +28,14 @@ Almanac * init_almanac(){
 
     a->passenger = malloc(sizeof(unsigned int) * amount_flights);
     a->user = init_user_almanac(amount_users);
+    a->reservation = init_reservation_almanac(amount_reservations);
     a->flight = fhash_init(amount_flights);
-    a->reservation = fhash_init(amount_reservations);
 
     return a;
 }
 void free_almanac(Almanac * a){
     free_fhash(a->flight,free_flight);
-    free_fhash(a->reservation,free_reservation);
+    free_reservation_almanac(a->reservation);
     free_user_almanac(a->user);
     free(a->passenger);
 
@@ -77,25 +78,10 @@ void almanac_count_passengers(Almanac *almanac,char * path){
             }
         }
                 if(flight_id!=NULL)
-                free(flight_id);
-                // if(user_id!=NULL)
-                // free(user_id);
-        
+                free(flight_id);        
     }
-        // free(user_id);
-        // free(flight_id);
-
-            printf("\n\nSAFE\n\n");
-
-            
-    // for(int i = 0; i < amount_flights; i++)
-    // printf("\n%d",almanac->passenger[i]);
-
 
     fclose(file);
-
-
-    // if(line!=NULL)
     free(line);
 }
 void almanac_add_passengers(Almanac * almanac, char * user_id, char * flight_id){
@@ -113,16 +99,12 @@ void almanac_add_flight(Almanac *almanac,char * id,char * airline, char * plane_
 }
 void almanac_add_reservation(Almanac *almanac,char *id, char *id_hotel, char *user_id, char *hotel_name, char *hotel_stars, char *begin_date, char *end_date, int includes_breakfast, char *rating, char *ppn, char *city_tax){
     
-    Reservation * a; 
-
     if(includes_breakfast == 1)
-    a = set_reservation(id, id_hotel, user_id, hotel_name, hotel_stars, begin_date, end_date, "True", rating, ppn, city_tax);
+    reservation_almanac_add_reservation(almanac->reservation, almanac->user,id, id_hotel, user_id, hotel_name, hotel_stars, begin_date, end_date, "True", rating, ppn, city_tax);
 
     else    
-    a = set_reservation(id, id_hotel, user_id, hotel_name, hotel_stars, begin_date, end_date, "False", rating, ppn, city_tax);
+    reservation_almanac_add_reservation(almanac->reservation, almanac->user,id, id_hotel, user_id, hotel_name, hotel_stars, begin_date, end_date, "False", rating, ppn, city_tax);
 
-    fhash_add(almanac->reservation,id,(void *)a, 0);
-    user_almanac_add_reservation(almanac->user,user_id,a);
 }
 ////////////////////////////////////////////////////////
 
@@ -140,15 +122,19 @@ void * almanac_get_prefix(Almanac *almanac){
 void * almanac_get_user_node(Almanac *almanac, char * target){
     return user_almanac_get_user(almanac->user,target);
 }
+
 void * almanac_get_flight(Almanac *almanac, char * target){
     void * flight = fhash_get(almanac->flight,target,0,compare_flight);
     return flight;
 }
 void * almanac_get_reservation(Almanac *almanac, char * target){
-    void * reservation =fhash_get(almanac->reservation,target,0,compare_reservation);
+    void * reservation = reservation_almanac_get_reservation(almanac->reservation,target);
     return reservation;
 }
-
+void * almanac_get_hotel(Almanac *almanac, char * target, int * amount){
+    void * hotel = reservation_almanac_get_hotel(almanac->reservation,target,amount);
+    return hotel;
+}
 
 void * almanac_get_user_flights(Almanac * almanac, char * target){
     return user_almanac_use_flights(almanac->user, target);

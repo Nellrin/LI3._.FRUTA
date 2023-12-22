@@ -6,7 +6,6 @@
 ////////////////////////////////////////////////////////
 typedef struct user User;
 typedef struct flight Flight;
-typedef struct reservation Reservation;
 typedef struct h FHash;
 
 typedef struct almanac Almanac;
@@ -35,11 +34,28 @@ void almanac_add_reservation(Almanac *almanac,char *id, char *id_hotel, char *us
 
 ////////////////////////////////////////////////////////
 unsigned int almanac_get_seats(Almanac *almanac, int target);
+
+
+
+
+
+void * almanac_get_flight(Almanac *almanac, char * target);
+
+
+
+
+
+void * almanac_get_reservation(Almanac *almanac, char * target);
+void * almanac_get_hotel(Almanac *almanac, char * target, int * amount);
+
+
+
+
+
+
 void * almanac_get_user_node(Almanac *almanac, char * target);
 void * almanac_get_prefix(Almanac *almanac);
 void * almanac_get_user(Almanac *almanac, char * target);
-void * almanac_get_flight(Almanac *almanac, char * target);
-void * almanac_get_reservation(Almanac *almanac, char * target);
 void almanac_get_user_reservations_flights(Almanac * almanac, char * target, int * n_flights, int * n_reservations);
 void * almanac_get_user_flights(Almanac * almanac, char * target);
 void * almanac_get_user_reservations(Almanac * almanac, char * target);

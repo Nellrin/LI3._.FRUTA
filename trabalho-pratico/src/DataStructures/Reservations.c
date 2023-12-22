@@ -130,10 +130,10 @@ char * get_reservationRATING(Reservation * a){
 
 
 ////////////////////////////////////////////////////////
-float total_got_from_reservation(const void * info){
+double total_got_from_reservation(const void * info){
     Reservation * a = (Reservation *) info;
-    float ppn = strtod(a->ppn,NULL);
-    float tax = strtod(a->city_tax,NULL);
+    double ppn = strtod(a->ppn,NULL);
+    double tax = strtod(a->city_tax,NULL);
     int nights = string_to_time("%d/%d/%d",a->begin_date,a->end_date);
 
     return (ppn * nights + ((ppn*nights)/100)*tax);

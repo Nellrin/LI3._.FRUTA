@@ -33,7 +33,7 @@ static void query1_reservation(void * entity, char ** result,char F){
         char * includes_breakfast = get_reservationBREAKFAST(entity);
 
         int nights = string_to_time("%d/%d/%d",begin_date,end_date);
-        float total_price = total_got_from_reservation(entity);
+        double total_price = total_got_from_reservation(entity);
 
                         if(F)
                         snprintf(*result, MAX_RESULT ,
@@ -79,7 +79,7 @@ static void query1_user(Almanac * box, char * string, void * entity, char ** res
         void * reservation = almanac_get_user_reservations(box,string);
 
 
-        float total_spent = do_something(reservation,total_got_from_reservation);
+        double total_spent = do_something(reservation,total_got_from_reservation);
 
         int idade = (string_to_time("%d/%d/%d",age,CURRENT_DATE))/(365);
 
