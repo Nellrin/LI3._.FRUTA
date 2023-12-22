@@ -11,17 +11,16 @@
 #include "../../include/Queries/8Query.h"
 
 
-
 static char * strcat_list(short F, double n){
 
-    char * line = malloc(sizeof(char) * 40);
+    char * line = malloc(sizeof(char) * 100);
     line[0] = '\0';
     
     if(F)
-    snprintf(line,40, "--- 1 ---\nrevenue: %.0f\n", n);
+    snprintf(line,100, "--- 1 ---\nrevenue: %d\n", (int)n);
 
     else 
-    snprintf(line,40, "%.0f\n", n);
+    snprintf(line,100, "%d\n", (int)n);
 
 
     return line;
@@ -31,7 +30,7 @@ static double get_revenue(const void * reservation, char * begin, char * end){
     char * ppn = get_reservationPPN((Reservation*) reservation);
     char * res_begin = get_reservationBEGIN((Reservation*) reservation);
     char * res_end = get_reservationEND((Reservation*) reservation);
-    double x = strtod(ppn,NULL), result;
+    double x = strtod(ppn,NULL), result = 0;
     
 
 
@@ -79,12 +78,10 @@ static double get_revenue(const void * reservation, char * begin, char * end){
 static char * query8_getter(Almanac * box, char ** arguments, char F){
     char * result = NULL;
 
-    void * hotels = almanac_get_hotel(box,arguments[1]);
-    double value = money_trees(hotels,arguments[2],arguments[3], get_revenue);
-    
-    printf("%f\n",value);
-
-    result = strcat_list(F,value);
+        void * hotels = almanac_get_hotel(box,arguments[1]);
+        double value = money_trees(hotels,arguments[2],arguments[3], get_revenue);
+        
+        result = strcat_list(F,value);
 
     return result;
 }
