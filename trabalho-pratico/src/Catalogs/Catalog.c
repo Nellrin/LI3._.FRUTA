@@ -131,8 +131,12 @@ void * almanac_get_reservation(Almanac *almanac, char * target){
     void * reservation = reservation_almanac_get_reservation(almanac->reservation,target);
     return reservation;
 }
-void * almanac_get_hotel(Almanac *almanac, char * target, int * amount){
-    void * hotel = reservation_almanac_get_hotel(almanac->reservation,target,amount);
+void * almanac_get_hotel(Almanac *almanac, char * target){
+    void * hotel = reservation_almanac_get_hotel(almanac->reservation,target);
+    return hotel;
+}
+int almanac_get_hotel_num_res(Almanac *almanac, char * target){
+    int hotel = reservation_almanac_get_hotel_num_res(almanac->reservation,target);
     return hotel;
 }
 

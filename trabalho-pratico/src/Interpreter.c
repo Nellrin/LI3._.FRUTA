@@ -6,6 +6,8 @@
 #include "../include/Queries/1Query.h"
 #include "../include/Queries/2Query.h"
 #include "../include/Queries/3Query.h"
+#include "../include/Queries/4Query.h"
+#include "../include/Queries/8Query.h"
 #include "../include/Queries/9Query.h"
 #include "../include/Output.h"
 #include "../include/Interpreter.h"
@@ -59,6 +61,7 @@ static void filter_querys(Almanac * box, char * line, int number){
 
 
                                                                     arguments[n_arguments] = strdup(argumento);
+                                                                    if(argumento != NULL)
                                                                     free(argumento);
                                                                 }
 
@@ -80,7 +83,11 @@ static void filter_querys(Almanac * box, char * line, int number){
                         break;
                     
                     case 4:
-                        /* code */
+                        fputs("",file);
+                        fclose(file);
+                        file = create_file(title,"a");
+
+                        answear = query4(file,box,arguments[1],(strchr(arguments[0],'F')!=NULL));
                         break;
                     
                     case 5:
@@ -96,11 +103,15 @@ static void filter_querys(Almanac * box, char * line, int number){
                         break;
                     
                     case 8:
-                        /* code */
+                        answear = query8(box,arguments,(strchr(arguments[0],'F')!=NULL));
                         break;
                     
                     case 9:
-                        answear = query9(box,arguments[1],(strchr(arguments[0],'F')!=NULL));
+                        fputs("",file);
+                        fclose(file);
+                        file = create_file(title,"a");
+                    
+                        query9(file,box,arguments[1],(strchr(arguments[0],'F')!=NULL));
                         break;
                     
                     case 10:
@@ -121,12 +132,14 @@ static void filter_querys(Almanac * box, char * line, int number){
                         }
 
 
+
     for(int i = 0;i<n_arguments;i++)
     if(arguments[i]!=NULL)
     free(arguments[i]);
 
     free(arguments);
 
+        if(token!=NULL)
         free(token);
         free(title);
         fclose(file);
@@ -145,13 +158,10 @@ void read_query_file(Almanac * box, char * path){
     
     for(int i = 1;getline(&line, &len, file) != -1;i++) {
         line[strlen(line)-1] = '\0';
-
-
-        // printf("%s\n",line);
-
         filter_querys(box,line,i);
     }
 
+    if(line!=NULL)
     free(line);
     fclose(file);
 }

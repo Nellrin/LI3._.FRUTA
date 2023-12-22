@@ -235,9 +235,6 @@ int valid_flight(Almanac * a, const char * string){
             almanac_add_flight(a,list[0],list[1],list[2],list[4],list[5],list[6],list[8],list[7],almanac_get_seats(a,atoi(list[0])-1));
             res ++;
 
-
-            if(!strcmp(list[0],"0000145802"))
-            printf("YES!\n");
             // id;airline;plane_model;total_seats;origin;destination;schedule_departure_date;schedule_arrival_date;real_departure_date;real_arrival_date;pilot;copilot;notes
 
             // char *id, char *airline, char *plane_model, char *origin, char *destination, char *schedule_departure_date, char *real_departure_date, char *schedule_arrival_date, char *passengers

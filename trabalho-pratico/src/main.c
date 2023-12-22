@@ -1,20 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <malloc.h>
 
 #include "../include/Catalogs/Catalog.h"
 #include "../include/Utilities.h"
 #include "../include/Parser.h"
 #include "../include/Interpreter.h"
 
-
-
-void printMemoryInfo() {
-    struct mallinfo info = mallinfo();
-    printf("\n\nTotal allocated space: %u bytes\n", info.uordblks);
-    printf("Total free space: %u bytes\n", info.fordblks);
-}
 
 int main(int argc, char *argv[]) {
 
@@ -50,10 +42,7 @@ int main(int argc, char *argv[]) {
 
 
     free(passengers);
-
-    printMemoryInfo();
     free_almanac(u);
-    printMemoryInfo();
 
     return 0;
 }

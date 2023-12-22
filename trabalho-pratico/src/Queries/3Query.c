@@ -4,7 +4,6 @@
 #include <ctype.h>
 
 #include "../../include/Catalogs/Catalog.h"
-#include "../../include/Utilities.h"
 
 #include "../../include/DataStructures/BTree.h"
 #include "../../include/DataStructures/Reservations.h"
@@ -37,9 +36,9 @@ static double get_rating(const void * reservation){
 }
 static char * query3_getter(Almanac * box, char * argument, char F){
     char * result = NULL;
-    int nr = 0;
+    int nr = almanac_get_hotel_num_res(box,argument);
     
-    void * hotels = almanac_get_hotel(box,argument,&nr);
+    void * hotels = almanac_get_hotel(box,argument);
     double value = do_something(hotels, get_rating);
     
     value /= nr;
@@ -51,9 +50,8 @@ static char * query3_getter(Almanac * box, char * argument, char F){
 
 char * query3(Almanac * box, char * argument, short F){
 
-    int n = 0;
-    if(almanac_get_hotel(box,argument,&n)!=NULL)
-        return query3_getter(box,argument,F);
+    if(almanac_get_hotel(box,argument)!=NULL)
+    return query3_getter(box,argument,F);
 
     return NULL;
 }

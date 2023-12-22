@@ -93,13 +93,16 @@ void reservation_almanac_add_reservation(Reservation_Almanac *almanac, User_Alma
 void * reservation_almanac_get_reservation(Reservation_Almanac *almanac, char * target){
     return fhash_get(almanac->reservations,target,1,compare_reservation);
 }
-static void * helpy(void * info, int * number){
+static void * helpy(void * info){
     RNode * a = (RNode *)info;
-    *number = a->amount;
     return a->reserva;
 }
-void * reservation_almanac_get_hotel(Reservation_Almanac *almanac, char * target, int * amount){
+void * reservation_almanac_get_hotel(Reservation_Almanac *almanac, char * target){
     void * result = fhash_get(almanac->hotels,target,0,compare_node);
-    return helpy(result, amount);
+    return helpy(result);
+}
+int reservation_almanac_get_hotel_num_res(Reservation_Almanac *almanac, char * target){
+    void * result = fhash_get(almanac->hotels,target,0,compare_node);
+    return (((RNode *)result)-> amount);
 }
 ////////////////////////////////////////////////////////

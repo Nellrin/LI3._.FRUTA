@@ -4,7 +4,7 @@
 #include <ctype.h>
 
 #include "../../include/Catalogs/Catalog.h"
-#include "../../include/Utilities.h"
+#include "../../include/Output.h"
 
 #include "../../include/DataStructures/Users.h"
 #include "../../include/DataStructures/BTree.h"
@@ -14,103 +14,68 @@
 
 
 
-static void line_user(void * b, char *** list_id, char *** list_name, int * n, char * prefix){
+static short checker(void * user, char * prefix){
+    char * name = get_userNAME(user);
+    
+    short len = strlen(prefix);
+    short result = !(strncmp(prefix,name,len));
+    
+    free(name);
+
+    return result;
+
+}
+
+static void line_user(FILE * file,void * b, int * n, char F, char * prefix){
     User * a = (User *)b;
     char * name = get_userNAME(a);
 
     short len = strlen(prefix);
     if(!strncmp(prefix,name,len)&&get_userASTATUS(a)==1){
-        (*list_id)[(*n)] = get_userID(a);
-        (*list_name)[(*n)] = get_userNAME(a);
+        char * id = get_userID(a);
+        char * line = malloc(sizeof(char) * 1000); 
+
+
+                if(F){
+                    if((*n)==0)
+                    snprintf(line,1000,
+                                    "--- %d ---\n"
+                                    "id: %s\n"
+                                    "name: %s\n",
+                                    (*n)+1,id,name);
+                   
+                   
+                    else
+                    snprintf(line,1000,
+                                    "\n--- %d ---\n"
+                                    "id: %s\n"
+                                    "name: %s\n",
+                                    (*n)+1,id,name);
+                
+                }
+
+                else
+                snprintf(line,1000,
+                                "%s;%s\n",
+                                id,name);
+
+
+            write_line(file,line);
+
             
         (*n) ++;
-        
+        free(line);
+        free(id);
     }
         free(name);
 }
 
-static char * strcat_list_pre( char ** list_id,char ** list_dates, short F, int n){
 
-    char * line = (char*) malloc(sizeof(char) * 200000);
-    char * x = malloc(sizeof(char) * 300);
-    line[0] = '\0';
-    
-    if(F){
-            for (int i = 0; i < n; i++) {
-                
-                    sprintf(x, "%d", i+1);
-                    strcat(line, "--- ");
-                    strcat(line, x);
-                    strcat(line, " ---\n");
-                
-                strcat(line, "id: ");
-                strcat(line, list_id[i]);
-                strcat(line, "\nname: ");
-                strcat(line, list_dates[i]);
+void query9(FILE * file,Almanac * box, char * argument,  short F){
 
-
-                strcat(line, "\n\n");
-            }
-
-        if (strlen(line) > 0) {
-            line[strlen(line) - 1] = '\0';
-        }
-    }
-
-
-    else{
-        for(int i = 0; i < n; i++){
-            strcat(line,list_id[i]);
-            strcat(line,";");
-            strcat(line,list_dates[i]);
-            strcat(line,"\n");
-        }
-    }
-
-    free(x);
-    return line;
-
-}
-
-
-static char * query9_getter(Almanac * box, char * argument ,char F){
-    char * result = NULL;
-    
-    int nt = 2000;
-
-    char **list_user_id = malloc(sizeof(char *) * nt);
-    char **list_user_name = malloc(sizeof(char *) * nt);
-
-        for(int i = 0; i < 2000; i++){
-            list_user_id[i] = NULL;
-            list_user_name[i] = NULL;
-        }
-
-    nt = 0;
-
+        int nt = 0;
 
         void * users = almanac_get_prefix(box);
 
-        get_prefix(users, &list_user_id,&list_user_name, argument,&nt, line_user);
-
-
-        result = strcat_list_pre(list_user_id,list_user_name,F,nt);
-
-        for(int i = 0; i < 2000; i++)
-            if(list_user_id[i]!=NULL){
-            free(list_user_id[i]);
-            free(list_user_name[i]);
-        }
-
-            free(list_user_id);
-            free(list_user_name);
-
-            return result;
-}
-
-
-char * query9(Almanac * box, char * argument,  short F){
-
-        return query9_getter(box,argument,F);
-
+        get_prefix(file,users, argument,&nt,F, line_user,checker);
 }

@@ -1,7 +1,7 @@
-#include "../../include/DataStructures/BTree.h"
-
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "../../include/DataStructures/BTree.h"
 ////////////////////////////////////////////////////////
 
 
@@ -72,6 +72,12 @@ double do_something(BTree *root, double (*f)(const void *)){
 
     return (do_something(root->left,f)) + (f(root->data)) + (do_something(root->right,f));
 }
+double money_trees(BTree *root, char * start, char * end, double (*f)(const void *, char *, char *)){
+    if (root == NULL)
+    return 0;
+
+    return (money_trees(root->left,start,end,f)) + (f(root->data,start,end)) + (money_trees(root->right,start,end,f));
+}
 void get_tlines(BTree * root, char *** list_id,char *** list_dates, int * n, void (*f)(void *, char ***,char ***, int *)){
 
     if(root->left!=NULL)
@@ -82,14 +88,26 @@ void get_tlines(BTree * root, char *** list_id,char *** list_dates, int * n, voi
     if(root->right!=NULL)    
     get_tlines(root->right,list_id,list_dates,n,f);
 }
-void get_prefix(BTree * root, char *** list_id,char *** list_dates, char * prefix, int * n, void (*f)(void *, char ***,char ***, int *, char *)){
+void get_prefix(FILE * file,BTree * root, char * prefix, int * n,char F, void (*f)(FILE *, void *, int *,char, char *), short (*g)(void*,char*)){
 
     if(root->left!=NULL)
-    get_prefix(root->left,list_id,list_dates,prefix,n,f);
+    // if((g(root->left->data,prefix)) || (!g(root->data,prefix)))
+    get_prefix(file,root->left,prefix, n,F, f,g);    
     
-    f(root->data,list_id,list_dates,n,prefix);
+    f(file,root->data,n,F,prefix);
 
     if(root->right!=NULL)
-    get_prefix(root->right,list_id,list_dates,prefix,n,f);
+    // if((g(root->right->data,prefix)) || (!g(root->data,prefix)))
+    get_prefix(file,root->right,prefix, n,F, f,g);
+}
+void get_every_node(FILE * file,BTree * root, int * n,char F, void (*f)(FILE * file,void *, int *, char)){
+
+    if(root->left!=NULL)
+    get_every_node(file,root->left,n,F,f);
+    
+    f(file,root->data,n,F);
+
+    if(root->right!=NULL)
+    get_every_node(file,root->right,n,F,f);
 }
 ////////////////////////////////////////////////////////

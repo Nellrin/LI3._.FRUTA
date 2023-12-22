@@ -27,7 +27,8 @@ void reservation_almanac_add_reservation(Reservation_Almanac *almanac, User_Alma
 
 ////////////////////////////////////////////////////////
 void * reservation_almanac_get_reservation(Reservation_Almanac *almanac, char * target);
-void * reservation_almanac_get_hotel(Reservation_Almanac *almanac, char * target, int * amount);
+void * reservation_almanac_get_hotel(Reservation_Almanac *almanac, char * target);
+int reservation_almanac_get_hotel_num_res(Reservation_Almanac *almanac, char * target);
 ////////////////////////////////////////////////////////
 
 #endif

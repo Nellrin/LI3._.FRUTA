@@ -45,7 +45,7 @@ void parser(char * path,char * type,Almanac * box, int (*f)(Almanac *,const char
         free(line);
     }
 
-    printf("\n\n%d\n\n",amount);
+    printf("%d\n\n",amount);
 
     free(head);
     free(name);
