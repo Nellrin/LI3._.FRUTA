@@ -8,6 +8,7 @@
 
 #include "../../include/DataStructures/BTree.h"
 #include "../../include/DataStructures/Reservations.h"
+#include "../../include/DataStructures/Users.h"
 #include "../../include/Queries/8Query.h"
 
 
@@ -26,49 +27,72 @@ static char * strcat_list(short F, double n){
     return line;
 
 }
-static double get_revenue(const void * reservation, char * begin, char * end){
+static double get_revenue(void * box, const void * reservation, char * begin, char * end){
     char * ppn = get_reservationPPN((Reservation*) reservation);
     char * res_begin = get_reservationBEGIN((Reservation*) reservation);
     char * res_end = get_reservationEND((Reservation*) reservation);
+    char * user_id = get_reservationUSERID((Reservation*) reservation);
+
+
     double x = strtod(ppn,NULL), result = 0;
+    int nights = 0;    
+
+
+    if(strcmp(begin,end)>0){
+        swap_strings(&begin,&end);
+        printf("YE\n");
+    }
     
 
-
-    if(strcmp(begin,end)>0)
-    swap_strings(&begin,&end);
     
+    if(!((strcmp(res_end,begin) < 0 || strcmp(res_begin,end) > 0)))
+    // if(get_userASTATUS(almanac_get_user(box,user_id))==1)
+    {
+        char *start = NULL;
 
-    if(strcmp(res_end,begin)>=0 && strcmp(end,res_begin)>=0){
-        char * start = NULL;
-        char * finish = NULL;
-        int days = 0;
-
-                if(strcmp(res_begin,begin)>0)
-                start = (res_begin);
-                
-                else{
-                    start = (begin);
-                    days++;
-                }
-
-
-                if(strcmp(res_end,end)>=0)
-                    finish = (end);
-                
-                
-                else{
-                    finish = (res_end);
-                    // if(days==0)days++;
-                }
-
-                // printf("__________\nSTART: %s  (REAL: %s    HOTEL:%s)\nFINISH: %s  (REAL: %s    HOTEL:%s)\n_________\n\n",start,begin,res_begin,finish,end,res_end);
+        
+            if(strcmp(res_begin, begin) < 0){
+                start = begin;
+                // nights ++;
+            }
+    
+            else
+            start = res_begin;
 
 
-        days += string_to_time("%d/%d/%d",start,finish);
-        result = days * x;
+        char *finish = NULL;
+        
+            if(strcmp(res_end, end) > 0){
+                finish = end;
+                nights =1;
+            }
+            
+            else
+            finish = res_end;
 
+        nights += string_to_time("%d/%d/%d",start, finish);
+
+
+        result = nights * x;
+
+    
+/*
+         
+        +-----------------------+                       +-----------------------+-----------------------+ 
+        |ppn        =       100€|                       |nights     =          0|total_cost   =     100€|
+        +-----------------------+-----------------------+-----------------------+-----------------------+
+        |res_begin  = 2023/10/01|begin      = 2023/10/01|start      = 2023/10/01|
+        +-----------------------+-----------------------+-----------------------+
+        |res_end    = 2023/10/02|end        = 2023/10/02|finish     = 2023/10/02|
+        +-----------------------+-----------------------+-----------------------+
+
+        caso um hotel tenha apenas uma reserva de 100€/noite de 2023/10/01 a 2023/10/10, e quisermos saber as 
+        receitas entre 2023/10/01 a 2023/10/02, deverá ser retornado 200€ (duas noites). Por outro lado, caso 
+        a reserva seja entre 2023/10/01 a 2023/10/02, deverá ser retornado 100€ (uma noite).
+*/
     }
 
+    free(user_id);
     free(ppn); 
     free(res_begin); 
     free(res_end); 
@@ -79,7 +103,7 @@ static char * query8_getter(Almanac * box, char ** arguments, char F){
     char * result = NULL;
 
         void * hotels = almanac_get_hotel(box,arguments[1]);
-        double value = money_trees(hotels,arguments[2],arguments[3], get_revenue);
+        double value = money_trees(box,hotels,arguments[2],arguments[3], get_revenue);
         
         result = strcat_list(F,value);
 

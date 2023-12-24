@@ -2,35 +2,46 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <time.h>
 
 
 #include "../include/Utilities.h"
 #include "../include/Catalogs/Catalog.h"
 
 ///////////////////////////////////////////////////////////////
-static int string_to_tm(char * format, char *date) {
-    int year = 0, month = 0, day = 0, hours = 0, minutes = 0, seconds = 0;
+int string_to_time(char * format,char *date1, char *date2) {
 
-    if(!strcmp(format,"%d/%d/%d")){
-        if (sscanf(date, format, &year, &month, &day) != 3){}
-        return (year * 365) + (month * 30) + day;
+    struct tm start = {0}, end = {0};
+
+    if(strchr(format,':')){
+        sscanf(date1,format,&start.tm_year,&start.tm_mon,&start.tm_mday,&start.tm_hour,&start.tm_min,&start.tm_sec);
+        sscanf(date2,format,&end.tm_year,&end.tm_mon,&end.tm_mday,&end.tm_hour,&end.tm_min,&end.tm_sec);
+    }
+    else{
+        sscanf(date1,format,&start.tm_year,&start.tm_mon,&start.tm_mday);
+        sscanf(date2,format,&end.tm_year,&end.tm_mon,&end.tm_mday);
     }
 
-    if (sscanf(date, format, &year, &month, &day, &hours, &minutes, &seconds) != (!strcmp(format,"%d/%d/%d")?3:6)){}
-    return seconds + 60*(minutes+60*(hours+24*(day+31*(month + 12 * year))));
-}
-///////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////
-int string_to_time(char *format, char *date1, char *date2) {
-
-    int x1 = string_to_tm(format, date2), x2 = string_to_tm(format, date1);
-    int diff = (x1 - x2);
-
-    // (!strcmp(format,"%d/%d/%d"))?(diff=(x1 - x2)/(366 * 60)):(diff = (x1 - x2));
+    start.tm_year -= 1900;
+    start.tm_mon -= 1;
+    end.tm_year -= 1900;
+    end.tm_mon -= 1;
 
 
-    return diff;
+    time_t quirky_start = mktime(&start);
+    time_t quirky_end = mktime(&end);
+
+    int int_seconds = quirky_end-quirky_start;
+
+    if(strchr(format,':'))
+    return int_seconds;
+
+        int_seconds = 0;
+        for (time_t current = quirky_start; current < quirky_end; current += 24 * 60 * 60)
+        int_seconds++;
+
+
+    return int_seconds;
 }
 void swap_strings(char ** s1, char ** s2){
     char *temp = *s1;
@@ -304,7 +315,6 @@ int valid_reservation(Almanac * a, const char * string){
     int res = 0;
     char ** list = malloc(sizeof(char *)*14);
     char *token = NULL;
-    
     for(int i = 0;token = strsep(&copy, ";");i++)
     list[i] = strdup(token);
 
@@ -327,6 +337,7 @@ int valid_reservation(Almanac * a, const char * string){
         && general_string_validation(list[11]) && rating_validation(list[12])){
             almanac_add_reservation(a,list[0],list[2],list[1],list[3],list[4],list[7],list[8],includes_breafast_validation(list[10]),list[12],list[9],list[5]);
             res++;
+            if(!strcmp(list[2],"HTL909"));
             }
 
             // id;user_id;hotel_id;hotel_name;hotel_stars;city_tax;address;begin_date;end_date;price_per_night;includes_breakfast;room_details;rating;comment

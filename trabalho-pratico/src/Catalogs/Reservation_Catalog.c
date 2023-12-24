@@ -52,7 +52,7 @@ Reservation_Almanac * init_reservation_almanac(int amount){
     Reservation_Almanac * a = malloc(sizeof(Reservation_Almanac));
 
     a->reservations = fhash_init(amount);
-    a->hotels = fhash_init(3000);
+    a->hotels = fhash_init(amount/1000);
 
     return a;
 }

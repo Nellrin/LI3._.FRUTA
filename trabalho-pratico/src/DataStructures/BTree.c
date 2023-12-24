@@ -72,11 +72,11 @@ double do_something(BTree *root, double (*f)(const void *)){
 
     return (do_something(root->left,f)) + (f(root->data)) + (do_something(root->right,f));
 }
-double money_trees(BTree *root, char * start, char * end, double (*f)(const void *, char *, char *)){
+double money_trees(void * box,BTree *root, char * start, char * end, double (*f)(void *,const void *, char *, char *)){
     if (root == NULL)
     return 0;
 
-    return (money_trees(root->left,start,end,f)) + (f(root->data,start,end)) + (money_trees(root->right,start,end,f));
+    return (money_trees(box,root->left,start,end,f)) + (f(box,root->data,start,end)) + (money_trees(box,root->right,start,end,f));
 }
 void get_tlines(BTree * root, char *** list_id,char *** list_dates, int * n, void (*f)(void *, char ***,char ***, int *)){
 

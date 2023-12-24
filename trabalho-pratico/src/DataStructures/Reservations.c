@@ -150,7 +150,7 @@ int compare_reservation_date(const void *a, const void *b) {
     const Reservation *reservationA = (const Reservation *)a;
     const Reservation *reservationB = (const Reservation *)b;
     
-    return strcmp(reservationB->begin_date, reservationA->begin_date);
+    return strcmp(reservationA->begin_date, reservationB->begin_date);
 }
 ////////////////////////////////////////////////////////
 

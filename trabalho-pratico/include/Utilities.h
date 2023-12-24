@@ -8,7 +8,7 @@ typedef struct almanac Almanac;
 
 
 ///////////////////////////////////////////////////////////////
-int string_to_time(char *format, char *date1, char *date2);
+int string_to_time(char * format,char *date1, char *date2);
 void swap_strings(char ** s1, char ** s2);
 ///////////////////////////////////////////////////////////////
 
