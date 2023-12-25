@@ -5,7 +5,8 @@
 
 // ////////////////////////////////////////////////////////
 // typedef struct h FHash;
-// typedef struct btree BTree;
+// typedef struct ht Hotel;
+// // typedef struct btree BTree;
 
 
 // typedef struct f_almanac Flight_Almanac;

@@ -5,6 +5,7 @@
 // #include "../../include/DataStructures/Flights.h"
 // #include "../../include/DataStructures/FHash.h"
 // #include "../../include/DataStructures/BTree.h"
+// #include "../../include/DataStructures/Stack.h"
 // #include "../../include/Catalogs/Flight_Catalog.h"
 // #include "../../include/Utilities.h"
 
@@ -14,6 +15,16 @@
 //     FHash * hotels;
 // };
 
+// struct ht{
+//     char * id;
+//     BTree * reservations;
+
+//     Stack * delays;
+// };
+
+// struct htq6{
+//     char * year;
+// };
 
 // /*
 

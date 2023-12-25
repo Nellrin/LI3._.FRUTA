@@ -81,7 +81,7 @@ static void query1_user(Almanac * box, char * string, void * entity, char ** res
 
         double total_spent = do_something(reservation,total_got_from_reservation);
 
-        int idade = (string_to_time("%d/%d/%d",age,CURRENT_DATE))/(365);
+        int idade = (string_to_time("%d/%d/%d",age,CURRENT_DATE))/(365.25);
 
             
             // char * text = get_userID(almanac_get_user(box,"RodrigGonçalves260"));

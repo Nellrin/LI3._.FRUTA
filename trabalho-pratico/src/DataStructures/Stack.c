@@ -7,17 +7,17 @@
 typedef struct Node {
     void* data;
     struct Node* next;
-} Node;
+} Stack_Node;
 
 struct stack{
-    Node* top;
+    Stack_Node* top;
     int size;
 } ;
 ////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////
-Stack* initStack() {
+Stack* init_stack() {
     Stack* stack = malloc(sizeof(Stack));
     
     stack->top = NULL;
@@ -27,7 +27,7 @@ Stack* initStack() {
 }
 
 void push(Stack* stack, void* data) {
-    Node* newNode = malloc(sizeof(Node));
+    Stack_Node* newNode = malloc(sizeof(Stack_Node));
     
     newNode->data = data;
     newNode->next = stack->top;
@@ -47,7 +47,7 @@ void ** getStackMembers(Stack *stack, int *numMembers) {
     }
 
     void **members = malloc(stack->size * sizeof(void *));
-    Node *current = stack->top;
+    Stack_Node *current = stack->top;
     
     for(int i = 0;current != NULL; i++) {
         members[i] = current->data;
@@ -64,7 +64,7 @@ void ** getStackMembers(Stack *stack, int *numMembers) {
 void freeStack(Stack *stack) {
 
     while (stack->top != NULL) {
-        Node *top = stack->top;
+        Stack_Node *top = stack->top;
         stack->top = top->next;
         free(top);
     }
