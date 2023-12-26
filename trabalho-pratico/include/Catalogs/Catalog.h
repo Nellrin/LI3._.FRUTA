@@ -10,9 +10,9 @@ typedef struct h FHash;
 
 typedef struct almanac Almanac;
 ////////////////////////////////////////
-#define amount_flights 200000
-#define amount_users 1000000
-#define amount_reservations 6000000
+#define amount_flights 20000
+#define amount_users 100000
+#define amount_reservations 600000
 #define CURRENT_DATE "2023/10/01"
 ////////////////////////////////////////////////////////
 
