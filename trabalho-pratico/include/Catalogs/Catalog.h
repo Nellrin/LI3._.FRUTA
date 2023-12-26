@@ -10,15 +10,13 @@ typedef struct h FHash;
 
 typedef struct almanac Almanac;
 ////////////////////////////////////////
-#define amount_flights 20000
-#define amount_users 100000
-#define amount_reservations 600000
 #define CURRENT_DATE "2023/10/01"
 ////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////
-Almanac * init_almanac();
+Almanac * init_almanac(int amount_f, int amount_u, int amount_r);
+void set_up_almanac(Almanac **almanac,char * path);
 void free_almanac(Almanac * a);
 ////////////////////////////////////////////////////////
 

@@ -24,21 +24,23 @@ typedef struct almanac{
 
 
 ////////////////////////////////////////////////////////
-Almanac * init_almanac(){
+Almanac * init_almanac(int amount_f, int amount_u, int amount_r){
     Almanac * a = malloc(sizeof(Almanac));
 
-    a->passenger = malloc(sizeof(unsigned int) * amount_flights);
-    a->user = init_user_almanac(amount_users);
-    a->reservation = init_reservation_almanac(amount_reservations);
-    a->flight = init_flight_almanac(amount_flights);
+    a->passenger = malloc(sizeof(unsigned int) * amount_f);
+    a->user = init_user_almanac(amount_u);
+    a->reservation = init_reservation_almanac(amount_r);
+    a->flight = init_flight_almanac(amount_f);
 
     return a;
 }
 void free_almanac(Almanac * a){
-    free_flight_almanac(a->flight);
-    free_reservation_almanac(a->reservation);
-    free_user_almanac(a->user);
-    free(a->passenger);
+    if(a!=NULL){
+        free_flight_almanac(a->flight);
+        free_reservation_almanac(a->reservation);
+        free_user_almanac(a->user);
+        free(a->passenger);
+    }
 
     free(a);
 }
@@ -46,17 +48,58 @@ void free_almanac(Almanac * a){
 
 
 ////////////////////////////////////////////////////////
+void set_up_almanac(Almanac **almanac,char * path){
+
+    int amount_f = 0;//200000;
+    int amount_u = 0;//100000;
+    int amount_r = 0;// 600000;
+
+
+
+    char * flights = malloc(sizeof(char) * 256);
+    snprintf(flights, 256, "%s/flights.csv",path);
+
+    FILE *file = fopen(flights, "r");
+
+    char * line = NULL;
+    char *flight_id = NULL;
+    char *user_id = NULL;
+    size_t len = 0;
+
+    while (getline(&line, &len, file) != -1)
+    amount_f++;
+
+    fclose(file);
+
+    amount_u = 4 * amount_f; 
+    amount_r = 6 * amount_u; 
+
+    *almanac = init_almanac(amount_f,amount_u,amount_r);
+
+
+    for(int i = 0; i < amount_f; i++)
+    (*almanac)->passenger[i] = 0;
+
+
+    free(line);
+    free(flights);
+}
+
 void almanac_count_passengers(Almanac *almanac,char * path){
 
-    FILE *file = fopen(path, "r");
-    
+    char * passengers = malloc(sizeof(char) * 256);
+    snprintf(passengers, 256, "%s/passengers.csv",path);
+
+        
     char * line = NULL;
     char *flight_id = NULL;
     char *user_id = NULL;
     size_t len = 0;
     
-    for(int i = 0; i < amount_flights; i++)
-    almanac->passenger[i] = 0;
+
+
+    FILE * file = fopen(passengers, "r");
+
 
     while (getline(&line, &len, file) != -1) {
 
@@ -73,17 +116,19 @@ void almanac_count_passengers(Almanac *almanac,char * path){
             if(almanac_get_user_node(almanac,user_id) != NULL){
 
                 if(strlen(flight_id)> 0){
-                    almanac->passenger[atoi(flight_id)-1]++;
+                    (almanac)->passenger[atoi(flight_id)-1]++;
 
                 }
             }
         }
+        
                 if(flight_id!=NULL)
                 free(flight_id);        
     }
 
-    fclose(file);
+    free(passengers);
     free(line);
+    fclose(file);
 }
 void almanac_add_passengers(Almanac * almanac, char * user_id, char * flight_id){
     user_almanac_add_flight(almanac->user,user_id,almanac_get_flight(almanac,flight_id));

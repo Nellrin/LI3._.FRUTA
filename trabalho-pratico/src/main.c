@@ -9,28 +9,31 @@
 
 
 int main(int argc, char *argv[]) {
-
-        Almanac * u = init_almanac();
-
-    char * passengers = malloc(sizeof(char) * 256);
-    snprintf(passengers, 256, "%s/passengers.csv",argv[1]);
+    
+    Almanac * u = NULL;
 
     switch (argc){
     case 3:
 
+        set_up_almanac(&u,argv[1]);
+
+
         parser(argv[1],"users",u,valid_user);
         parser(argv[1],"reservations",u,valid_reservation);
         
-        almanac_count_passengers(u,passengers);
+        almanac_count_passengers(u,argv[1]);
 
         parser(argv[1],"flights",u,valid_flight);
         parser(argv[1],"passengers",u,valid_passenger);
         
         
+
             almanac_sort_flight_delays(u);
 
 
         read_query_file(u,argv[2]);
+
+
 
         break;
 
@@ -43,9 +46,9 @@ int main(int argc, char *argv[]) {
         break;
     }
 
+        
+        free_almanac(u);
 
-    free(passengers);
-    free_almanac(u);
 
     return 0;
 }
