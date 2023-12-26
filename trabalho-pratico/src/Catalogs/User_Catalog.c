@@ -61,7 +61,7 @@ void free_user_almanac(User_Almanac * a){
 
 
 ////////////////////////////////////////////////////////
-static int compare_node(const char * id, const void * info){
+static int compare_node_user(const char * id, const void * info){
     const Node *node = (const Node *)info;
     return (compare_user(id, node->user));
 }
@@ -78,11 +78,11 @@ void user_almanac_add_user(User_Almanac *almanac,char * id, char *name, char *bi
 
 }
 void user_almanac_add_flight(User_Almanac *almanac,char * id, void * flight){
-    Node * node = fhash_get(almanac->global_user,id,1,compare_node);
+    Node * node = fhash_get(almanac->global_user,id,1,compare_node_user);
     insert(&(node->flight),flight,compare_flight_date);
 }
 void user_almanac_add_reservation(User_Almanac *almanac,char *id, void * reservation){
-    Node * node = fhash_get(almanac->global_user,id,1,compare_node);
+    Node * node = fhash_get(almanac->global_user,id,1,compare_node_user);
     insert(&(node->reservation),reservation,compare_reservation_date);
 
 }
@@ -94,7 +94,7 @@ void user_almanac_add_reservation(User_Almanac *almanac,char *id, void * reserva
 //     return almanac->passenger[target];
 // }
 void * user_almanac_get_user(User_Almanac *almanac, char * target){
-    return fhash_get(almanac->global_user,target,1,compare_node);
+    return fhash_get(almanac->global_user,target,1,compare_node_user);
 }
 void * user_almanac_get_prefix(User_Almanac *almanac){
     return almanac->prefix;

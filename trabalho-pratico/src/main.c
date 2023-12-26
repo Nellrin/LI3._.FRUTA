@@ -26,6 +26,9 @@ int main(int argc, char *argv[]) {
         parser(argv[1],"flights",u,valid_flight);
         parser(argv[1],"passengers",u,valid_passenger);
         
+        
+            almanac_sort_flight_delays(u);
+
 
         read_query_file(u,argv[2]);
 

@@ -39,7 +39,7 @@ static double get_revenue(void * box, const void * reservation, char * begin, ch
 
 
     if(strcmp(begin,end)>0){
-        swap_strings(&begin,&end);
+        swap_pointers((void *)(&begin),(void *)(&end));
         printf("YE\n");
     }
     

@@ -27,6 +27,7 @@ double money_trees(void * box,BTree *root, char * start, char * end, double (*f)
 void get_tlines(BTree * root, char *** list_id,char *** list_dates, int * n, void (*f)(void *, char ***,char ***, int *));
 void get_prefix(FILE * file,BTree * root, char * prefix, int * n,char F, void (*f)(FILE *, void *, int *,char, char *), short (*g)(void*,char*));
 void get_every_node(FILE * file,BTree * root, int * n,char F, void (*f)(FILE * file,void *, int *, char));
+void get_every_node2(FILE * file,BTree * root, char ** arguments,int * n,char F, void (*f)(FILE * file,void *,char **, int *, char));
 ////////////////////////////////////////////////////////
 
 #endif

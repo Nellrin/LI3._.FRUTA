@@ -27,6 +27,8 @@
         "2query.h": "c",
         "9query.h": "c",
         "3query.h": "c",
-        "4query.h": "c"
+        "4query.h": "c",
+        "7query.h": "c",
+        "8query.h": "c"
     }
 }

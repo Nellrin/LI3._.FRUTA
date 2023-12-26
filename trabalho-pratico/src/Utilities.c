@@ -43,6 +43,11 @@ int string_to_time(char * format,char *date1, char *date2) {
 
     return int_seconds;
 }
+void swap_pointers(void ** s1, void ** s2){
+    void *temp = *s1;
+    *s1 = *s2;
+    *s2 = temp;
+}
 void swap_strings(char ** s1, char ** s2){
     char *temp = *s1;
     *s1 = *s2;
@@ -184,6 +189,19 @@ static int general_string_validation(char * string){
 
     return(x>0);
 }
+///////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////
+int median(int * array, int amount){
+    if (amount % 2 == 0)
+    return ((array[amount / 2 - 1] + array[amount / 2]) / 2.0);
+
+
+    return array[amount / 2];
+}
+
+
 ///////////////////////////////////////////////////////////////
 
 

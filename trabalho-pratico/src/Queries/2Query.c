@@ -189,8 +189,8 @@ static char * query2_getter(Almanac * box, char ** arguments,int n_arguments,cha
                                         
                                     )
                                 ) {
-                                swap_strings(&merge_dates[i], &merge_dates[j]);
-                                swap_strings(&merge_id[i], &merge_id[j]);
+                                swap_pointers((void *)(&merge_dates[i]), (void *)(&merge_dates[j]));
+                                swap_pointers((void *)(&merge_id[i]), (void *)(&merge_id[j]));
                             }
                         }
 

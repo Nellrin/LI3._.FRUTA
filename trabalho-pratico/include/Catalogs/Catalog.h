@@ -37,20 +37,20 @@ unsigned int almanac_get_seats(Almanac *almanac, int target);
 
 
 
-
-
 void * almanac_get_flight(Almanac *almanac, char * target);
 
+void * almanac_get_airport(Almanac *almanac, char * target);
+void * almanac_get_airport_flights(Almanac *almanac, char * target);
 
+void ** almanac_get_all_airport(Almanac *almanac, int * amount);
+void almanac_get_airport_delays(Almanac *almanac, char *** list_of_names, int ** list_of_med, int * amount);
+void almanac_sort_flight_delays(Almanac * almanac);
 
 
 
 void * almanac_get_reservation(Almanac *almanac, char * target);
 void * almanac_get_hotel(Almanac *almanac, char * target);
 int almanac_get_hotel_num_res(Almanac *almanac, char * target);
-
-
-
 
 
 

@@ -110,4 +110,14 @@ void get_every_node(FILE * file,BTree * root, int * n,char F, void (*f)(FILE * f
     if(root->right!=NULL)
     get_every_node(file,root->right,n,F,f);
 }
+void get_every_node2(FILE * file,BTree * root, char ** arguments,int * n,char F, void (*f)(FILE * file,void *,char **, int *, char)){
+
+    if(root->left!=NULL)
+    get_every_node2(file,root->left,arguments,n,F,f);
+    
+    f(file,root->data,arguments,n,F);
+
+    if(root->right!=NULL)
+    get_every_node2(file,root->right,arguments,n,F,f);
+}
 ////////////////////////////////////////////////////////

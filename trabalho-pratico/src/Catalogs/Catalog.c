@@ -10,13 +10,14 @@
 #include "../../include/Catalogs/Catalog.h"
 #include "../../include/Catalogs/User_Catalog.h"
 #include "../../include/Catalogs/Reservation_Catalog.h"
+#include "../../include/Catalogs/Flight_Catalog.h"
 
 
 ////////////////////////////////////////////////////////
 typedef struct almanac{
     User_Almanac * user;
     Reservation_Almanac * reservation;
-    FHash * flight;
+    Flight_Almanac * flight;
     unsigned int * passenger;
 }Almanac;
 ////////////////////////////////////////////////////////
@@ -29,12 +30,12 @@ Almanac * init_almanac(){
     a->passenger = malloc(sizeof(unsigned int) * amount_flights);
     a->user = init_user_almanac(amount_users);
     a->reservation = init_reservation_almanac(amount_reservations);
-    a->flight = fhash_init(amount_flights);
+    a->flight = init_flight_almanac(amount_flights);
 
     return a;
 }
 void free_almanac(Almanac * a){
-    free_fhash(a->flight,free_flight);
+    free_flight_almanac(a->flight);
     free_reservation_almanac(a->reservation);
     free_user_almanac(a->user);
     free(a->passenger);
@@ -92,9 +93,11 @@ void almanac_add_user(Almanac *almanac,char * id, char *name, char *birth_date, 
 }
 void almanac_add_flight(Almanac *almanac,char * id,char * airline, char * plane_model, char * origin, char * destination, char * schedule_departure_date,char * real_departure_date, char * schedule_arrival_date, unsigned int passengers){
 
-    Flight * a = set_flight(id,airline, plane_model, origin, destination, schedule_departure_date,real_departure_date, schedule_arrival_date, passengers);
+    // if((!strcmp(origin,"LIS")) && (strcmp(schedule_departure_date,"2021/01/01 00:00:00")>=0) && (strcmp(schedule_departure_date,"2022/12/31 23:59:59")<=0))
+    // printf("%s %s %s\n",id,origin,schedule_departure_date);
 
-    fhash_add(almanac->flight,id,a, 0);
+
+    flight_almanac_add_flight(almanac->flight,id,airline, plane_model, origin, destination, schedule_departure_date,real_departure_date, schedule_arrival_date, passengers);
 
 }
 void almanac_add_reservation(Almanac *almanac,char *id, char *id_hotel, char *user_id, char *hotel_name, char *hotel_stars, char *begin_date, char *end_date, int includes_breakfast, char *rating, char *ppn, char *city_tax){
@@ -124,8 +127,28 @@ void * almanac_get_user_node(Almanac *almanac, char * target){
 }
 
 void * almanac_get_flight(Almanac *almanac, char * target){
-    void * flight = fhash_get(almanac->flight,target,0,compare_flight);
+    void * flight = flight_almanac_get_flight(almanac->flight,target);
     return flight;
+}
+
+void * almanac_get_airport(Almanac *almanac, char * target){
+    void * airport = flight_almanac_get_airport_direct(almanac->flight,target);
+    return airport;
+}
+void * almanac_get_airport_flights(Almanac *almanac, char * target){
+    void * airport = flight_almanac_get_airport_flights(almanac->flight,target);
+    return airport;
+}
+
+void ** almanac_get_all_airport(Almanac *almanac, int * amount){
+    void ** airports = flight_almanac_get_airport_general(almanac->flight,amount);
+    return airports;
+}
+void almanac_get_airport_delays(Almanac *almanac, char *** list_of_names, int ** list_of_med, int * amount){
+    flight_almanac_get_airport_delays(almanac->flight,list_of_names,list_of_med,amount);
+}
+void almanac_sort_flight_delays(Almanac * almanac){
+    flight_almanac_sort_airport_delays(almanac->flight);
 }
 void * almanac_get_reservation(Almanac *almanac, char * target){
     void * reservation = reservation_almanac_get_reservation(almanac->reservation,target);
