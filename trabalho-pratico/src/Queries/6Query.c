@@ -11,7 +11,7 @@
 
 
 
-static void str_q7(FILE * file,int * passengers,char ** names,int n, char F){
+static void str_q6(FILE * file,int * passengers,char ** names,int n, char F){
 
     char * result = malloc(sizeof(char) * 1000); 
     result[0]='\0';
@@ -25,14 +25,14 @@ static void str_q7(FILE * file,int * passengers,char ** names,int n, char F){
                     snprintf(result,1000,
                                 "--- %d ---\n"
                                 "name: %s\n"
-                                "median: %d\n",
+                                "passengers: %d\n",
                                 i+1,names[i],passengers[i]);
 
                     else
                     snprintf(result,1000,
                                 "\n--- %d ---\n"
                                 "name: %s\n"
-                                "median: %d\n",
+                                "passengers: %d\n",
                                 i+1,names[i],passengers[i]);
 
 
@@ -62,26 +62,26 @@ static void str_q7(FILE * file,int * passengers,char ** names,int n, char F){
 
 char * query6(FILE * file, Almanac * box, char ** arguments, short F){
 
-    // char ** list_names = NULL;
-    // int * passengers = NULL;
-    // int amount = 0, x = 0;
+    char ** list_names = NULL;
+    int * passengers = NULL;
+    int amount = 0, x = 0;
 
-    // almanac_get_airport_delays(box,&list_names,&passengers,&amount);
+    almanac_get_airport_year(box,arguments[1],&list_names,&passengers,&amount);
 
-    //         if(atoi(argument)<amount)
-    //         x = atoi(argument);
+            if(atoi(arguments[2])<amount)
+            x = atoi(arguments[2]);
 
-    //         else
-    //         x = amount;
+            else
+            x = amount;
 
-    // if(amount > 0)
-    //     str_q7(file,passengers,list_names,x,F);
+    if(amount > 0)
+        str_q6(file,passengers,list_names,x,F);
 
-    //     for(int i = 0; i < amount; i++)
-    //     free(list_names[i]);
+        for(int i = 0; i < amount; i++)
+        free(list_names[i]);
 
-    //     free(list_names);
-    //     free(passengers);
+        free(list_names);
+        free(passengers);
 
 
     return NULL;

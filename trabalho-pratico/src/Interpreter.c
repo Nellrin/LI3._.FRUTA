@@ -8,6 +8,7 @@
 #include "../include/Queries/3Query.h"
 #include "../include/Queries/4Query.h"
 #include "../include/Queries/5Query.h"
+#include "../include/Queries/6Query.h"
 #include "../include/Queries/7Query.h"
 #include "../include/Queries/8Query.h"
 #include "../include/Queries/9Query.h"
@@ -101,7 +102,11 @@ static void filter_querys(Almanac * box, char * line, int number){
                         break;
                     
                     case 6:
-                        /* code */
+                        fputs("",file);
+                        fclose(file);
+                        file = create_file(title,"a");
+
+                        answear = query6(file,box,arguments,(strchr(arguments[0],'F')!=NULL));
                         break;
                     
                     case 7:

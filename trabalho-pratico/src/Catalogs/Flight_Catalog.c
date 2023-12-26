@@ -14,9 +14,11 @@
 struct f_almanac{
     FHash * flight;
 
-    FHash * direct_airport;
+    short amount_years;
+    int * years_id;
     FHash * years;
     
+    FHash * direct_airport;
     Stack * general_airport;
 
     int amount_airports;
@@ -48,7 +50,7 @@ struct year_of_airport{
 ////////////////////////////////////////////////////////
 static int compare_node_year(const char * id, const void * info){
     const Year_Airport *Node = (const Year_Airport *)info;
-    return (strcmp(id, Node->year)==0);
+    return (strcasecmp(id, Node->year)==0);
 }
 static int compare_node_airport(const char * id, const void * info){
     const Airport *Node = (const Airport *)info;
@@ -66,7 +68,7 @@ static Year_Airport * init_node_year_airport(char * year, char * origin,int pass
     a->passengers = malloc(sizeof(int)*5);
     a->airports = malloc(sizeof(char *)*5);
 
-    for(int i = 1; i < 5; i++){
+    for(int i = 0; i < 5; i++){
         a->passengers[i] = 0;
         a->airports[i] = NULL;
     }
@@ -99,8 +101,12 @@ Flight_Almanac * init_flight_almanac(int amount){
     Flight_Almanac * a = malloc(sizeof(Flight_Almanac));
     
     a->flight = fhash_init(amount);
+
     a->general_airport = init_stack();
     a->direct_airport = fhash_init(amount/30);
+    
+    a->amount_years = 0;
+    a->years_id = NULL;
     a->years = fhash_init(20);
 
     return a;
@@ -162,6 +168,8 @@ void free_flight_almanac(Flight_Almanac * a){
     free(a->airport_names_delay);
     free(a->airport_median_delays);
 
+    free(a->years_id);
+
 
     
     free(a);
@@ -170,6 +178,37 @@ void free_flight_almanac(Flight_Almanac * a){
 
 
 ////////////////////////////////////////////////////////
+static void add_passengers_to_year(Year_Airport * year, int passengers, char * origin){
+        int found = 0;
+        for(int i = 0; i < year->amount; i++)
+            if(strcasecmp(year->airports[i],origin)==0){
+                year->passengers[i] += passengers;
+                found ++;
+            }
+
+        if(found == 0){
+
+
+                    if((year->amount)%5 == 0){
+                        int * list_num = (int *)realloc(year->passengers, sizeof(int) * (year->amount+5));
+                        year->passengers = list_num;
+
+                        char ** list_nam = (char **)realloc(year->airports, sizeof(char *) * (year->amount+5));
+                        year->airports = list_nam;
+                    
+                        for(int i = 0; i < 5; i++){
+                            year->airports[year->amount+i] = NULL;
+                            year->passengers[year->amount+i] = 0;
+                        }
+                    }
+
+
+            year->airports[year->amount] = strdup(origin);
+            year->passengers[year->amount] += passengers;
+            year->amount++;
+        }
+    }
+
 void flight_almanac_add_flight(Flight_Almanac *almanac, char * id,char * airline, char * plane_model, char * origin, char * destination, char * schedule_departure_date,char * real_departure_date, char * schedule_arrival_date, unsigned int passengers){
     
     for(int i = 0; i < strlen(origin);i++)
@@ -197,8 +236,6 @@ void flight_almanac_add_flight(Flight_Almanac *almanac, char * id,char * airline
     insert_flight(airport,flight,real_departure_date,schedule_departure_date);
 
 
-
-
     char * copy = strdup(schedule_departure_date);
     char * token = NULL; 
     token = strsep(&copy, "/");
@@ -207,41 +244,22 @@ void flight_almanac_add_flight(Flight_Almanac *almanac, char * id,char * airline
     Year_Airport * x = fhash_get(almanac->years,year_date,1,compare_node_year);
 
     if(x==NULL){
-        
+        int * list_years = (int *)realloc(almanac->years_id, sizeof(int) * (almanac->amount_years+1));
+        almanac->years_id = list_years;
+
+        almanac->years_id[almanac->amount_years] = atoi(year_date);
+
+        almanac->amount_years++;
+
         x = init_node_year_airport(year_date,origin,passengers);        
         fhash_add(almanac->years,year_date,x,1);
+        add_passengers_to_year(x,passengers,destination);
 
     }
 
     else{
-        int i = 0;
-        for(i = 0; i < x->amount; i++)
-            if(strcmp(x->airports[i],origin)==0){
-                x->passengers[i] += passengers;
-                break;
-            }
-
-        if(i == x->amount){
-
-
-                    if((x->amount)%5 == 0){
-                        int * list_num = (int *)realloc(x->passengers, sizeof(int) * (x->amount+5));
-                        x->passengers = list_num;
-
-                        char ** list_nam = (char **)realloc(x->airports, sizeof(char *) * (x->amount+5));
-                        x->airports = list_nam;
-                    
-                        for(int i = 1; i < 5; i++){
-                            x->airports[x->amount+i] = NULL;
-                            x->passengers[x->amount+i] = 0;
-                        }
-                    }
-
-
-            x->airports[x->amount] = strdup(origin);
-            x->passengers[x->amount] = passengers;
-            x->amount++;
-        }
+        add_passengers_to_year(x,passengers,origin);
+        add_passengers_to_year(x,passengers,destination);
     }
 
 
@@ -313,6 +331,35 @@ void flight_almanac_sort_airport_delays(Flight_Almanac *almanac){
 
     free(airport_list);
 
+
+    for(int i = 0; i < almanac->amount_years; i++){
+        char * id_year = malloc(sizeof(char)*5);
+        id_year[0]='\0';
+        
+        snprintf(id_year,5,"%d",almanac->years_id[i]);
+
+        Year_Airport * y  = fhash_get(almanac->years,id_year,1,compare_node_year);
+
+        for(int j = 0; j < y->amount; j++){
+
+            for(int k = j+1; k < y->amount; k++){
+                if((y->passengers[j]<y->passengers[k]) || ((y->passengers[j]==y->passengers[k] && (strcasecmp(y->airports[j],y->airports[k])>0)))){
+                
+                int temp = y->passengers[j];
+                y->passengers[j] = y->passengers[k];
+                y->passengers[k] = temp;
+
+                swap_strings(&y->airports[k],&y->airports[j]);
+                }
+
+
+            }
+
+        }
+
+        free(id_year);
+    }
+
 }
 
 void flight_almanac_get_airport_delays(Flight_Almanac *almanac, char *** list_of_names, int ** list_of_med, int * amount){
@@ -335,4 +382,49 @@ void flight_almanac_get_airport_delays(Flight_Almanac *almanac, char *** list_of
     *list_of_names = names;
     *list_of_med = med;
 }
+
+void flight_almanac_get_airport_years(Flight_Almanac *almanac, char * target, char *** list_of_names, int ** list_of_passengers, int * amount){
+
+
+    Year_Airport * y = fhash_get(almanac->years,target,1,compare_node_year);
+
+    (*amount) = y->amount;
+    char ** names = malloc(sizeof(char *) * (*amount));
+    int * passengers = malloc(sizeof(int) * (*amount));
+
+    for(int i = 0; i < (*amount); i++){
+
+        (names)[i] = strdup(y->airports[i]);
+        (passengers)[i] = y->passengers[i];
+
+    }
+
+
+
+    *list_of_names = names;
+    *list_of_passengers = passengers;
+}
 ////////////////////////////////////////////////////////
+
+
+
+
+// DUB 2763
+// LHR 2439
+// AMS 1999
+// MAN 1931
+// FRA 1909
+// VIE 1538
+// MAD 1537
+// CDG 1483
+// OSL 1315
+// FCO 1222
+// SVO 1191
+// ARN 1165
+// LIS 1126
+// KBP 1120
+// CPH 1108
+// IST 1049
+// ZRH 636
+// WAW 583
+// BCN 528
