@@ -21,9 +21,7 @@ int main(int argc, char *argv[]) {
 
     case 3:
             
-            Almanac * u = NULL;
-
-            set_up_almanac(&u,argv[1]);
+            Almanac * u = set_up_almanac(argv[1]);
 
 
             parser(argv[1],"users",u,valid_user);

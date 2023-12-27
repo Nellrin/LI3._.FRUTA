@@ -16,7 +16,7 @@ typedef struct almanac Almanac;
 
 ////////////////////////////////////////////////////////
 Almanac * init_almanac(int amount_f, int amount_u, int amount_r);
-void set_up_almanac(Almanac **almanac,char * path);
+Almanac * set_up_almanac(char * path);
 void free_almanac(Almanac * a);
 ////////////////////////////////////////////////////////
 

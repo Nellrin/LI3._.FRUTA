@@ -15,6 +15,8 @@
 #include "../../include/Catalogs/Flight_Catalog.h"
 #include "../../include/Catalogs/Calendar_Catalog.h"
 
+#include "../../include/Output.h"
+
 
 ////////////////////////////////////////////////////////
 typedef struct almanac{
@@ -56,7 +58,7 @@ void free_almanac(Almanac * a){
 
 
 ////////////////////////////////////////////////////////
-void set_up_almanac(Almanac **almanac,char * path){
+Almanac * set_up_almanac(char * path){
 
     int amount_f = 0;//200000;
     int amount_u = 0;//100000;
@@ -67,7 +69,7 @@ void set_up_almanac(Almanac **almanac,char * path){
     char * flights = malloc(sizeof(char) * 256);
     snprintf(flights, 256, "%s/flights.csv",path);
 
-    FILE *file = fopen(flights, "r");
+    FILE *file = create_file(flights, "r");
 
     char * line = NULL;
     char *flight_id = NULL;
@@ -82,15 +84,17 @@ void set_up_almanac(Almanac **almanac,char * path){
     amount_u = 4 * amount_f; 
     amount_r = 6 * amount_u; 
 
-    *almanac = init_almanac(amount_f,amount_u,amount_r);
+    Almanac * almanac = init_almanac(amount_f,amount_u,amount_r);
 
 
     for(int i = 0; i < amount_f; i++)
-    (*almanac)->passenger[i] = 0;
+    almanac->passenger[i] = 0;
 
 
     free(line);
     free(flights);
+
+    return almanac;
 }
 
 void almanac_count_passengers(Almanac *almanac,char * path){
@@ -106,7 +110,7 @@ void almanac_count_passengers(Almanac *almanac,char * path){
     
 
 
-    FILE * file = fopen(passengers, "r");
+    FILE * file = create_file(passengers, "r");
 
 
     while (getline(&line, &len, file) != -1) {
