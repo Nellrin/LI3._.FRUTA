@@ -10,7 +10,9 @@
 
 
 static void setting_up(char * path,char * input){
-        Almanac * u = set_up_almanac(path);
+
+        // Almanac * u = set_up_almanac(path);
+    Almanac * u = init_almanac(200000,1000000,6000000);
 
     parser(path,"users",u,valid_user);
     parser(path,"reservations",u,valid_reservation);
@@ -34,10 +36,11 @@ static void setting_up(char * path,char * input){
 
 int main(int argc, char *argv[]){
 
+
     switch (argc){
-        case 1:
-                interactive_mode();
-            break;
+        // case 1:
+        //         interactive_mode();
+        //     break;
 
 
         case 3:

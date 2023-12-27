@@ -3,15 +3,15 @@
 #include <string.h>
 #include <ncurses.h>
 
-#include "../include/Catalogs/Catalog.h"
+#include "../../include/Catalogs/Catalog.h"
 #include "../../include/Interactive/Interactive.h"
-#include "../include/Output.h"
-#include "../include/Interpreter.h"
+#include "../../include/Output.h"
+#include "../../include/Interpreter.h"
 ///////////////////////////////////////////////////////////////
 
 void interactive_mode(){
     
 }
 
-///////////////////////////////////////////////////////////////
+
 ///////////////////////////////////////////////////////////////

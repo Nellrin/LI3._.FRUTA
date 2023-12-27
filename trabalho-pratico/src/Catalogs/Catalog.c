@@ -86,6 +86,20 @@ void free_almanac(Almanac * a){
 
 
 ////////////////////////////////////////////////////////
+static int aproximated_amount_of_lines_of_a_file(FILE *file) {
+    int size;
+
+    int start = ftell(file);
+
+    fseek(file, 0, SEEK_END);
+    size = ftell(file);
+    fseek(file, start, SEEK_SET);
+
+    int length = strlen("id;airline;plane_model;seats;ori;des;schedule_departure_date;schedule_arrival_date;real_departure_date;real_arrival_date");
+
+    return (size/length);
+}
+
 Almanac * set_up_almanac(char * path){
 
     int amount_f = 0;//200000;
@@ -105,33 +119,23 @@ Almanac * set_up_almanac(char * path){
         printf("Ficheiro aberto\n");
     }
 
-    char * line = NULL;
-    size_t len = 0;
+    amount_f = aproximated_amount_of_lines_of_a_file(file);
 
-    while (getline(&line, &len, file) != -1){
-        printf("[%d]",amount_f);
-        amount_f++;
-    }
+    // if(amount_f<200001)
+    // amount_f = 200001;
 
-    fclose(file);
-    amount_f *= 1.5;
-    amount_u = 3.5 * amount_f; 
+    amount_u = 4 * amount_f; 
     amount_r = 6 * amount_u; 
 
 
         printf("\n\nFlights [%d]\n Reservations [%d]\n Users[%d]\n",amount_f,amount_r,amount_u);
 
 
-    Almanac * almanac = init_almanac(amount_f,amount_u,amount_r);
 
-
-        printf("\nAlmanac size [%d]\n",(int)sizeof(almanac));
-
-
-    free(line);
     free(name);
+    fclose(file);
 
-    return almanac;
+    return init_almanac(amount_f,amount_u,amount_r);
 }
 
 static void get_sdepartures(void * Flight, char *** g_list,char *** b_list, int * amount){
@@ -177,8 +181,8 @@ void almanac_count_passengers(Almanac *almanac,char * path){
             }
         }
         
-                if(flight_id!=NULL)
-                free(flight_id);        
+        if(flight_id!=NULL)
+        free(flight_id);        
     }
 
     free(passengers);

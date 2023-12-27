@@ -1,6 +1,5 @@
 CC = gcc
-CFLAGS =-Wall -Wextra -pedantic -O3 -I. -Iinclude $(shell pkg-config --cflags glib-2.0) -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
-CFLAGS += -march=native -mtune=native
+CFLAGS = -lncurses -O3 -march=native -mtune=native -I.
 
 LIBS = $(shell pkg-config --libs glib-2.0)
 
