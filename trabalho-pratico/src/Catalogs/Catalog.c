@@ -33,16 +33,41 @@ typedef struct almanac{
 Almanac * init_almanac(int amount_f, int amount_u, int amount_r){
     Almanac * a = malloc(sizeof(Almanac));
 
+    if(a!=NULL){
+        printf("\nalmanac alocado\n");
+    }
+
+
     a->passenger = malloc(sizeof(int) * amount_f);
 
-    for(int i = 0; i < amount_f; i++)
-    a->passenger[i] = 0;
+    if(a->passenger!=NULL){
+        printf("\npassengers alocados\n");
+    }
+
+
+    for(int i = 0; i < amount_f; i++){
+        a->passenger[i] = 0;
+        // printf(".");
+    }
 
 
     a->user = init_user_almanac(amount_u);
+
+    if(a->user!=NULL){
+        printf("\nuser alocado\n");
+    }
     a->reservation = init_reservation_almanac(amount_r);
+    if(a->reservation!=NULL){
+        printf("\nreservas alocadas\n");
+    }
     a->flight = init_flight_almanac(amount_f);
+    if(a->flight!=NULL){
+        printf("\nvoos alocados\n");
+    }
     a->counter = init_calendar_almanac();
+    if(a->counter!=NULL){
+        printf("\ncalendário alocado\n");
+    }
 
     return a;
 }
@@ -69,27 +94,42 @@ Almanac * set_up_almanac(char * path){
 
 
 
-    char * flights = malloc(sizeof(char) * 256);
-    snprintf(flights, 256, "%s/flights.csv",path);
+    char * name = malloc(sizeof(char) * 256);
+    snprintf(name, 256, "%s/flights.csv",path);
 
-    FILE *file = create_file(flights, "r");
+    printf("\nficheiro: %s\n",name);
+
+    FILE *file = create_file(name, "r");
+
+    if(file != NULL){
+        printf("Ficheiro aberto\n");
+    }
 
     char * line = NULL;
     size_t len = 0;
 
-    while (getline(&line, &len, file) != -1)
-    amount_f++;
+    while (getline(&line, &len, file) != -1){
+        printf("[%d]",amount_f);
+        amount_f++;
+    }
 
     fclose(file);
-
-    amount_u = 5 * amount_f; 
+    amount_f *= 1.5;
+    amount_u = 3.5 * amount_f; 
     amount_r = 6 * amount_u; 
+
+
+        printf("\n\nFlights [%d]\n Reservations [%d]\n Users[%d]\n",amount_f,amount_r,amount_u);
+
 
     Almanac * almanac = init_almanac(amount_f,amount_u,amount_r);
 
 
+        printf("\nAlmanac size [%d]\n",(int)sizeof(almanac));
+
+
     free(line);
-    free(flights);
+    free(name);
 
     return almanac;
 }
