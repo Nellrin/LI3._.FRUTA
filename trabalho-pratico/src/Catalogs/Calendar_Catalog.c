@@ -340,22 +340,22 @@ void calendar_add(Calendar_Almanac *a, char * date, int amount,short type, void 
 
                 case 3:
         
-                date[4]='\0';
-                copy = strdup(date);
+                    date[4]='\0';
+                    copy = strdup(date);
 
-                x = fhash_get(a->years,copy,1,compare_general_date);
+                    x = fhash_get(a->years,copy,1,compare_general_date);
 
-                if(x == NULL){
-                    x = init_general_date(copy,12);
-                    fhash_add(a->years,copy,x,1);
-                    
-                    char ** listA = (char **)realloc(a->id_years, sizeof(char *) * (a->amount_years + 1));
-                    a->id_years = listA;
+                    if(x == NULL){
+                        x = init_general_date(copy,12);
+                        fhash_add(a->years,copy,x,1);
+                        
+                        char ** listA = (char **)realloc(a->id_years, sizeof(char *) * (a->amount_years + 1));
+                        a->id_years = listA;
 
-                    a->id_years[a->amount_years] = strdup(copy);
-                    a->amount_years ++;
+                        a->id_years[a->amount_years] = strdup(copy);
+                        a->amount_years ++;
 
-                }
+                    }
 
                     f(x->general_date,amount);
 

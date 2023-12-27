@@ -153,9 +153,7 @@ void almanac_add_passengers(Almanac * almanac, char * user_id, char * flight_id)
     user_almanac_get_amount_flights(almanac->user,user_id,&amount);
 
     char * sdeparture = get_flightSDEPARTURE(almanac_get_flight(almanac,flight_id));
-    sdeparture[strlen(sdeparture)-6] = '\0';
-
-
+    sdeparture[strlen(sdeparture)-9] = '\0';
 
     if(amount>0){
         void * flights_of_user = almanac_get_user_flights(almanac,user_id);
