@@ -23,7 +23,7 @@ typedef struct almanac{
     User_Almanac * user;
     Reservation_Almanac * reservation;
     Flight_Almanac * flight;
-    unsigned int * passenger;
+    int * passenger;
     Calendar_Almanac * counter;
 }Almanac;
 ////////////////////////////////////////////////////////
@@ -33,7 +33,12 @@ typedef struct almanac{
 Almanac * init_almanac(int amount_f, int amount_u, int amount_r){
     Almanac * a = malloc(sizeof(Almanac));
 
-    a->passenger = malloc(sizeof(unsigned int) * amount_f);
+    a->passenger = malloc(sizeof(int) * amount_f);
+
+    for(int i = 0; i < amount_f; i++)
+    a->passenger[i] = 0;
+
+
     a->user = init_user_almanac(amount_u);
     a->reservation = init_reservation_almanac(amount_r);
     a->flight = init_flight_almanac(amount_f);
@@ -48,8 +53,6 @@ void free_almanac(Almanac * a){
         free_user_almanac(a->user);
         free(a->passenger);
         free_calendar_almanac(a->counter);
-
-
     
         free(a);
     }
@@ -81,14 +84,10 @@ Almanac * set_up_almanac(char * path){
 
     fclose(file);
 
-    amount_u = 4 * amount_f; 
+    amount_u = 5 * amount_f; 
     amount_r = 6 * amount_u; 
 
     Almanac * almanac = init_almanac(amount_f,amount_u,amount_r);
-
-
-    for(int i = 0; i < amount_f; i++)
-    almanac->passenger[i] = 0;
 
 
     free(line);

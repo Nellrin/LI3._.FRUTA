@@ -6,55 +6,52 @@
 #include "../include/Utilities.h"
 #include "../include/Parser.h"
 #include "../include/Interpreter.h"
+#include "../include/Interactive/Interactive.h"
 
 
-int main(int argc, char *argv[]) {
+static void setting_up(char * path,char * input){
+        Almanac * u = set_up_almanac(path);
+
+    parser(path,"users",u,valid_user);
+    parser(path,"reservations",u,valid_reservation);
     
+        almanac_count_passengers(u,path);
+
+    parser(path,"flights",u,valid_flight);
+    parser(path,"passengers",u,valid_passenger);
+    
+    
+
+        almanac_sort_flight_delays(u);
+
+
+    read_query_file(u,input);
+
+
+        free_almanac(u);
+}
+
+
+int main(int argc, char *argv[]){
 
     switch (argc){
+        case 1:
+                interactive_mode();
+            break;
 
 
-    case 1:
-            /* iterativo */
-        break;
+        case 3:
+            setting_up(argv[1],argv[2]);
+            break;
 
+        // case 4:
+        //     /* testes */
+        //     break;
 
-    case 3:
-            
-            Almanac * u = set_up_almanac(argv[1]);
-
-
-            parser(argv[1],"users",u,valid_user);
-            parser(argv[1],"reservations",u,valid_reservation);
-            
-            almanac_count_passengers(u,argv[1]);
-
-            parser(argv[1],"flights",u,valid_flight);
-            parser(argv[1],"passengers",u,valid_passenger);
-            
-            
-
-                almanac_sort_flight_delays(u);
-
-
-            read_query_file(u,argv[2]);
-
-    
-            free_almanac(u);
-
-        break;
-
-    case 4:
-        /* testes */
-        break;
-
-    default:
-        printf("Número de argumentos inválidos\n");
-        break;
+        default:
+            printf("Número de argumentos inválidos\n");
+            break;
     }
-
-        
-
 
     return 0;
 }
