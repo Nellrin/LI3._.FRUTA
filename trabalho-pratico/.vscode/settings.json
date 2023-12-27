@@ -30,6 +30,9 @@
         "4query.h": "c",
         "7query.h": "c",
         "8query.h": "c",
-        "6query.h": "c"
+        "6query.h": "c",
+        "calendar.h": "c",
+        "calendar_catalog.h": "c",
+        "10query.h": "c"
     }
 }

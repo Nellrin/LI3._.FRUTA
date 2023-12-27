@@ -53,6 +53,11 @@ void swap_strings(char ** s1, char ** s2){
     *s1 = *s2;
     *s2 = temp;
 }
+void swap_ints(int * a, int * b){
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
 ///////////////////////////////////////////////////////////////
 
 

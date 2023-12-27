@@ -1,0 +1,28 @@
+#ifndef CALENDAR_CATALOGS_H
+#define CALENDAR_CATALOGS_H
+////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
+typedef struct h FHash;
+typedef struct calendar Date_Counter;
+typedef struct g_date General_Date;
+
+
+typedef struct c_almanac Calendar_Almanac;
+////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
+Calendar_Almanac * init_calendar_almanac();
+void free_calendar_almanac(Calendar_Almanac * a);
+////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
+void calendar_add(Calendar_Almanac *a, char * date, int amount, void (*f)(void*,int));
+void calendar_get(Calendar_Almanac *a,char ** arguments,int num_arguments,int * amount,int ** year, int ** user, int ** fli, int ** res,int ** pas, int ** uni_pas);
+////////////////////////////////////////////////////////
+
+
+#endif

@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "../../include/DataStructures/Calendar.h"
+////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
+struct calendar{
+    int users;
+    int reservations;
+    int flights;
+    int passengers;
+    int unique_passengers;
+};
+////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
+Date_Counter *create_date() {
+    Date_Counter *a = malloc(sizeof(Date_Counter));
+
+    a->flights = 0;
+    a->users = 0;
+    a->reservations = 0;
+    a->passengers = 0;
+    a->unique_passengers = 0;
+
+    return a;
+}
+////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
+void date_add_users(void * a,int amount) {
+
+    ((Date_Counter *) a)->users+=amount;
+
+}
+void date_add_flights(void * a,int amount) {
+    ((Date_Counter *) a)->flights+=amount;
+}
+void date_add_reservations(void * a,int amount) {
+    ((Date_Counter *) a)->reservations+=amount;
+}
+void date_add_passengers(void * a,int amount){
+    ((Date_Counter *) a)->passengers+=amount;
+}
+void date_add_unique_passengers(void * a,int amount){
+    ((Date_Counter *) a)->unique_passengers+=amount;
+}
+void date_subtract_unique_passengers(void * a,int amount){
+    ((Date_Counter *) a)->unique_passengers-=amount;
+}
+////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
+int get_date_users(Date_Counter * a) {
+    int x = a->users;
+    return x;
+}
+int get_date_flights(Date_Counter * a) {
+    int x = a->flights;
+    return x;
+}
+int get_date_reservations(Date_Counter * a) {
+    int x = a->reservations;
+    return x;
+}
+int get_date_passengers(Date_Counter * a) {
+    int x = a->passengers;
+    return x;
+}
+int get_date_unique_passengers(Date_Counter * a) {
+    int x = a->unique_passengers;
+    return x;
+}
+////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
+void free_date(Date_Counter *a){
+    if (a != NULL)
+    free(a);
+}
+////////////////////////////////////////////////////////

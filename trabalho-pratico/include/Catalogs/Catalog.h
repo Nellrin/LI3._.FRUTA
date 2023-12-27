@@ -59,6 +59,9 @@ void * almanac_get_user(Almanac *almanac, char * target);
 void almanac_get_user_reservations_flights(Almanac * almanac, char * target, int * n_flights, int * n_reservations);
 void * almanac_get_user_flights(Almanac * almanac, char * target);
 void * almanac_get_user_reservations(Almanac * almanac, char * target);
+
+
+void almanac_get_dates(Almanac * almanac,char ** arguments,int num_arguments,int * amount,int ** year, int ** user, int ** fli, int ** res,int ** pas, int ** uni_pas);
 ////////////////////////////////////////////////////////
 
 
