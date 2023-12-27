@@ -46,9 +46,11 @@ void free_almanac(Almanac * a){
         free_user_almanac(a->user);
         free(a->passenger);
         free_calendar_almanac(a->counter);
-    }
 
-    free(a);
+
+    
+        free(a);
+    }
 }
 ////////////////////////////////////////////////////////
 

@@ -10,7 +10,6 @@
 
 int main(int argc, char *argv[]) {
     
-    Almanac * u = NULL;
 
     switch (argc){
 
@@ -21,6 +20,8 @@ int main(int argc, char *argv[]) {
 
 
     case 3:
+            
+            Almanac * u = NULL;
 
             set_up_almanac(&u,argv[1]);
 
@@ -40,6 +41,9 @@ int main(int argc, char *argv[]) {
 
             read_query_file(u,argv[2]);
 
+    
+            free_almanac(u);
+
         break;
 
     case 4:
@@ -52,7 +56,6 @@ int main(int argc, char *argv[]) {
     }
 
         
-        free_almanac(u);
 
 
     return 0;
