@@ -28,6 +28,7 @@ void user_almanac_add_reservation(User_Almanac *almanac,char *id, void * reserva
 
 ////////////////////////////////////////////////////////
 void * user_almanac_use_reservations(User_Almanac *almanac, char * target);
+void user_almanac_get_amount_flights(User_Almanac *almanac, char * target, int * amount);
 void * user_almanac_use_flights(User_Almanac *almanac, char * target);
 
 void * user_almanac_get_user(User_Almanac *almanac, char * target);

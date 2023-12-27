@@ -70,8 +70,10 @@ static void q10_str(FILE * file, int n_arguments, int amount, int * year, int * 
         }
 
     else
-        for(int i = 0; i < amount; i++)
-        snprintf(result,1000,"%d;%d;%d;%d;%d;%d\n",year[i],user[i],fli[i],pas[i],uni_pas[i],res[i]);
+        for(int i = 0; i < amount; i++){
+            snprintf(result,1000,"%d;%d;%d;%d;%d;%d\n",year[i],user[i],fli[i],pas[i],uni_pas[i],res[i]);
+            write_line(file,result);
+        }
 
 
     free(year);

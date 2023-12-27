@@ -57,6 +57,7 @@ void * almanac_get_user_node(Almanac *almanac, char * target);
 void * almanac_get_prefix(Almanac *almanac);
 void * almanac_get_user(Almanac *almanac, char * target);
 void almanac_get_user_reservations_flights(Almanac * almanac, char * target, int * n_flights, int * n_reservations);
+void almanac_get_user_amount_flights(Almanac * almanac, char * target, int * n_flights);
 void * almanac_get_user_flights(Almanac * almanac, char * target);
 void * almanac_get_user_reservations(Almanac * almanac, char * target);
 

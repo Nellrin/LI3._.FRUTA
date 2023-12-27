@@ -62,7 +62,7 @@ Almanac * set_up_almanac(char * path){
 
     int amount_f = 0;//200000;
     int amount_u = 0;//100000;
-    int amount_r = 0;// 600000;
+    int amount_r = 0;//600000;
 
 
 
@@ -95,6 +95,11 @@ Almanac * set_up_almanac(char * path){
     free(flights);
 
     return almanac;
+}
+
+static void get_sdepartures(void * Flight, char *** g_list,char *** b_list, int * amount){
+    (*g_list)[*amount] = get_flightSDEPARTURE(Flight);
+    (*amount)++;
 }
 
 void almanac_count_passengers(Almanac *almanac,char * path){
@@ -143,19 +148,87 @@ void almanac_count_passengers(Almanac *almanac,char * path){
     fclose(file);
 }
 void almanac_add_passengers(Almanac * almanac, char * user_id, char * flight_id){
-    user_almanac_add_flight(almanac->user,user_id,almanac_get_flight(almanac,flight_id));   
+
+    int amount = 0, found = 0;
+    user_almanac_get_amount_flights(almanac->user,user_id,&amount);
+
+    char * sdeparture = get_flightSDEPARTURE(almanac_get_flight(almanac,flight_id));
+    sdeparture[strlen(sdeparture)-6] = '\0';
+
+
+
+    if(amount>0){
+        void * flights_of_user = almanac_get_user_flights(almanac,user_id);
+
+        char ** list_sdepartures = malloc(sizeof(char *) * amount);
+        char ** dummy_list = malloc(sizeof(char *) * amount);
+
+        amount = 0;
+
+
+        get_tlines(flights_of_user,&list_sdepartures,&dummy_list,&amount,get_sdepartures);
+
+        for(int j = 0; j < 3; j++){
+            found = 0;
+
+            for(int i = 0; i < amount; i++){
+                if(strncmp(list_sdepartures[i],sdeparture,strlen(sdeparture)) == 0){
+                    // calendar_add(almanac->counter,sdeparture,1,0,date_subtract_unique_passengers);
+                    found = 1;
+                    break;
+                }
+            }
+            
+                if(found == 0)
+                calendar_add(almanac->counter,sdeparture,1,j+1,date_add_unique_passengers);
+
+            sdeparture[strlen(sdeparture)-3] = '\0';
+
+
+            // printf("%s %ld %s %d\n",user_id,strlen(sdeparture),sdeparture, j+1);
+
+
+        }
+
+
+
+
+
+
+
+
+        for(int i = 0; i < amount; i++)
+        free(list_sdepartures[i]);
+
+        free(list_sdepartures);
+        free(dummy_list);
+    }
+
+    else
+    calendar_add(almanac->counter,sdeparture,1,0,date_add_unique_passengers);
+
+
+
+
+
+
+    user_almanac_add_flight(almanac->user,user_id,almanac_get_flight(almanac,flight_id)); 
+
+
+        free(sdeparture);
+
 }
 void almanac_add_user(Almanac *almanac,char * id, char *name, char *birth_date, char *sex, char *country_code, short account_status, char *account_creation, char * passport){
     user_almanac_add_user(almanac->user,id, name, birth_date, sex, country_code, account_status, account_creation, passport);
     
-    calendar_add(almanac->counter,account_creation,1,date_add_users);
+    calendar_add(almanac->counter,account_creation,1,0,date_add_users);
 }
 void almanac_add_flight(Almanac *almanac,char * id,char * airline, char * plane_model, char * origin, char * destination, char * schedule_departure_date,char * real_departure_date, char * schedule_arrival_date, unsigned int passengers){
 
     flight_almanac_add_flight(almanac->flight,id,airline, plane_model, origin, destination, schedule_departure_date,real_departure_date, schedule_arrival_date, passengers);
 
-    calendar_add(almanac->counter,schedule_departure_date,1,date_add_flights);
-    calendar_add(almanac->counter,schedule_departure_date,passengers,date_add_passengers);
+    calendar_add(almanac->counter,schedule_departure_date,1,0,date_add_flights);
+    calendar_add(almanac->counter,schedule_departure_date,passengers,0,date_add_passengers);
 
 
 }
@@ -167,7 +240,7 @@ void almanac_add_reservation(Almanac *almanac,char *id, char *id_hotel, char *us
     else    
     reservation_almanac_add_reservation(almanac->reservation, almanac->user,id, id_hotel, user_id, hotel_name, hotel_stars, begin_date, end_date, "False", rating, ppn, city_tax);
 
-    calendar_add(almanac->counter,begin_date,1,date_add_reservations);
+    calendar_add(almanac->counter,begin_date,1,0,date_add_reservations);
 
 }
 ////////////////////////////////////////////////////////

@@ -14,7 +14,9 @@
 struct node{
     void * user;
     
+    short amount_flights;
     BTree * flight;
+    short amount_reservations;
     BTree * reservation;
 };
 
@@ -37,7 +39,9 @@ User_Almanac * init_user_almanac(int amount_users){
 static Node * init_node(User * user){
     Node * a = malloc(sizeof(Node));
     a->user = user;
+    a->amount_flights = 0;
     a->flight = NULL;
+    a->amount_reservations = 0;
     a->reservation = NULL;
 
     return a;
@@ -80,11 +84,12 @@ void user_almanac_add_user(User_Almanac *almanac,char * id, char *name, char *bi
 void user_almanac_add_flight(User_Almanac *almanac,char * id, void * flight){
     Node * node = fhash_get(almanac->global_user,id,1,compare_node_user);
     insert(&(node->flight),flight,compare_flight_date);
+    node->amount_flights++;
 }
 void user_almanac_add_reservation(User_Almanac *almanac,char *id, void * reservation){
     Node * node = fhash_get(almanac->global_user,id,1,compare_node_user);
     insert(&(node->reservation),reservation,compare_reservation_date);
-
+    node->amount_reservations++;
 }
 ////////////////////////////////////////////////////////
 
@@ -104,6 +109,10 @@ void * user_almanac_get_individual_user(User_Almanac *almanac, char * target){
     return a->user;
 }
 
+void user_almanac_get_amount_flights(User_Almanac *almanac, char * target, int * amount){
+    Node * a = (Node *)user_almanac_get_user(almanac,target);
+    *amount = a->amount_flights;
+}
 void * user_almanac_use_flights(User_Almanac *almanac, char * target){
     Node * a = (Node *)user_almanac_get_user(almanac,target);
     return a->flight;

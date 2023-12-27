@@ -20,7 +20,7 @@ void free_calendar_almanac(Calendar_Almanac * a);
 
 
 ////////////////////////////////////////////////////////
-void calendar_add(Calendar_Almanac *a, char * date, int amount, void (*f)(void*,int));
+void calendar_add(Calendar_Almanac *a, char * date, int amount,short type, void (*f)(void*,int));
 void calendar_get(Calendar_Almanac *a,char ** arguments,int num_arguments,int * amount,int ** year, int ** user, int ** fli, int ** res,int ** pas, int ** uni_pas);
 ////////////////////////////////////////////////////////
 
