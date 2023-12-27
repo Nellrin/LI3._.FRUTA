@@ -122,7 +122,7 @@ static int country_code_validation(char * string){
 
 static int account_status_validation(char * string){
     char * copy = strdup(string);
-    for(int i = 0; i < strlen(string); i++)
+    for(int i = 0; i < (int)strlen(string); i++)
         copy[i] = toupper(copy[i]);
      
     if(!strcmp(copy,"ACTIVE")){
@@ -139,15 +139,9 @@ static int account_status_validation(char * string){
     return 0;
 }
 
-static int total_seats_validation(char * total_seats, int amount){
-    int x = atoi(total_seats);
-
-    return (x>=amount);
-}
-
 static int airport_validation(char * string){
     if(strlen(string) == 3){
-        for(int i = 0; i < strlen(string); i++)
+        for(int i = 0; i < (int)strlen(string); i++)
             if(!isalpha(string[i]))
             return 0;
 
@@ -165,7 +159,7 @@ static int general_number_validation(int li,char * string,int ls){
 
 static int includes_breafast_validation(char * string){
     
-    for(int i = 0; i < strlen(string);i++)
+    for(int i = 0; i < (int)strlen(string);i++)
     string[i] = tolower(string[i]);
 
     if ((!strcmp(string,"t"))||(!strcmp(string,"true"))||(!strcmp(string,"1"))){
@@ -219,7 +213,7 @@ int valid_passenger(Almanac * a, const char * string){
     char ** list = malloc(sizeof(char *)*2);
     char *token = NULL;
     
-    for(int i = 0;token = strsep(&copy, ";");i++)
+    for(int i = 0;(token = strsep(&copy, ";"));i++)
     list[i] = strdup(token);
 
 
@@ -251,13 +245,13 @@ int valid_flight(Almanac * a, const char * string){
     int res = 0;
 
     
-    for(int i = 0;token = strsep(&copy, ";");i++)
+    for(int i = 0;(token = strsep(&copy, ";"));i++)
     list[i] = strdup(token);
     
     if(general_string_validation(list[0])
     && general_string_validation(list[1])
     && general_string_validation(list[2])
-    && general_string_validation(list[3]) && atoi(list[3]) >= almanac_get_seats(a,atoi(list[0])-1)
+    && general_string_validation(list[3]) && (unsigned int)atoi(list[3]) >= almanac_get_seats(a,atoi(list[0])-1)
     && general_string_validation(list[4]) && airport_validation(list[4])
         && general_string_validation(list[5]) && airport_validation(list[5])  && (strcmp(list[4], list[5]) != 0)
         && general_string_validation(list[6]) && validate_hours(list[6])
@@ -299,7 +293,7 @@ int valid_user(Almanac * a, const char * string){
     char ** list = malloc(sizeof(char *)*12);
     char *token = NULL;
     
-    for(int i = 0;token = strsep(&copy, ";");i++)
+    for(int i = 0;(token = strsep(&copy, ";"));i++)
     list[i] = strdup(token);
     
     if(general_string_validation(list[0])
@@ -338,7 +332,7 @@ int valid_reservation(Almanac * a, const char * string){
     int res = 0;
     char ** list = malloc(sizeof(char *)*14);
     char *token = NULL;
-    for(int i = 0;token = strsep(&copy, ";");i++)
+    for(int i = 0;(token = strsep(&copy, ";"));i++)
     list[i] = strdup(token);
 
     // char * bekfast
@@ -358,13 +352,10 @@ int valid_reservation(Almanac * a, const char * string){
         && general_string_validation(list[9]) && general_number_validation(0,list[9],1000000)
         && includes_breafast_validation(list[10]) != 0
         && general_string_validation(list[11]) && rating_validation(list[12])){
+            
             almanac_add_reservation(a,list[0],list[2],list[1],list[3],list[4],list[7],list[8],includes_breafast_validation(list[10]),list[12],list[9],list[5]);
             res++;
-            if(!strcmp(list[2],"HTL909"));
-            }
-
-            // id;user_id;hotel_id;hotel_name;hotel_stars;city_tax;address;begin_date;end_date;price_per_night;includes_breakfast;room_details;rating;comment
-            // char *id, char *id_hotel, char *user_id, char *hotel_name, char *hotel_stars, char *begin_date, char *end_date, char *includes_breakfast, char *rating, char *ppn, char *city_tax
+        }
 
     for(int i = 0; i < 14; i++)
     free(list[i]);

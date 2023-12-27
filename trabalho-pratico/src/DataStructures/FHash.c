@@ -83,7 +83,7 @@ void check_nulls(FHash * a){
     unsigned int amount = 0;
 
     printf("Amount: %d\n",a->amount);
-    for(int i = 0; i < a->amount; i++)
+    for(unsigned int i = 0; i < a->amount; i++)
     if(a->element[i] == NULL)
     amount ++;    
 

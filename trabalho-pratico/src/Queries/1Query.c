@@ -18,7 +18,7 @@
 
 static int user_verifier(const char * id){
 
-    for(int i = 0; i < strlen(id); i++)
+    for(int i = 0; i < (int)strlen(id); i++)
         if(isalpha(id[i]))
         return 1;
 

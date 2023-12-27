@@ -27,8 +27,7 @@ void parser(char * path,char * type,Almanac * box, int (*f)(Almanac *,const char
 
     char *head = NULL;
     size_t len = 0;
-    if(getline(&head, &len, file));
-    write_line(errors,head);
+    if(getline(&head, &len, file)){write_line(errors,head);}
     
     
     while (getline(&head, &len, file) != -1) {

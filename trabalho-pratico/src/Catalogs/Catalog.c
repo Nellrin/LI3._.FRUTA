@@ -75,8 +75,6 @@ Almanac * set_up_almanac(char * path){
     FILE *file = create_file(flights, "r");
 
     char * line = NULL;
-    char *flight_id = NULL;
-    char *user_id = NULL;
     size_t len = 0;
 
     while (getline(&line, &len, file) != -1)
@@ -98,6 +96,7 @@ Almanac * set_up_almanac(char * path){
 
 static void get_sdepartures(void * Flight, char *** g_list,char *** b_list, int * amount){
     (*g_list)[*amount] = get_flightSDEPARTURE(Flight);
+    (*b_list)[*amount] = (*g_list)[*amount];
     (*amount)++;
 }
 

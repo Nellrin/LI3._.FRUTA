@@ -33,7 +33,7 @@ struct airport{
     BTree * flights;
 
     short amount;
-    int * delays;;
+    int * delays;
 };
 
 struct year_of_airport{
@@ -211,10 +211,10 @@ static void add_passengers_to_year(Year_Airport * year, int passengers, char * o
 
 void flight_almanac_add_flight(Flight_Almanac *almanac, char * id,char * airline, char * plane_model, char * origin, char * destination, char * schedule_departure_date,char * real_departure_date, char * schedule_arrival_date, unsigned int passengers){
     
-    for(int i = 0; i < strlen(origin);i++)
+    for(int i = 0; i < (int)strlen(origin);i++)
     origin[i] = toupper(origin[i]);
 
-    for(int i = 0; i < strlen(origin);i++)
+    for(int i = 0; i < (int)strlen(origin);i++)
     destination[i] = toupper(destination[i]);
 
 

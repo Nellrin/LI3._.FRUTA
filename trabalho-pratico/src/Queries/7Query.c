@@ -74,8 +74,7 @@ char * query7(FILE * file, Almanac * box, char * argument, short F){
             else
             x = amount;
 
-    if(amount > 0)
-        str_q7(file,passengers,list_names,x,F);
+    if(amount > 0){str_q7(file,passengers,list_names,x,F);}
 
         for(int i = 0; i < amount; i++)
         free(list_names[i]);

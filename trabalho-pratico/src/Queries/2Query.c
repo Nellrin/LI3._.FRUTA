@@ -39,13 +39,13 @@ static void line_reservation(void * a, char *** list_id, char *** list_dates, in
 static char * strcat_list( char ** list_id,char ** list_dates, short F, int n, short mixed){
 
     char * line = malloc(sizeof(char) * 20000);
-    char * x = malloc(sizeof(char) * 3);
+    char * x = malloc(sizeof(char) * 20);
     line[0] = '\0';
     
     if(F){
             for (int i = 0; i < n; i++) {
                 
-                    sprintf(x, "%d", i+1);
+                    sprintf(x, "%d", (i+1));
                     strcat(line, "--- ");
                     strcat(line, x);
                     strcat(line, " ---\n");

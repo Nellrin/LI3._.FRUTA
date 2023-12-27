@@ -8,7 +8,7 @@ FILE * create_file(char * title,char * type){
     FILE *file = fopen(title, type);
 
     if (file == NULL) {
-        perror(("Error opening %s\n",title));
+        printf("Error opening %s\n",title);
         return NULL;
     }
 

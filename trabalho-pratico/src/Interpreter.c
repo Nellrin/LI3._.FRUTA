@@ -48,7 +48,7 @@ static char ** break_arguments(char * line, int * n_arguments){
                 }
             }
 
-                for(int i = 0; i < strlen(argumento) - 1; i++)
+                for(int i = 0; i < (int)strlen(argumento) - 1; i++)
                 argumento[i] = argumento[i+1];
                 argumento[strlen(argumento)-2] = '\0';
             }
