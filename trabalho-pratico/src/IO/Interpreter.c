@@ -2,19 +2,19 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../include/Catalogs/Catalog.h"
-#include "../include/Queries/1Query.h"
-#include "../include/Queries/2Query.h"
-#include "../include/Queries/3Query.h"
-#include "../include/Queries/4Query.h"
-#include "../include/Queries/5Query.h"
-#include "../include/Queries/6Query.h"
-#include "../include/Queries/7Query.h"
-#include "../include/Queries/8Query.h"
-#include "../include/Queries/9Query.h"
-#include "../include/Queries/10Query.h"
-#include "../include/Output.h"
-#include "../include/Interpreter.h"
+#include "../../include/Catalogs/Catalog.h"
+#include "../../include/Queries/1Query.h"
+#include "../../include/Queries/2Query.h"
+#include "../../include/Queries/3Query.h"
+#include "../../include/Queries/4Query.h"
+#include "../../include/Queries/5Query.h"
+#include "../../include/Queries/6Query.h"
+#include "../../include/Queries/7Query.h"
+#include "../../include/Queries/8Query.h"
+#include "../../include/Queries/9Query.h"
+#include "../../include/Queries/10Query.h"
+#include "../../include/IO/Output.h"
+#include "../../include/IO/Interpreter.h"
 ///////////////////////////////////////////////////////////////
 
 

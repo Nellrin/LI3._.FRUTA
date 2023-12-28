@@ -4,33 +4,62 @@
 
 #include "../include/Catalogs/Catalog.h"
 #include "../include/Utilities.h"
-#include "../include/Parser.h"
-#include "../include/Interpreter.h"
-#include "../include/Interactive/Interactive.h"
+#include "../include/IO/Parser.h"
+#include "../include/IO/Interpreter.h"
+#include "../include/IO/Interactive/Interactive.h"
 
 
-static void setting_up(char * path,char * input){
+static void setting_up(char * path,char * input,short test){
 
-    Almanac * u = set_up_almanac(path);
-    // Almanac * u = init_almanac(200000,1000000,6000000);
+    Almanac * u = NULL;
 
-    parser(path,"users",u,valid_user);
-    parser(path,"reservations",u,valid_reservation);
+    switch (test){
+    case 1:
+            u = set_up_almanac(path);
+
+        parser(path,"users",u,valid_user);
+        parser(path,"reservations",u,valid_reservation);
+        
+            almanac_count_passengers(u,path);
+
+        parser(path,"flights",u,valid_flight);
+        parser(path,"passengers",u,valid_passenger);
+        
+        
+
+            almanac_sort_flight_delays(u);
+
+
+        read_query_file(u,input);
+
+
+            free_almanac(u);
+            
+        break;
     
-        almanac_count_passengers(u,path);
+    default:
+            u = set_up_almanac(path);
 
-    parser(path,"flights",u,valid_flight);
-    parser(path,"passengers",u,valid_passenger);
-    
-    
+        parser(path,"users",u,valid_user);
+        parser(path,"reservations",u,valid_reservation);
+        
+            almanac_count_passengers(u,path);
 
-        almanac_sort_flight_delays(u);
+        parser(path,"flights",u,valid_flight);
+        parser(path,"passengers",u,valid_passenger);
+        
+        
+
+            almanac_sort_flight_delays(u);
 
 
-    read_query_file(u,input);
+        read_query_file(u,input);
 
 
-        free_almanac(u);
+            free_almanac(u);
+
+        break;
+    }
 }
 
 
@@ -44,12 +73,12 @@ int main(int argc, char *argv[]){
 
 
         case 3:
-            setting_up(argv[1],argv[2]);
+            setting_up(argv[1],argv[2],0);
             break;
 
-        // case 4:
-        //     /* testes */
-        //     break;
+        case 4:
+            setting_up(argv[1],argv[2],1);
+            break;
 
         default:
             printf("Número de argumentos inválidos\n");

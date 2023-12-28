@@ -15,8 +15,6 @@
 #include "../../include/Catalogs/Flight_Catalog.h"
 #include "../../include/Catalogs/Calendar_Catalog.h"
 
-#include "../../include/Output.h"
-
 
 ////////////////////////////////////////////////////////
 typedef struct almanac{
@@ -113,7 +111,7 @@ Almanac * set_up_almanac(char * path){
 
     printf("\nficheiro: %s\n",name);
 
-    FILE *file = create_file(name, "r");
+    FILE *file = fopen(name, "r");
 
     if(file != NULL){
         printf("Ficheiro aberto\n");
@@ -157,7 +155,7 @@ void almanac_count_passengers(Almanac *almanac,char * path){
     
 
 
-    FILE * file = create_file(passengers, "r");
+    FILE * file = fopen(passengers, "r");
 
 
     while (getline(&line, &len, file) != -1) {

@@ -4,7 +4,7 @@
 #include <ctype.h>
 
 #include "../../include/Catalogs/Catalog.h"
-#include "../../include/Output.h"
+#include "../../include/IO/Output.h"
 #include "../../include/Utilities.h"
 
 #include "../../include/Queries/7Query.h"

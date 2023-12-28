@@ -3,10 +3,10 @@
 #include <string.h>
 #include <ncurses.h>
 
-#include "../../include/Catalogs/Catalog.h"
-#include "../../include/Interactive/Interactive.h"
-#include "../../include/Output.h"
-#include "../../include/Interpreter.h"
+#include "../../../include/Catalogs/Catalog.h"
+#include "../../../include/IO/Interactive/Interactive.h"
+#include "../../../include/IO/Output.h"
+#include "../../../include/IO/Interpreter.h"
 ///////////////////////////////////////////////////////////////
 
 void interactive_mode() {
@@ -52,8 +52,7 @@ void interactive_mode() {
 
     // End ncurses mode
     endwin();
-exit_curses(0);
-_nc_freeall();
+    exit_curses(0);
     printf("done\n");
 }
 

@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../include/Parser.h"
-#include "../include/Output.h"
+#include "../../include/IO/Parser.h"
+#include "../../include/IO/Output.h"
 
 void parser(char * path,char * type,Almanac * box, int (*f)(Almanac *,const char *)){
 

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../include/Output.h"
+#include "../../include/IO/Output.h"
 
 FILE * create_file(char * title,char * type){
     FILE *file = fopen(title, type);
