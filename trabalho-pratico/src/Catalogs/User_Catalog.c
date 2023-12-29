@@ -73,7 +73,7 @@ static int compare_node_user(const char * id, const void * info){
 
 
 ////////////////////////////////////////////////////////
-void user_almanac_add_user(User_Almanac *almanac,char * id, char *name, char *birth_date, char *sex, char *country_code, short account_status, char *account_creation,char * passport){
+void user_almanac_add_user(User_Almanac *almanac,char * id, char *name, char *birth_date, short sex, char *country_code, short account_status, char *account_creation,char * passport){
     void * user = set_user(id, name, birth_date, sex, country_code, account_status, account_creation,passport);
     Node * a = init_node(user);
 
@@ -112,6 +112,10 @@ void * user_almanac_get_individual_user(User_Almanac *almanac, char * target){
 void user_almanac_get_amount_flights(User_Almanac *almanac, char * target, int * amount){
     Node * a = (Node *)user_almanac_get_user(almanac,target);
     *amount = a->amount_flights;
+}
+void user_almanac_get_amount_reservations(User_Almanac *almanac, char * target, int * amount){
+    Node * a = (Node *)user_almanac_get_user(almanac,target);
+    *amount = a->amount_reservations;
 }
 void * user_almanac_use_flights(User_Almanac *almanac, char * target){
     Node * a = (Node *)user_almanac_get_user(almanac,target);

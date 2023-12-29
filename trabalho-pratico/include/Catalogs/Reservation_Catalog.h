@@ -21,7 +21,7 @@ void free_reservation_almanac(Reservation_Almanac * a);
 
 
 ////////////////////////////////////////////////////////
-void reservation_almanac_add_reservation(Reservation_Almanac *almanac, User_Almanac *user, char *id, char *id_hotel, char *user_id, char *hotel_name, char *hotel_stars, char *begin_date, char *end_date, char *includes_breakfast, char *rating, char *ppn, char *city_tax);
+void reservation_almanac_add_reservation(Reservation_Almanac *almanac, User_Almanac *user, char *id, short id_hotel, char *user_id, char *hotel_name, short hotel_stars, char *begin_date, char *end_date, short includes_breakfast, short rating, short ppn, short city_tax);
 ////////////////////////////////////////////////////////
 
 

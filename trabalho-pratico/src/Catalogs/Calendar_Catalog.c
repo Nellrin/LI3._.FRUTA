@@ -14,7 +14,7 @@ struct c_almanac{
 };
 
 struct g_date{
-    char * general_date_id;
+    short general_date_id;
     Date_Counter * general_date;
 
 
@@ -30,12 +30,12 @@ struct g_date{
 static int compare_general_date(const char * id, const void * info){
     const General_Date * node = (const General_Date *)info;
 
-    return (strcmp(id, node->general_date_id)==0);
+    return (atoi(id) == node->general_date_id);
 }
 static General_Date * init_general_date(char * id, int amount){
     General_Date * a = malloc(sizeof(General_Date));
 
-    a->general_date_id = strdup(id);
+    a->general_date_id = atoi(id);
 
     a->general_date = create_date();
 
@@ -59,7 +59,7 @@ static void free_nodes(void * info){
 
     if(a != NULL){
 
-        free(a->general_date_id);
+        // free(a->general_date_id);
         free_date(a->general_date);
 
             for(int i = 0; i < a->amount_of_general_dates_inside; i++)
@@ -201,9 +201,8 @@ void calendar_add(Calendar_Almanac *a, char * date, int amount,short type, void 
                 free(list);
 
         break;
-
-            case 1:
-                date[10]='\0';
+    case 1:
+        
                 copy = strdup(date);
                 origin = copy;
                 token = NULL;
@@ -222,53 +221,52 @@ void calendar_add(Calendar_Almanac *a, char * date, int amount,short type, void 
                     list[2] = strdup(token);
 
 
+                        x = fhash_get(a->years,list[0],1,compare_general_date);
 
-
-
-                x = fhash_get(a->years,list[0],1,compare_general_date);
-
-                if(x == NULL){
-                    x = init_general_date(list[0],12);
-                    fhash_add(a->years,list[0],x,1);
-                    
-                    char ** listA = (char **)realloc(a->id_years, sizeof(char *) * (a->amount_years + 1));
-                    a->id_years = listA;
-
-                    a->id_years[a->amount_years] = strdup(list[0]);
-                    a->amount_years ++;
-
-                }
-
-                    y = fhash_get(x->general_dates_inside,list[1],1,compare_general_date);
-
-                    if(y == NULL){
-                        y = init_general_date(list[1],31);
-                        fhash_add(x->general_dates_inside,list[1],y,1);
-                        
-                        char ** listB = (char **)realloc(x->ids_of_general_dates_inside, sizeof(char *) * (x->amount_of_general_dates_inside + 1));
-                        x->ids_of_general_dates_inside = listB;
-
-                        x->ids_of_general_dates_inside[x->amount_of_general_dates_inside] = strdup(list[1]);
-                        x->amount_of_general_dates_inside ++;
-
-                    }
-
-                        z = fhash_get(y->general_dates_inside,list[2],1,compare_general_date);
-
-                        if(z == NULL){
-
-                            z = init_general_date(list[2],0);
-                            fhash_add(y->general_dates_inside,list[2],z,1);
+                        if(x == NULL){
+                            x = init_general_date(list[0],12);
+                            fhash_add(a->years,list[0],x,1);
                             
-                            char ** listC = (char **)realloc(y->ids_of_general_dates_inside, sizeof(char *) * (y->amount_of_general_dates_inside + 1));
-                            y->ids_of_general_dates_inside = listC;
+                            char ** listA = (char **)realloc(a->id_years, sizeof(char *) * (a->amount_years + 1));
+                            a->id_years = listA;
 
-                            y->ids_of_general_dates_inside[y->amount_of_general_dates_inside] = strdup(list[2]);
-                            y->amount_of_general_dates_inside ++;
+                            a->id_years[a->amount_years] = strdup(list[0]);
+                            a->amount_years ++;
 
                         }
 
-                        f(z->general_date,amount);
+                            y = fhash_get(x->general_dates_inside,list[1],1,compare_general_date);
+
+                            if(y == NULL){
+                                y = init_general_date(list[1],31);
+                                fhash_add(x->general_dates_inside,list[1],y,1);
+                                
+                                char ** listB = (char **)realloc(x->ids_of_general_dates_inside, sizeof(char *) * (x->amount_of_general_dates_inside + 1));
+                                x->ids_of_general_dates_inside = listB;
+
+                                x->ids_of_general_dates_inside[x->amount_of_general_dates_inside] = strdup(list[1]);
+                                x->amount_of_general_dates_inside ++;
+
+                            }
+
+                            f(y->general_date,amount);
+
+                                z = fhash_get(y->general_dates_inside,list[2],1,compare_general_date);
+
+                                if(z == NULL){
+
+                                    z = init_general_date(list[2],0);
+                                    fhash_add(y->general_dates_inside,list[2],z,1);
+                                    
+                                    char ** listC = (char **)realloc(y->ids_of_general_dates_inside, sizeof(char *) * (y->amount_of_general_dates_inside + 1));
+                                    y->ids_of_general_dates_inside = listC;
+
+                                    y->ids_of_general_dates_inside[y->amount_of_general_dates_inside] = strdup(list[2]);
+                                    y->amount_of_general_dates_inside ++;
+
+                                }
+
+                                f(z->general_date,amount);
 
 
 
@@ -279,14 +277,14 @@ void calendar_add(Calendar_Almanac *a, char * date, int amount,short type, void 
                 free(list);
 
         break;
-    
-        case 2:
-                date[7]='\0';
+
+            case 2:
+        
                 copy = strdup(date);
                 origin = copy;
                 token = NULL;
 
-                char ** list = malloc(sizeof(char *) * 2);
+                list = malloc(sizeof(char *) * 3);
 
                 for(int i = 0; i < 2; i++){
                     list[i] = NULL;
@@ -295,42 +293,60 @@ void calendar_add(Calendar_Almanac *a, char * date, int amount,short type, void 
                 }
 
 
+                    list[2] = NULL;
+                    token = strsep(&copy, " ");
+                    list[2] = strdup(token);
 
 
+                        x = fhash_get(a->years,list[0],1,compare_general_date);
 
-                x = fhash_get(a->years,list[0],1,compare_general_date);
+                        if(x == NULL){
+                            x = init_general_date(list[0],12);
+                            fhash_add(a->years,list[0],x,1);
+                            
+                            char ** listA = (char **)realloc(a->id_years, sizeof(char *) * (a->amount_years + 1));
+                            a->id_years = listA;
 
-                if(x == NULL){
-                    x = init_general_date(list[0],12);
-                    fhash_add(a->years,list[0],x,1);
-                    
-                    char ** listA = (char **)realloc(a->id_years, sizeof(char *) * (a->amount_years + 1));
-                    a->id_years = listA;
+                            a->id_years[a->amount_years] = strdup(list[0]);
+                            a->amount_years ++;
 
-                    a->id_years[a->amount_years] = strdup(list[0]);
-                    a->amount_years ++;
+                        }
 
-                }
+                            y = fhash_get(x->general_dates_inside,list[1],1,compare_general_date);
 
-                    y = fhash_get(x->general_dates_inside,list[1],1,compare_general_date);
+                            if(y == NULL){
+                                y = init_general_date(list[1],31);
+                                fhash_add(x->general_dates_inside,list[1],y,1);
+                                
+                                char ** listB = (char **)realloc(x->ids_of_general_dates_inside, sizeof(char *) * (x->amount_of_general_dates_inside + 1));
+                                x->ids_of_general_dates_inside = listB;
 
-                    if(y == NULL){
-                        y = init_general_date(list[1],31);
-                        fhash_add(x->general_dates_inside,list[1],y,1);
-                        
-                        char ** listB = (char **)realloc(x->ids_of_general_dates_inside, sizeof(char *) * (x->amount_of_general_dates_inside + 1));
-                        x->ids_of_general_dates_inside = listB;
+                                x->ids_of_general_dates_inside[x->amount_of_general_dates_inside] = strdup(list[1]);
+                                x->amount_of_general_dates_inside ++;
 
-                        x->ids_of_general_dates_inside[x->amount_of_general_dates_inside] = strdup(list[1]);
-                        x->amount_of_general_dates_inside ++;
+                            }
 
-                    }
+                                z = fhash_get(y->general_dates_inside,list[2],1,compare_general_date);
 
-                    f(y->general_date,amount);
+                                if(z == NULL){
+
+                                    z = init_general_date(list[2],0);
+                                    fhash_add(y->general_dates_inside,list[2],z,1);
+                                    
+                                    char ** listC = (char **)realloc(y->ids_of_general_dates_inside, sizeof(char *) * (y->amount_of_general_dates_inside + 1));
+                                    y->ids_of_general_dates_inside = listC;
+
+                                    y->ids_of_general_dates_inside[y->amount_of_general_dates_inside] = strdup(list[2]);
+                                    y->amount_of_general_dates_inside ++;
+
+                                }
+
+                                f(z->general_date,amount);
+
 
 
                 free(origin);
-                for(int i = 0; i < 2; i++)
+                for(int i = 0; i < 3; i++)
                 free(list[i]);
 
                 free(list);
@@ -338,38 +354,9 @@ void calendar_add(Calendar_Almanac *a, char * date, int amount,short type, void 
         break;
 
 
-                case 3:
-        
-                    date[4]='\0';
-                    copy = strdup(date);
-
-                    x = fhash_get(a->years,copy,1,compare_general_date);
-
-                    if(x == NULL){
-                        x = init_general_date(copy,12);
-                        fhash_add(a->years,copy,x,1);
-                        
-                        char ** listA = (char **)realloc(a->id_years, sizeof(char *) * (a->amount_years + 1));
-                        a->id_years = listA;
-
-                        a->id_years[a->amount_years] = strdup(copy);
-                        a->amount_years ++;
-
-                    }
-
-                    f(x->general_date,amount);
-
-                    free(copy);
-
-
-        break;
-
-
     default:
         break;
     }
-
-
 
 }
 void calendar_get(Calendar_Almanac *a,char ** arguments,int num_arguments,int * amount,int ** year, int ** user, int ** fli, int ** res,int ** pas, int ** uni_pas){

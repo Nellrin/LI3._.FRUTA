@@ -11,7 +11,7 @@ struct user {
     char *id;
     char *name;
     char *birth_date;
-    char *sex;
+    short sex;
     char *passport;
     char *country_code;
     char *account_creation;
@@ -27,7 +27,7 @@ void print_user(User * a){
         printf("[ID]: %s\n",a->id);
         printf("[NAME]: %s\n",a->name);
         printf("[BIRTH DATE]: %s\n",a->birth_date);
-        printf("[SEX]: %s\n",a->sex);
+        printf("[SEX]: %d\n",a->sex);
         printf("[COUNTRY CODE]: %s\n",a->country_code);
         printf("[ACCOUNT STATUS]: %d\n",a->account_status);
         printf("[PASSPORT]: %s\n",a->passport);
@@ -39,7 +39,7 @@ void print_user(User * a){
 
 
 ////////////////////////////////////////////////////////
-User * set_user(char * id,char * name, char * birth_date, char * sex, char * country_code, short account_status, char * account_creation, char * passport){
+User * set_user(char * id,char * name, char * birth_date, short sex, char * country_code, short account_status, char * account_creation, char * passport){
     User * a = malloc(sizeof(User));
     
     if (a == NULL)
@@ -48,7 +48,7 @@ User * set_user(char * id,char * name, char * birth_date, char * sex, char * cou
     a->id = strdup(id);
     a->name = strdup(name);
     a->birth_date = strdup(birth_date);
-    a->sex = strdup(sex);
+    a->sex = (sex);
     a->country_code = strdup(country_code);
     a->account_status = (account_status);
     a->account_creation = strdup(account_creation);
@@ -61,45 +61,31 @@ User * set_user(char * id,char * name, char * birth_date, char * sex, char * cou
 
 ////////////////////////////////////////////////////////
 char * get_userID(User * a){
-    if(a==NULL)
-    return NULL;
-    
-    char * id = strdup(a->id);
-
-    return id;
+    return strdup(a->id);
 }
 char * get_userNAME(User * a){
-    char * name = strdup(a->name);
-
-    return name;
+    return strdup(a->name);
 }
 char * get_userBDAY(User * a){
-    char * birth_date = strdup(a->birth_date);
-
-    return birth_date;
+    return strdup(a->birth_date);
 }
-char * get_userSEX(User * a){
-    char * sex = strdup(a->sex);
+short get_userSEX(User * a){
+    short sex = (a->sex);
 
     return sex;
 }
 char * get_userCOUNTRY(User * a){
-    char * country_code = strdup(a->country_code);
-
-    return country_code;
+    return strdup(a->country_code);
 }
 short get_userASTATUS(User * a){
-    return a->account_status;
+    short status = a->account_status;
+    return status;
 }
 char * get_userACREATION(User * a){
-    char * account_creation = strdup(a->account_creation);
-
-    return account_creation;
+    return strdup(a->account_creation);
 }
 char * get_userPASSPORT(User * a){
-    char * passport = strdup(a->passport);
-
-    return passport;
+    return strdup(a->passport);
 }
 ////////////////////////////////////////////////////////
 
@@ -110,8 +96,7 @@ int compare_user(const char *id, const void *info) {
     return (strcmp(id, user->id) == 0);
 }
 
-
-static void removeSpacesAndHyphens(char *str) {
+static void tira_aspas(char *str) {
     if (str == NULL) {
         return;
     }
@@ -135,29 +120,29 @@ static int compare_prefix(char* a, char* b) {
 
     setlocale(LC_COLLATE, "en_US.UTF-8"); 
 
-    int result = strcoll(a, b);
-
-    return result;
+    return strcoll(a, b);
 }
 
-int compare_user_prefix(const void *a, const void *b) {
-    User *userA = (User *)a;
-    User *userB = (User *)b;
+int compare_user_prefix(const void *a, const void *b){
+    char * nameA = get_userNAME((User *)a);
+    char * nameB = get_userNAME((User *)b);
 
-    char * nameA = get_userNAME(userA);
-    char * nameB = get_userNAME(userB);
-
-    removeSpacesAndHyphens(nameA);
-    removeSpacesAndHyphens(nameB);
+    tira_aspas(nameA);
+    tira_aspas(nameB);
 
 
     int res = compare_prefix(nameA, nameB);
     free(nameA);free(nameB);
     
-    if(!res)
-        return compare_prefix(userA->id,userB->id);
+    if(!res){
+        char * idA = get_userID((User *)a);
+        char * idB = get_userID((User *)b);
 
-    return (res);
+        res = compare_prefix(idA,idB);
+        free(idA);free(idB);
+    }
+
+    return res;
 }
 ////////////////////////////////////////////////////////
 
@@ -171,7 +156,6 @@ void free_user(void * user) {
         free(a->id);
         free(a->name);
         free(a->birth_date);
-        free(a->sex);
         free(a->country_code);
         free(a->account_creation);
         free(a->passport);

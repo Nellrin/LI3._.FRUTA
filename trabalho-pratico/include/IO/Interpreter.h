@@ -10,7 +10,7 @@ typedef struct almanac Almanac;
 
 ///////////////////////////////////////////////////////////////
 void filter_querys(Almanac * box, char * line, int number);
-void read_query_file(Almanac * box, char * path);
+void read_query_file(Almanac * box, char * path, short test);
 ///////////////////////////////////////////////////////////////
 
 

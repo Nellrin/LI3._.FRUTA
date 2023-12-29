@@ -31,41 +31,15 @@ typedef struct almanac{
 Almanac * init_almanac(int amount_f, int amount_u, int amount_r){
     Almanac * a = malloc(sizeof(Almanac));
 
-    if(a!=NULL){
-        printf("\nalmanac alocado\n");
-    }
-
-
     a->passenger = malloc(sizeof(int) * amount_f);
 
-    if(a->passenger!=NULL){
-        printf("\npassengers alocados\n");
-    }
-
-
-    for(int i = 0; i < amount_f; i++){
+    for(int i = 0; i < amount_f; i++)
         a->passenger[i] = 0;
-        // printf(".");
-    }
-
 
     a->user = init_user_almanac(amount_u);
-
-    if(a->user!=NULL){
-        printf("\nuser alocado\n");
-    }
     a->reservation = init_reservation_almanac(amount_r);
-    if(a->reservation!=NULL){
-        printf("\nreservas alocadas\n");
-    }
     a->flight = init_flight_almanac(amount_f);
-    if(a->flight!=NULL){
-        printf("\nvoos alocados\n");
-    }
     a->counter = init_calendar_almanac();
-    if(a->counter!=NULL){
-        printf("\ncalendário alocado\n");
-    }
 
     return a;
 }
@@ -100,46 +74,23 @@ static int aproximated_amount_of_lines_of_a_file(FILE *file) {
 
 Almanac * set_up_almanac(char * path){
 
-    int amount_f = 0;//200000;
-    int amount_u = 0;//100000;
-    int amount_r = 0;//600000;
-
-
-
     char * name = malloc(sizeof(char) * 256);
     snprintf(name, 256, "%s/flights.csv",path);
 
-    printf("\nficheiro: %s\n",name);
-
     FILE *file = fopen(name, "r");
 
-    if(file != NULL){
-        printf("Ficheiro aberto\n");
-    }
-
-    amount_f = aproximated_amount_of_lines_of_a_file(file);
-
-    // if(amount_f<200001)
-    // amount_f = 200001;
-
-    amount_u = 4 * amount_f; 
-    amount_r = 6 * amount_u; 
+    int amount_f = aproximated_amount_of_lines_of_a_file(file);
+    int amount_u = 4 * amount_f; 
+    int amount_r = 6 * amount_u; 
 
 
-        printf("\n\nFlights [%d]\n Reservations [%d]\n Users[%d]\n",amount_f,amount_r,amount_u);
-
-
+        printf("\n\nFlights [%d]\nReservations [%d]\nUsers[%d]\n\n",amount_f,amount_r,amount_u);
 
     free(name);
     fclose(file);
 
     return init_almanac(amount_f,amount_u,amount_r);
-}
 
-static void get_sdepartures(void * Flight, char *** g_list,char *** b_list, int * amount){
-    (*g_list)[*amount] = get_flightSDEPARTURE(Flight);
-    (*b_list)[*amount] = (*g_list)[*amount];
-    (*amount)++;
 }
 
 void almanac_count_passengers(Almanac *almanac,char * path){
@@ -187,76 +138,87 @@ void almanac_count_passengers(Almanac *almanac,char * path){
     free(line);
     fclose(file);
 }
+
+static void get_sdepartures(void * Flight, char *** g_list,char *** b_list, int * amount){
+
+    char * date = NULL;
+    
+    switch ((*amount)){
+        case 0:
+        
+                date = get_flightSDEPARTURE(Flight);
+
+
+                (*amount) += (strncmp((*g_list)[0],date,10)==0);    //mesmo dia
+                (*amount) += (strncmp((*g_list)[0],date,7)==0);     //mesmo mes
+                (*amount) += (strncmp((*g_list)[0],date,4)==0);     //mesmo ano
+
+                free(date);
+
+            break;
+        case 1:
+        
+                date = get_flightSDEPARTURE(Flight);
+
+
+                (*amount) += (strncmp((*g_list)[0],date,10)==0);    //mesmo dia
+                (*amount) += (strncmp((*g_list)[0],date,7)==0);     //mesmo mes
+
+                free(date);
+
+            break;
+        case 2:
+        
+                date = get_flightSDEPARTURE(Flight);
+
+
+                (*amount) += (strncmp((*g_list)[0],date,10)==0);    //mesmo dia
+
+                free(date);
+
+            break;
+
+        default:
+            break;
+        }
+        //      f("SAFE\n| %s | %d |\n",(*g_list)[0],*amount);
+}
+
 void almanac_add_passengers(Almanac * almanac, char * user_id, char * flight_id){
 
-    int amount = 0, found = 0;
+    int amount = 0;
     user_almanac_get_amount_flights(almanac->user,user_id,&amount);
 
     char * sdeparture = get_flightSDEPARTURE(almanac_get_flight(almanac,flight_id));
+
     sdeparture[strlen(sdeparture)-9] = '\0';
 
-    if(amount>0){
-        void * flights_of_user = almanac_get_user_flights(almanac,user_id);
+        if(amount>0){
+            char ** list = malloc(sizeof(char *));
+            list[0] = sdeparture;
+            amount = 0;
 
-        char ** list_sdepartures = malloc(sizeof(char *) * amount);
-        char ** dummy_list = malloc(sizeof(char *) * amount);
-
-        amount = 0;
-
-
-        get_tlines(flights_of_user,&list_sdepartures,&dummy_list,&amount,get_sdepartures);
-
-        for(int j = 0; j < 3; j++){
-            found = 0;
-
-            for(int i = 0; i < amount; i++){
-                if(strncmp(list_sdepartures[i],sdeparture,strlen(sdeparture)) == 0){
-                    // calendar_add(almanac->counter,sdeparture,1,0,date_subtract_unique_passengers);
-                    found = 1;
-                    break;
-                }
-            }
-            
-                if(found == 0)
-                calendar_add(almanac->counter,sdeparture,1,j+1,date_add_unique_passengers);
-
-            sdeparture[strlen(sdeparture)-3] = '\0';
+            get_tlines(almanac_get_user_flights(almanac,user_id),&list,&list,&amount,get_sdepartures);
 
 
-            // printf("%s %ld %s %d\n",user_id,strlen(sdeparture),sdeparture, j+1);
 
+            calendar_add(almanac->counter,sdeparture,1,amount,date_add_unique_passengers);
 
+            free(list);
         }
 
-
-
-
-
-
-
-
-        for(int i = 0; i < amount; i++)
-        free(list_sdepartures[i]);
-
-        free(list_sdepartures);
-        free(dummy_list);
-    }
-
-    else
-    calendar_add(almanac->counter,sdeparture,1,0,date_add_unique_passengers);
-
-
+        else
+        calendar_add(almanac->counter,sdeparture,1,0,date_add_unique_passengers);
 
 
 
 
     user_almanac_add_flight(almanac->user,user_id,almanac_get_flight(almanac,flight_id)); 
 
-
-        free(sdeparture);
+    free(sdeparture);
 
 }
-void almanac_add_user(Almanac *almanac,char * id, char *name, char *birth_date, char *sex, char *country_code, short account_status, char *account_creation, char * passport){
+void almanac_add_user(Almanac *almanac,char * id, char *name, char *birth_date, short sex, char *country_code, short account_status, char *account_creation, char * passport){
     user_almanac_add_user(almanac->user,id, name, birth_date, sex, country_code, account_status, account_creation, passport);
     
     calendar_add(almanac->counter,account_creation,1,0,date_add_users);
@@ -270,13 +232,9 @@ void almanac_add_flight(Almanac *almanac,char * id,char * airline, char * plane_
 
 
 }
-void almanac_add_reservation(Almanac *almanac,char *id, char *id_hotel, char *user_id, char *hotel_name, char *hotel_stars, char *begin_date, char *end_date, int includes_breakfast, char *rating, char *ppn, char *city_tax){
+void almanac_add_reservation(Almanac *almanac,char *id, short id_hotel, char *user_id, char *hotel_name, short hotel_stars, char *begin_date, char *end_date, short includes_breakfast, short rating, short ppn, short city_tax){
     
-    if(includes_breakfast == 1)
-    reservation_almanac_add_reservation(almanac->reservation, almanac->user,id, id_hotel, user_id, hotel_name, hotel_stars, begin_date, end_date, "True", rating, ppn, city_tax);
-
-    else    
-    reservation_almanac_add_reservation(almanac->reservation, almanac->user,id, id_hotel, user_id, hotel_name, hotel_stars, begin_date, end_date, "False", rating, ppn, city_tax);
+    reservation_almanac_add_reservation(almanac->reservation, almanac->user,id, id_hotel, user_id, hotel_name, hotel_stars, begin_date, end_date, includes_breakfast, rating, ppn, city_tax);
 
     calendar_add(almanac->counter,begin_date,1,0,date_add_reservations);
 
@@ -346,11 +304,9 @@ void * almanac_get_user_reservations(Almanac * almanac, char * target){
 
 void almanac_get_user_reservations_flights(Almanac * almanac, char * target, int * n_flights, int * n_reservations){
 
-    void * x = user_almanac_use_flights(almanac->user,target);
-    void * y = user_almanac_use_reservations(almanac->user,target);
+    user_almanac_get_amount_flights(almanac->user,target,n_flights);
+    user_almanac_get_amount_reservations(almanac->user,target,n_reservations);
 
-    *n_flights = (int) do_something(x,exists);
-    *n_reservations = (int) do_something(y,exists);
 }
 void almanac_get_dates(Almanac * almanac,char ** arguments,int num_arguments,int * amount,int ** year, int ** user, int ** fli, int ** res,int ** pas, int ** uni_pas){
 
@@ -358,3 +314,115 @@ void almanac_get_dates(Almanac * almanac,char ** arguments,int num_arguments,int
 
 }
 ////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// static void get_sdepartures(void * Flight, char *** g_list,char *** b_list, int * amount){
+//     (*g_list)[*amount] = get_flightSDEPARTURE(Flight);
+//     (*amount)++;
+// }
+
+// void almanac_add_passengers(Almanac * almanac, char * user_id, char * flight_id){
+
+//     int amount = 0, found = 0;
+//     user_almanac_get_amount_flights(almanac->user,user_id,&amount);
+
+//     char * sdeparture = get_flightSDEPARTURE(almanac_get_flight(almanac,flight_id));
+//     sdeparture[strlen(sdeparture)-9] = '\0';
+
+//     if(amount>0){
+
+//         char ** list_sdepartures = malloc(sizeof(char *) * amount);
+
+//         amount = 0;
+
+
+//         get_tlines(almanac_get_user_flights(almanac,user_id),&list_sdepartures,&list_sdepartures,&amount,get_sdepartures);
+
+//         for(int j = 0; j < 3; j++){
+//             found = 0;
+
+//             for(int i = 0; i < amount; i++){
+//                 if(strncmp(list_sdepartures[i],sdeparture,strlen(sdeparture)) == 0){
+//                     found = 1;
+//                     break;
+//                 }
+//             }
+            
+//                 if(found)
+//                 break; 
+
+
+//             calendar_add(almanac->counter,sdeparture,1,j+1,date_add_unique_passengers);
+//             sdeparture[strlen(sdeparture)-3] = '\0';
+//         }
+
+//         for(int i = 0; i < amount; i++)
+//         free(list_sdepartures[i]);
+
+//         free(list_sdepartures);
+//     }
+
+//     else
+//     calendar_add(almanac->counter,sdeparture,1,0,date_add_unique_passengers);
+
+
+
+
+
+
+//     user_almanac_add_flight(almanac->user,user_id,almanac_get_flight(almanac,flight_id)); 
+
+
+//         free(sdeparture);
+
+// }

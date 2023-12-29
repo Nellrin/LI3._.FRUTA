@@ -28,13 +28,12 @@ static char * strcat_list(short F, double n){
 
 }
 static double get_revenue(void * box, const void * reservation, char * begin, char * end){
-    char * ppn = get_reservationPPN((Reservation*) reservation);
     char * res_begin = get_reservationBEGIN((Reservation*) reservation);
     char * res_end = get_reservationEND((Reservation*) reservation);
     char * user_id = get_reservationUSERID((Reservation*) reservation);
 
 
-    double x = strtod(ppn,NULL), result = 0;
+    double result = 0;
     int nights = 0;    
 
 
@@ -73,7 +72,7 @@ static double get_revenue(void * box, const void * reservation, char * begin, ch
         nights += string_to_time("%d/%d/%d",start, finish);
 
 
-        result = nights * x;
+        result = nights * get_reservationPPN((Reservation*) reservation);
 
     
 /*
@@ -93,7 +92,6 @@ static double get_revenue(void * box, const void * reservation, char * begin, ch
     }
 
     free(user_id);
-    free(ppn); 
     free(res_begin); 
     free(res_end); 
 

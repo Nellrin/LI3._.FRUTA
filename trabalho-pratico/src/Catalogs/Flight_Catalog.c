@@ -88,7 +88,7 @@ static Airport * init_node_airport(char * id, char *real_departure, char * sched
     a->id = strdup(id);
 
 
-    a->flights = createNode(flight);
+    a->flights = create_node(flight);
     a->amount = 0;
 
     a->delays = malloc(sizeof(int)*5);
@@ -160,7 +160,7 @@ void free_flight_almanac(Flight_Almanac * a){
     free_fhash(a->direct_airport,free_node_airport);
     free_fhash(a->flight,free_flight);
     free_fhash(a->years,free_node_year);
-    freeStack(a->general_airport);
+    free_stack(a->general_airport);
 
     for(int i = 0; i < a->amount_airports; i++)
     free(a->airport_names_delay[i]);
@@ -286,14 +286,14 @@ void * flight_almanac_get_airport_flights(Flight_Almanac *almanac, char * target
 }
 
 void ** flight_almanac_get_airport_general(Flight_Almanac *almanac, int * amount){
-    return getStackMembers(almanac->general_airport,amount);
+    return stack_to_array(almanac->general_airport,amount);
 }
 
 
 void flight_almanac_sort_airport_delays(Flight_Almanac *almanac){
 
     int amount = 0;
-    Airport ** airport_list = (Airport **)getStackMembers(almanac->general_airport,&amount);
+    Airport ** airport_list = (Airport **)stack_to_array(almanac->general_airport,&amount);
     
     int * med = malloc(sizeof(int) * (amount));
     char ** names = malloc(sizeof(char *) * (amount));

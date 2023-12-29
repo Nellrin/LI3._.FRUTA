@@ -40,7 +40,7 @@ void push(Stack* stack, void* data) {
 
 
 ////////////////////////////////////////////////////////
-void ** getStackMembers(Stack *stack, int *numMembers) {
+void ** stack_to_array(Stack *stack, int *numMembers) {
     if (stack == NULL || stack->size == 0) {
         *numMembers = 0;
         return NULL;
@@ -61,7 +61,7 @@ void ** getStackMembers(Stack *stack, int *numMembers) {
 
 
 ////////////////////////////////////////////////////////
-void freeStack(Stack *stack) {
+void free_stack(Stack *stack) {
 
     while (stack->top != NULL) {
         Stack_Node *top = stack->top;

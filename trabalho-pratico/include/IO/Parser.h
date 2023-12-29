@@ -7,7 +7,7 @@ typedef struct almanac Almanac;
 
 
 ////////////////////////////////////////////////////////
-void parser(char * path,char * type,Almanac * box, int (*f)(Almanac *, const char *));
+int parser(char * path,char * type,Almanac * box, int (*f)(Almanac *, const char *));
 ////////////////////////////////////////////////////////
 
 #endif

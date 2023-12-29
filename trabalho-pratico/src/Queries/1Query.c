@@ -25,12 +25,17 @@ static int user_verifier(const char * id){
     return 0;
 }
 static void query1_reservation(void * entity, char ** result,char F){
-        char * hotel_id = get_reservationHOTELID(entity);
+
         char * hotel_name = get_reservationHOTELNAME(entity);
-        char * hotel_stars = get_reservationSTARS(entity);
         char * begin_date = get_reservationBEGIN(entity);
         char * end_date = get_reservationEND(entity);
-        char * includes_breakfast = get_reservationBREAKFAST(entity);
+        char * includes_breakfast = NULL;
+
+        if(get_reservationBREAKFAST(entity)==1)
+        includes_breakfast = strdup("True");
+
+        else
+        includes_breakfast = strdup("False");
 
         int nights = string_to_time("%d/%d/%d",begin_date,end_date);
         double total_price = total_got_from_reservation(entity);
@@ -38,35 +43,40 @@ static void query1_reservation(void * entity, char ** result,char F){
                         if(F)
                         snprintf(*result, MAX_RESULT ,
                                 "--- 1 ---\n"
-                                "hotel_id: %s\n"
+                                "hotel_id: HTL%d\n"
                                 "hotel_name: %s\n"
-                                "hotel_stars: %s\n"
+                                "hotel_stars: %d\n"
                                 "begin_date: %s\n"
                                 "end_date: %s\n"
                                 "includes_breakfast: %s\n"
                                 "nights: %d\n"
                                 "total_price: %.3f\n",
-                            hotel_id, hotel_name, hotel_stars, begin_date,
+                            get_reservationHOTELID(entity), hotel_name, get_reservationSTARS(entity), begin_date,
                             end_date, includes_breakfast, nights, total_price);
 
 
 
                         else
                         snprintf(*result, MAX_RESULT,
-                                "%s;%s;%s;%s;%s;%s;%d;%.3f\n",
-                            hotel_id, hotel_name, hotel_stars, begin_date,
+                                "HTL%d;%s;%d;%s;%s;%s;%d;%.3f\n",
+                            get_reservationHOTELID(entity), hotel_name, get_reservationSTARS(entity), begin_date,
                             end_date, includes_breakfast, nights, total_price);
 
-        free(hotel_id);
         free(hotel_name);
-        free(hotel_stars);
         free(begin_date);
         free(end_date);
         free(includes_breakfast);
 }
 static void query1_user(Almanac * box, char * string, void * entity, char ** result,char F){
         char * name = get_userNAME(entity);
-        char * sex = get_userSEX(entity);
+        char * sex = NULL;
+
+        if(!get_userSEX(entity))
+        sex = strdup("F");
+
+        else
+        sex = strdup("M");
+        
         char * age = get_userBDAY(entity);
         char * country = get_userCOUNTRY(entity);
         char * passport = get_userPASSPORT(entity);

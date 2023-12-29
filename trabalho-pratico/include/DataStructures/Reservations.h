@@ -12,27 +12,27 @@ void print_reservation(Reservation * a);
 
 
 ////////////////////////////////////////////////////////
-Reservation * set_reservation(char * id,char * id_hotel, char * user_id, char * hotel_name, char * hotel_stars, char * begin_date, char * end_date, char * includes_breakfast, char * rating, char * ppn, char * city_tax);
+Reservation * set_reservation(char * id,short id_hotel, char * user_id, char * hotel_name, short hotel_stars, char * begin_date, char * end_date, short includes_breakfast, short rating, short ppn, short city_tax);
 ////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////
 char * get_reservationID(Reservation * a);
-char * get_reservationHOTELID(Reservation * a);
+short get_reservationHOTELID(Reservation * a);
 char * get_reservationUSERID(Reservation * a);
 char * get_reservationHOTELNAME(Reservation * a);
-char * get_reservationSTARS(Reservation * a);
+short get_reservationSTARS(Reservation * a);
 char * get_reservationBEGIN(Reservation * a);
 char * get_reservationEND(Reservation * a);
-char * get_reservationBREAKFAST(Reservation * a);
-char * get_reservationRATING(Reservation * a);
-char * get_reservationPPN(Reservation * a);
-char * get_reservationTAX(Reservation * a);
+short get_reservationBREAKFAST(Reservation * a);
+double get_reservationRATING(void * a);
+short get_reservationPPN(Reservation * a);
+short get_reservationTAX(Reservation * a);
 ////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////
-double total_got_from_reservation(const void * info);
+double total_got_from_reservation(void * info);
 ////////////////////////////////////////////////////////
 
 

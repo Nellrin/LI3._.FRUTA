@@ -36,6 +36,8 @@
         "10query.h": "c",
         "interactive.h": "c",
         "5query.h": "c",
-        "ncurses.h": "c"
+        "ncurses.h": "c",
+        "resource.h": "c",
+        "time.h": "c"
     }
 }

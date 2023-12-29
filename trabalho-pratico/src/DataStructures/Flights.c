@@ -41,9 +41,6 @@ void print_flight(Flight * a){
 
 
 ////////////////////////////////////////////////////////
-void add_flightPASSENGER(Flight * a, int x){
-    a->passengers = x;
-}
 Flight * set_flight(char * id,char * airline, char * plane_model, char * origin, char * destination, char * schedule_departure_date,char * real_departure_date, char * schedule_arrival_date, unsigned int passengers){    
     Flight * a = malloc(sizeof(Flight));
     
@@ -66,44 +63,28 @@ Flight * set_flight(char * id,char * airline, char * plane_model, char * origin,
 
 ////////////////////////////////////////////////////////
 char * get_flightID(Flight * a){
-    char * id = strdup(a->id);
-
-    return id;
+    return strdup(a->id);
 }
 char * get_flightAIRLINE(Flight * a){
-    char * airline = strdup(a->airline);
-
-    return airline;
+    return strdup(a->airline);
 }
 char * get_flightMODEL(Flight * a){
-    char * plane_model = strdup(a->plane_model);
-
-    return plane_model;
+    return strdup(a->plane_model);
 }
 char * get_flightORIGIN(Flight * a){
-    char * origin = strdup(a->origin);
-
-    return origin;
+    return strdup(a->origin);
 }
 char * get_flightDESTINATION(Flight * a){
-    char * destination = strdup(a->destination);
-
-    return destination;
+    return strdup(a->destination);
 }
 char * get_flightSDEPARTURE(Flight * a){
-    char * schedule_departure_date = strdup(a->schedule_departure_date);
-
-    return schedule_departure_date;
+    return strdup(a->schedule_departure_date);
 }
 char * get_flightSARRIVAL(Flight * a){
-    char * schedule_arrival_date = strdup(a->schedule_arrival_date);
-
-    return schedule_arrival_date;
+    return strdup(a->schedule_arrival_date);
 }
 char * get_flightRDEPARTURE(Flight * a){
-    char * real_departure = strdup(a->real_departure_date);
-
-    return real_departure;
+    return strdup(a->real_departure_date);
 }
 int get_flightPASSENGERS(Flight * a){
     int x = a->passengers;
@@ -118,14 +99,26 @@ int compare_flight(const char *id, const void *info){
     const Flight *flight = (const Flight *)info;
     return (strcmp(id, flight->id) == 0);
 }
-int compare_flight_date(const void *a, const void *b){
-    Flight *flightA = (Flight *)a;
-    Flight *flightB = (Flight *)b;
-    
-    if(strcmp(flightB->schedule_departure_date, flightA->schedule_departure_date)==0)
-        return strcmp(flightA->id, flightB->id);
 
-    return strcmp(flightB->schedule_departure_date, flightA->schedule_departure_date);
+
+
+
+int compare_flight_date(const void *a, const void *b){
+    char * flightA = get_flightSDEPARTURE((Flight *)a);
+    char * flightB = get_flightSDEPARTURE((Flight *)b);
+
+    int res = strcmp(flightB,flightA);
+    free(flightA);free(flightB);
+    
+    if(!res){
+        char * idA = get_flightID((Flight *)a);
+        char * idB = get_flightID((Flight *)b);
+
+        res = strcmp(idA,idB);
+        free(idA);free(idB);
+    }
+
+    return res;
 }
 ////////////////////////////////////////////////////////
 

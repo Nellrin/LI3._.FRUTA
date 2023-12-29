@@ -28,7 +28,6 @@ static unsigned int hash(const char *str, unsigned int amount, short user){
         
         hash = (atoi(str + 4))-1;
 
-        // printf("HASH : %d\n",hash);
         return hash%amount;
     
     break;

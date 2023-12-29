@@ -5,7 +5,7 @@
 #include "../../include/IO/Parser.h"
 #include "../../include/IO/Output.h"
 
-void parser(char * path,char * type,Almanac * box, int (*f)(Almanac *,const char *)){
+int parser(char * path,char * type,Almanac * box, int (*f)(Almanac *,const char *)){
 
 
             char * name = malloc(sizeof(char)*200);
@@ -45,10 +45,10 @@ void parser(char * path,char * type,Almanac * box, int (*f)(Almanac *,const char
         free(line);
     }
 
-    printf("%d\n\n",amount);
-
     free(head);
     free(name);
     fclose(file);
     fclose(errors);
+
+    return amount;
 }

@@ -11,7 +11,7 @@
 
 ////////////////////////////////////////////////////////
 struct rnode{
-    char * id;
+    short id;
     int amount;
     BTree * reserva;
 };
@@ -26,11 +26,17 @@ struct r_almanac{
 ////////////////////////////////////////////////////////
 static int compare_node(const char * id, const void * info){
     const RNode *Node = (const RNode *)info;
-    return (strcmp(id, Node->id)==0);
+    
+    char * helpy = malloc(sizeof(char)*20);
+    snprintf(helpy,20,"HTL%d",Node->id);
+    short res = (strcmp(id,helpy) == 0);
+    free(helpy);
+
+    return res;
 }
-static RNode * init_node(char * hotel_id){
+static RNode * init_node(short hotel_id){
     RNode * a = malloc(sizeof(RNode));
-    a->id = strdup(hotel_id);
+    a->id = (hotel_id);
     a->reserva = NULL;
     a->amount = 0;
 
@@ -39,7 +45,6 @@ static RNode * init_node(char * hotel_id){
 static void free_nodes(void * info){
     RNode * a = (RNode *)info;
 
-    free(a->id);
     free_tree(a->reserva);
 
     free(a);
@@ -66,16 +71,19 @@ void free_reservation_almanac(Reservation_Almanac * a){
 
 
 ////////////////////////////////////////////////////////
-void reservation_almanac_add_reservation(Reservation_Almanac *almanac, User_Almanac *user, char *id, char *id_hotel, char *user_id, char *hotel_name, char *hotel_stars, char *begin_date, char *end_date, char *includes_breakfast, char *rating, char *ppn, char *city_tax){
+void reservation_almanac_add_reservation(Reservation_Almanac *almanac, User_Almanac *user, char *id, short id_hotel, char *user_id, char *hotel_name, short hotel_stars, char *begin_date, char *end_date, short includes_breakfast, short rating, short ppn, short city_tax){
     void * reservation = set_reservation(id, id_hotel, user_id, hotel_name, hotel_stars, begin_date, end_date, includes_breakfast, rating, ppn, city_tax);
     
-    fhash_add(almanac->reservations,id,reservation,1);
+    fhash_add(almanac->reservations,id,reservation,0);
+
+    char * finder = malloc(sizeof(char) * 20);
+    snprintf(finder,20,"HTL%d",id_hotel);
     
-    RNode * node = fhash_get(almanac->hotels,id_hotel,0,compare_node);
+    RNode * node = fhash_get(almanac->hotels,finder,1,compare_node);
 
     if(node == NULL){    
         node = init_node(id_hotel);
-        fhash_add(almanac->hotels,id_hotel,node,0);
+        fhash_add(almanac->hotels,finder,node,1);
     }
 
         insert(&(node->reserva),reservation,compare_reservation_date);
@@ -85,24 +93,27 @@ void reservation_almanac_add_reservation(Reservation_Almanac *almanac, User_Alma
     user_almanac_add_reservation(user,user_id,reservation);
 
 
+    free(finder);
+
+
 }
 ////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////
 void * reservation_almanac_get_reservation(Reservation_Almanac *almanac, char * target){
-    return fhash_get(almanac->reservations,target,1,compare_reservation);
+    return fhash_get(almanac->reservations,target,0,compare_reservation);
 }
 static void * helpy(void * info){
     RNode * a = (RNode *)info;
     return a->reserva;
 }
 void * reservation_almanac_get_hotel(Reservation_Almanac *almanac, char * target){
-    void * result = fhash_get(almanac->hotels,target,0,compare_node);
+    void * result = fhash_get(almanac->hotels,target,1,compare_node);
     return helpy(result);
 }
 int reservation_almanac_get_hotel_num_res(Reservation_Almanac *almanac, char * target){
-    void * result = fhash_get(almanac->hotels,target,0,compare_node);
-    return (((RNode *)result)-> amount);
+    void * result = fhash_get(almanac->hotels,target,1,compare_node);
+    return (((RNode *)result)->amount);
 }
 ////////////////////////////////////////////////////////

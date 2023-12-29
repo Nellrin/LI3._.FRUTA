@@ -14,7 +14,6 @@ void print_flight(Flight * a);
 
 ////////////////////////////////////////////////////////
 Flight * set_flight(char * id,char * airline, char * plane_model, char * origin, char * destination, char * schedule_departure_date,char * real_departure_date, char * schedule_arrival_date,unsigned int passengers);
-void add_flightPASSENGER(Flight * a, int x);
 ////////////////////////////////////////////////////////
 
 

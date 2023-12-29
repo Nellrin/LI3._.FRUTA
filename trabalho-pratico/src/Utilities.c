@@ -157,7 +157,7 @@ static int general_number_validation(int li,char * string,int ls){
 
 }
 
-static int includes_breafast_validation(char * string){
+static short includes_breafast_validation(char * string){
     
     for(int i = 0; i < (int)strlen(string);i++)
     string[i] = tolower(string[i]);
@@ -173,12 +173,15 @@ static int includes_breafast_validation(char * string){
     return 0;
 }
 
-static int rating_validation(char * string){
+static short rating_validation(char * string){
     if((!strcmp(string,"")))
-    return 1;
+    return 0;
 
 
-    return (general_number_validation(1,string,5));
+    if(general_number_validation(1,string,5));
+    return (short)atoi(string);
+
+    return -1;
 }
 
 static int general_string_validation(char * string){
@@ -217,7 +220,6 @@ int valid_passenger(Almanac * a, const char * string){
     list[i] = strdup(token);
 
 
-    //muito incompleta
 
     if(general_string_validation(list[0])&&general_string_validation(list[1]))
     if(almanac_get_user_node(a,list[1])!=NULL)
@@ -309,7 +311,7 @@ int valid_user(Almanac * a, const char * string){
     && general_string_validation(list[10])
     && general_string_validation(list[11]) && account_status_validation(list[11])
     && email_validation(list[2])){
-        almanac_add_user(a,list[0],list[1],list[4],list[5],list[7],account_status_validation(list[11]),list[9],list[6]);
+        almanac_add_user(a,list[0],list[1],list[4],strcmp(list[5],"F"),list[7],account_status_validation(list[11]),list[9],list[6]);
         res ++;
     }
 
@@ -351,9 +353,8 @@ int valid_reservation(Almanac * a, const char * string){
         && general_string_validation(list[8]) && validate_days(list[8])  && ((strcmp(list[8],list[7]))>0)
         && general_string_validation(list[9]) && general_number_validation(0,list[9],1000000)
         && includes_breafast_validation(list[10]) != 0
-        && general_string_validation(list[11]) && rating_validation(list[12])){
-            
-            almanac_add_reservation(a,list[0],list[2],list[1],list[3],list[4],list[7],list[8],includes_breafast_validation(list[10]),list[12],list[9],list[5]);
+        && general_string_validation(list[11]) && (rating_validation(list[12])!= -1)){
+            almanac_add_reservation(a,list[0],atoi(list[2]+3),list[1],list[3],atoi(list[4]),list[7],list[8],includes_breafast_validation(list[10]),rating_validation(list[12]),atoi(list[9]),atoi(list[5]));
             res++;
         }
 

@@ -16,7 +16,7 @@ struct btree{
 
 
 ////////////////////////////////////////////////////////
-BTree *createNode(void *data) {
+BTree *create_node(void *data) {
     BTree *newNode = malloc(sizeof(BTree));
     newNode->data = data;
     newNode->left = newNode->right = NULL;
@@ -24,7 +24,7 @@ BTree *createNode(void *data) {
 }
 void insert(BTree **root, void *data, int (*compare)(const void *, const void *)) {
     if (*root == NULL)
-    *root = createNode(data);
+    *root = create_node(data);
     
     else{
         if (compare(data, (*root)->data) < 0)
@@ -49,13 +49,6 @@ void free_tree(BTree *root){
 
 
 ////////////////////////////////////////////////////////
-double exists(const void * info){
-    return(info != NULL);
-}
-////////////////////////////////////////////////////////
-
-
-////////////////////////////////////////////////////////
 BTree *search(BTree *root, char *key, int (*compare)(const void *, const char *)) {
     if (root == NULL || compare(key, root->data) == 0)
     return root;
@@ -66,7 +59,7 @@ BTree *search(BTree *root, char *key, int (*compare)(const void *, const char *)
     else
     return search(root->right, key, compare);
 }
-double do_something(BTree *root, double (*f)(const void *)){
+double do_something(BTree *root, double (*f)(void *)){
     if (root == NULL)
     return 0;
 

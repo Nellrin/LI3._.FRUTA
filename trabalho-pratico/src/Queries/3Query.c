@@ -26,20 +26,12 @@ static char * strcat_list(short F, double n){
     return line;
 
 }
-static double get_rating(const void * reservation){
-    char * y = get_reservationRATING((Reservation*) reservation);
-    double x = strtod(y,NULL);
-    
-    free(y); 
-
-    return x;
-}
 static char * query3_getter(Almanac * box, char * argument, char F){
     char * result = NULL;
     int nr = almanac_get_hotel_num_res(box,argument);
     
     void * hotels = almanac_get_hotel(box,argument);
-    double value = do_something(hotels, get_rating);
+    double value = do_something(hotels, get_reservationRATING);
     
     value /= nr;
     result = strcat_list(F,value);

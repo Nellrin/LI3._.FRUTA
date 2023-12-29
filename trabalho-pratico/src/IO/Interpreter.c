@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <sys/resource.h>
 
 #include "../../include/Catalogs/Catalog.h"
 #include "../../include/Queries/1Query.h"
@@ -176,23 +178,63 @@ void filter_querys(Almanac * box, char * line, int number){
 
 
 ///////////////////////////////////////////////////////////////
-void read_query_file(Almanac * box, char * path){
+void read_query_file(Almanac * box, char * path,short test){
 
-    FILE * file = create_file(path,"r");
+    struct rusage antes,depois;
+    struct timespec start, end;
+    double t;
+
 
     char *line = NULL;
     size_t len = 0;
-    
-    
-    for(int i = 1;getline(&line, &len, file) != -1;i++) {
-        line[strlen(line)-1] = '\0';
 
-        // printf("%s\n",line);
-        filter_querys(box,line,i);
+
+
+
+        
+        FILE * file = create_file(path,"r");
+
+
+    switch (test){
+    case 1:    
+    
+            for(int i = 1;getline(&line, &len, file) != -1;i++) {
+                line[strlen(line)-1] = '\0';
+                
+                clock_gettime(CLOCK_REALTIME, &start);
+                    // getrusage(RUSAGE_SELF, &antes);
+
+                        filter_querys(box,line,i);
+
+                    // getrusage(RUSAGE_SELF, &depois);
+                clock_gettime(CLOCK_REALTIME, &end);
+                t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
+                printf("\e[1m|   [Line %4d: Query %2d]\e[m (%.6fs)\n",i, atoi(line), t);
+                    // printf("(%ld KB)\n", depois.ru_maxrss-antes.ru_maxrss);
+            }
+
+            if(line!=NULL)
+            free(line);
+            fclose(file);
+
+        break;
+    
+    default:
+            
+            for(int i = 1;getline(&line, &len, file) != -1;i++) {
+                line[strlen(line)-1] = '\0';
+                
+
+                filter_querys(box,line,i);
+            }
+
+            if(line!=NULL)
+            free(line);
+            fclose(file);
+
+        break;
     }
 
-    if(line!=NULL)
-    free(line);
-    fclose(file);
+
 }
 ///////////////////////////////////////////////////////////////
