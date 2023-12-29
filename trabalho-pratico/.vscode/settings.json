@@ -38,6 +38,7 @@
         "5query.h": "c",
         "ncurses.h": "c",
         "resource.h": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "stdint.h": "c"
     }
 }

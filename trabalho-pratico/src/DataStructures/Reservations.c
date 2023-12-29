@@ -9,7 +9,9 @@
 
 ////////////////////////////////////////////////////////
 struct reservation {
-    char *id;
+    int id;
+    char first_id_digit;
+
     short id_hotel;
     char *user_id;
     char *hotel_name;
@@ -17,11 +19,11 @@ struct reservation {
     char *begin_date;
     char *end_date;
     
-    short hotel_stars;
+    char hotel_stars;
     short city_tax;
     short ppn;
-    short rating;
-    short includes_breakfast;
+    char rating;
+    char includes_breakfast;
 };
 ////////////////////////////////////////////////////////
 
@@ -29,7 +31,7 @@ struct reservation {
 ////////////////////////////////////////////////////////
 void print_reservation(Reservation * a){
     printf("\n----------------------------------------------------\n");
-    printf("[ID BOOKING]: %s\n",a->id);
+    printf("[ID BOOKING]: Book%d%d\n",a->first_id_digit,a->id);
     printf("[ID HOTEL]: %d\n",a->id_hotel);
     printf("[ID USER]: %s\n",a->user_id);
     printf("[HOTEL NAME]: %s\n",a->hotel_name);
@@ -51,17 +53,18 @@ Reservation * set_reservation(char * id,short id_hotel, char * user_id, char * h
     if (a == NULL)
         return NULL;
 
-    a->id = strdup(id);
+    a->first_id_digit = (id[4]);
+    a->id = atoi(id+5);
     a->id_hotel = (id_hotel);
     a->user_id = strdup(user_id);
     a->hotel_name = strdup(hotel_name);
-    a->hotel_stars = hotel_stars;
+    a->hotel_stars = (char) hotel_stars;
     a->begin_date = strdup(begin_date);
     a->end_date = strdup(end_date);
-    a->includes_breakfast = includes_breakfast;
+    a->includes_breakfast = (char)includes_breakfast;
     a->city_tax = city_tax;
     a->ppn = ppn;
-    a->rating = rating;
+    a->rating = (char) rating;
 
     return a;
 }
@@ -70,7 +73,9 @@ Reservation * set_reservation(char * id,short id_hotel, char * user_id, char * h
 
 ////////////////////////////////////////////////////////
 char * get_reservationID(Reservation * a){
-    return strdup(a->id);
+    char * id = malloc(sizeof(char)*20);
+    snprintf(id,20,"Book%c%09d",a->first_id_digit,a->id);
+    return id;
 }
 short get_reservationHOTELID(Reservation * a){
     short id_hotel = (a->id_hotel);
@@ -84,7 +89,7 @@ char * get_reservationHOTELNAME(Reservation * a){
     return strdup(a->hotel_name);
 }
 short get_reservationSTARS(Reservation * a){
-    short hotel_stars = (a->hotel_stars);
+    short hotel_stars = (short)(a->hotel_stars);
 
     return hotel_stars;
 }
@@ -95,7 +100,7 @@ char * get_reservationEND(Reservation * a){
     return strdup(a->end_date);
 }
 short get_reservationBREAKFAST(Reservation * a){
-    short includes_breakfast = a->includes_breakfast;
+    short includes_breakfast = (short)a->includes_breakfast;
 
     return includes_breakfast;
 }
@@ -131,8 +136,10 @@ double total_got_from_reservation(void * info){
 
 ////////////////////////////////////////////////////////
 int compare_reservation(const char *id, const void *info){
-    const Reservation *reservation = (const Reservation *)info;
-    return (strcmp(id, reservation->id) == 0);
+    char * res_id = get_reservationID((Reservation *)info);
+    int res = (strcmp(id, res_id) == 0);
+    free(res_id);
+    return res;
 }
 int compare_reservation_date(const void *a, const void *b) {
     const Reservation *reservationA = (const Reservation *)a;
@@ -151,7 +158,6 @@ void free_reservation(void *reservation){
         Reservation *a = (Reservation *)reservation;
 
 
-        free(a->id);
         free(a->user_id);
         
         free(a->hotel_name);

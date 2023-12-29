@@ -7,11 +7,7 @@
 
 ////////////////////////////////////////////////////////
 struct calendar{
-    int users;
-    int reservations;
-    int flights;
-    int passengers;
-    int unique_passengers;
+    unsigned int * list;
 };
 ////////////////////////////////////////////////////////
 
@@ -20,12 +16,9 @@ struct calendar{
 Date_Counter *create_date() {
     Date_Counter *a = malloc(sizeof(Date_Counter));
 
-    a->flights = 0;
-    a->users = 0;
-    a->reservations = 0;
-    a->passengers = 0;
-    a->unique_passengers = 0;
-
+    a->list = malloc(sizeof(unsigned int)*5); 
+    for(int i = 0; i < 5; i++)
+    a->list[i] = 0;
     return a;
 }
 ////////////////////////////////////////////////////////
@@ -34,46 +27,46 @@ Date_Counter *create_date() {
 ////////////////////////////////////////////////////////
 void date_add_users(void * a,int amount) {
 
-    ((Date_Counter *) a)->users+=amount;
+    ((Date_Counter *) a)->list[0]++;
 
 }
 void date_add_flights(void * a,int amount) {
-    ((Date_Counter *) a)->flights+=amount;
+    ((Date_Counter *) a)->list[1]++;
 }
 void date_add_reservations(void * a,int amount) {
-    ((Date_Counter *) a)->reservations+=amount;
+    ((Date_Counter *) a)->list[2]++;
 }
 void date_add_passengers(void * a,int amount){
-    ((Date_Counter *) a)->passengers+=amount;
+    ((Date_Counter *) a)->list[3]+=amount;
 }
 void date_add_unique_passengers(void * a,int amount){
-    ((Date_Counter *) a)->unique_passengers+=amount;
+    ((Date_Counter *) a)->list[4]++;
 }
 void date_subtract_unique_passengers(void * a,int amount){
-    ((Date_Counter *) a)->unique_passengers-=amount;
+    ((Date_Counter *) a)->list[4]-=amount;
 }
 ////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////
 int get_date_users(Date_Counter * a) {
-    int x = a->users;
+    int x = a->list[0];
     return x;
 }
 int get_date_flights(Date_Counter * a) {
-    int x = a->flights;
+    int x = a->list[1];
     return x;
 }
 int get_date_reservations(Date_Counter * a) {
-    int x = a->reservations;
+    int x = a->list[2];
     return x;
 }
 int get_date_passengers(Date_Counter * a) {
-    int x = a->passengers;
+    int x = a->list[3];
     return x;
 }
 int get_date_unique_passengers(Date_Counter * a) {
-    int x = a->unique_passengers;
+    int x = a->list[4];
     return x;
 }
 ////////////////////////////////////////////////////////
@@ -81,7 +74,91 @@ int get_date_unique_passengers(Date_Counter * a) {
 
 ////////////////////////////////////////////////////////
 void free_date(Date_Counter *a){
-    if (a != NULL)
-    free(a);
+    if (a != NULL){
+        free(a->list);
+        free(a);
+    }
 }
 ////////////////////////////////////////////////////////
+
+
+// ////////////////////////////////////////////////////////
+// struct calendar{
+//     int users;
+//     int reservations;
+//     int flights;
+//     int passengers;
+//     int unique_passengers;
+// };
+// ////////////////////////////////////////////////////////
+
+
+// ////////////////////////////////////////////////////////
+// Date_Counter *create_date() {
+//     Date_Counter *a = malloc(sizeof(Date_Counter));
+
+//     a->flights = 0;
+//     a->users = 0;
+//     a->reservations = 0;
+//     a->passengers = 0;
+//     a->unique_passengers = 0;
+
+//     return a;
+// }
+// ////////////////////////////////////////////////////////
+
+
+// ////////////////////////////////////////////////////////
+// void date_add_users(void * a,int amount) {
+
+//     ((Date_Counter *) a)->users+=amount;
+
+// }
+// void date_add_flights(void * a,int amount) {
+//     ((Date_Counter *) a)->flights+=amount;
+// }
+// void date_add_reservations(void * a,int amount) {
+//     ((Date_Counter *) a)->reservations+=amount;
+// }
+// void date_add_passengers(void * a,int amount){
+//     ((Date_Counter *) a)->passengers+=amount;
+// }
+// void date_add_unique_passengers(void * a,int amount){
+//     ((Date_Counter *) a)->unique_passengers+=amount;
+// }
+// void date_subtract_unique_passengers(void * a,int amount){
+//     ((Date_Counter *) a)->unique_passengers-=amount;
+// }
+// ////////////////////////////////////////////////////////
+
+
+// ////////////////////////////////////////////////////////
+// int get_date_users(Date_Counter * a) {
+//     int x = a->users;
+//     return x;
+// }
+// int get_date_flights(Date_Counter * a) {
+//     int x = a->flights;
+//     return x;
+// }
+// int get_date_reservations(Date_Counter * a) {
+//     int x = a->reservations;
+//     return x;
+// }
+// int get_date_passengers(Date_Counter * a) {
+//     int x = a->passengers;
+//     return x;
+// }
+// int get_date_unique_passengers(Date_Counter * a) {
+//     int x = a->unique_passengers;
+//     return x;
+// }
+// ////////////////////////////////////////////////////////
+
+
+// ////////////////////////////////////////////////////////
+// void free_date(Date_Counter *a){
+//     if (a != NULL)
+//     free(a);
+// }
+// ////////////////////////////////////////////////////////
