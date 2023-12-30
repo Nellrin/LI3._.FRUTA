@@ -150,6 +150,7 @@ int valid_flight(Almanac * a, const char * string){
     
     for(int i = 0;(token = strsep(&copy, ";"));i++)
     list[i] = strdup(token);
+
     
     if(general_string_validation(list[0])
     && general_string_validation(list[1])

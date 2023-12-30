@@ -30,13 +30,16 @@ int parser(char * path,char * type,Almanac * box, int (*f)(Almanac *,const char 
     
     
     while (getline(&head, &len, file) != -1) {
-        head[strlen(head)-1] = '\0';
+        char *line = strdup(head);
+        line[strlen(line)-1] = '\0';
 
-        if(f(box,head))
+        if(f(box,line))
         amount++;
 
         else
         write_line(errors,head);
+
+        free(line);
     }
 
     free(head);
