@@ -4,65 +4,11 @@
 #include <ctype.h>
 #include <time.h>
 
-
-#include "../include/Utilities.h"
-#include "../include/Catalogs/Catalog.h"
-
-///////////////////////////////////////////////////////////////
-int string_to_time(char * format,char *date1, char *date2) {
-
-    struct tm start = {0}, end = {0};
-
-    if(strchr(format,':')){
-        sscanf(date1,format,&start.tm_year,&start.tm_mon,&start.tm_mday,&start.tm_hour,&start.tm_min,&start.tm_sec);
-        sscanf(date2,format,&end.tm_year,&end.tm_mon,&end.tm_mday,&end.tm_hour,&end.tm_min,&end.tm_sec);
-    }
-    else{
-        sscanf(date1,format,&start.tm_year,&start.tm_mon,&start.tm_mday);
-        sscanf(date2,format,&end.tm_year,&end.tm_mon,&end.tm_mday);
-    }
-
-    start.tm_year -= 1900;
-    start.tm_mon -= 1;
-    end.tm_year -= 1900;
-    end.tm_mon -= 1;
-
-
-    time_t quirky_start = mktime(&start);
-    time_t quirky_end = mktime(&end);
-
-    int int_seconds = quirky_end-quirky_start;
-
-    if(strchr(format,':'))
-    return int_seconds;
-
-        int_seconds = 0;
-        for (time_t current = quirky_start; current < quirky_end; current += 24 * 60 * 60)
-        int_seconds++;
-
-
-    return int_seconds;
-}
-void swap_pointers(void ** s1, void ** s2){
-    void *temp = *s1;
-    *s1 = *s2;
-    *s2 = temp;
-}
-void swap_strings(char ** s1, char ** s2){
-    char *temp = *s1;
-    *s1 = *s2;
-    *s2 = temp;
-}
-void swap_ints(int * a, int * b){
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
-///////////////////////////////////////////////////////////////
-
+#include "../../include/Catalogs/Catalog.h"
+#include "../../include/Tools/Validations.h"
 
 ///////////////////////////////////////////////////////////////
-static int validate_hours(const char *date_string){
+static int validate_hours(char *date_string){
     if (strlen(date_string) != 19)
     return 0;
     
@@ -78,8 +24,7 @@ static int validate_hours(const char *date_string){
 
     return 1;
 }
-
-static int validate_days(const char *date_string){
+static int validate_days(char *date_string){
     if (strlen(date_string) != 10)
     return 0;
     
@@ -95,7 +40,6 @@ static int validate_days(const char *date_string){
 
     return 1;
 }
-
 static int email_validation(char * string){
     const char *at_symbol = strchr(string, '@');
     const char *dot_symbol = at_symbol ? strchr(at_symbol, '.') : NULL;
@@ -112,33 +56,15 @@ static int email_validation(char * string){
 
     return 0;
 }
-
 static int country_code_validation(char * string){
     if(strlen(string)==2)
     return (isalpha(string[0])&&isalpha(string[1]));
 
     return 0;
 }
-
 static int account_status_validation(char * string){
-    char * copy = strdup(string);
-    for(int i = 0; i < (int)strlen(string); i++)
-        copy[i] = toupper(copy[i]);
-     
-    if(!strcmp(copy,"ACTIVE")){
-        free(copy);
-        return 1;
-    }
-
-    if(!strcmp(copy,"INACTIVE")){
-        free(copy);
-        return 2;
-    }
-
-    free(copy);
-    return 0;
+    return (strcasecmp(string,"ACTIVE") == 0) - (strcasecmp(string,"INACTIVE") == 0);
 }
-
 static int airport_validation(char * string){
     if(strlen(string) == 3){
         for(int i = 0; i < (int)strlen(string); i++)
@@ -149,30 +75,21 @@ static int airport_validation(char * string){
     }
     return 0;
 }
-
 static int general_number_validation(int li,char * string,int ls){
     double x = strtod(string,NULL);
 
     return((double)(int)x == x && x>=li && x<=ls); 
 
 }
-
 static short includes_breafast_validation(char * string){
-    
-    for(int i = 0; i < (int)strlen(string);i++)
-    string[i] = tolower(string[i]);
-
-    if ((!strcmp(string,"t"))||(!strcmp(string,"true"))||(!strcmp(string,"1"))){
+    if((!strcasecmp(string,"t"))||(!strcasecmp(string,"true"))||(!strcmp(string,"1")))
         return 1;
-    }
 
-    if ((!strcmp(string,"f"))||(!strcmp(string,"false"))||(!strcmp(string,"0"))||(!strcmp(string,""))){
+    if((!strcasecmp(string,"f"))||(!strcasecmp(string,"false"))||(!strcmp(string,"0"))||(!strcmp(string,"")))
         return -1;
-    }
 
     return 0;
 }
-
 static short rating_validation(char * string){
     if((!strcmp(string,"")))
     return 0;
@@ -183,27 +100,9 @@ static short rating_validation(char * string){
 
     return -1;
 }
-
 static int general_string_validation(char * string){
-    char * copy = strdup(string);
-    int x = strlen(copy);
-    free(copy);
-
-    return(x>0);
+    return(strlen(string)>0);
 }
-///////////////////////////////////////////////////////////////
-
-
-///////////////////////////////////////////////////////////////
-int median(int * array, int amount){
-    if (amount % 2 == 0)
-    return ((array[amount / 2 - 1] + array[amount / 2]) / 2.0);
-
-
-    return array[amount / 2];
-}
-
-
 ///////////////////////////////////////////////////////////////
 
 
@@ -215,6 +114,7 @@ int valid_passenger(Almanac * a, const char * string){
     int res = 0;
     char ** list = malloc(sizeof(char *)*2);
     char *token = NULL;
+    
     
     for(int i = 0;(token = strsep(&copy, ";"));i++)
     list[i] = strdup(token);
@@ -235,6 +135,7 @@ int valid_passenger(Almanac * a, const char * string){
     free(list);
     free(copy_origin);
     free(token);
+    
 
     return res;
 }
@@ -264,16 +165,7 @@ int valid_flight(Almanac * a, const char * string){
         && general_string_validation(list[11])){
             almanac_add_flight(a,list[0],list[1],list[2],list[4],list[5],list[6],list[8],list[7],almanac_get_seats(a,atoi(list[0])-1));
             res ++;
-
-            // id;airline;plane_model;total_seats;origin;destination;schedule_departure_date;schedule_arrival_date;real_departure_date;real_arrival_date;pilot;copilot;notes
-
-            // char *id, char *airline, char *plane_model, char *origin, char *destination, char *schedule_departure_date, char *real_departure_date, char *schedule_arrival_date, char *passengers
         }
-
-
-        // schedule_departure_date;schedule_arrival_date;real_departure_date;real_arrival_date
-
-        // schedule_departure_date;real_departure_date;schedule_arrival_date;real_arrival_date
 
 
     for(int i = 0; i < 13; i++)
@@ -287,8 +179,6 @@ int valid_flight(Almanac * a, const char * string){
     return res;
 }
 int valid_user(Almanac * a, const char * string){
-// char * id, *name, *birth_date, *sex, *country_code, *account_status, *account_creation;
-// char * email, *phone, *passport, *address, *payment_method;
     char * copy = strdup(string);
     char * copy_origin = copy;
     int res = 0;
@@ -314,9 +204,6 @@ int valid_user(Almanac * a, const char * string){
         almanac_add_user(a,list[0],list[1],list[4],strcmp(list[5],"F"),list[7],account_status_validation(list[11]),list[9],list[6]);
         res ++;
     }
-
-    // id;name;email;phone_number;birth_date;sex;passport;country_code;address;account_creation;pay_method;account_status
-    // char *id, char *name, char *birth_date, char *sex, char *country_code, char *account_status, char *account_creation
 
     for(int i = 0; i < 12; i++)
     free(list[i]);

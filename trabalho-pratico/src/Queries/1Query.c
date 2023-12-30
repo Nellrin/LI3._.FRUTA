@@ -4,7 +4,7 @@
 #include <ctype.h>
 
 #include "../../include/Catalogs/Catalog.h"
-#include "../../include/Utilities.h"
+#include "../../include/Tools/Utilities.h"
 
 #include "../../include/DataStructures/Users.h"
 #include "../../include/DataStructures/BTree.h"
@@ -67,6 +67,11 @@ static void query1_reservation(void * entity, char ** result,char F){
         free(end_date);
         free(includes_breakfast);
 }
+
+// static void adapt_f (FILE *, void * data, void *, char **, char ***, double * amount, char){
+//     total_got_from_reservation(data,amount);
+// }
+
 static void query1_user(Almanac * box, char * string, void * entity, char ** result,char F){
         char * name = get_userNAME(entity);
         char * sex = NULL;
@@ -86,10 +91,11 @@ static void query1_user(Almanac * box, char * string, void * entity, char ** res
                 almanac_get_user_reservations_flights(box,string,&number_of_flights,&number_of_reservations);
 
 
-        void * reservation = almanac_get_user_reservations(box,string);
-
-
-        double total_spent = do_something(reservation,total_got_from_reservation);
+        double total_spent = do_something(almanac_get_user_reservations(box,string),total_got_from_reservation);
+        
+        // double total_spent = 0;
+        
+        // general_btree_function(almanac_get_user_reservations(box,string),NULL,NULL,NULL,NULL,&total_spent,0,adapt_f);
 
         int idade = (string_to_time("%d/%d/%d",age,CURRENT_DATE))/(365.25);
 

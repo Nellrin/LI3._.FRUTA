@@ -4,7 +4,7 @@
 #include <ctype.h>
 
 #include "../../include/Catalogs/Catalog.h"
-#include "../../include/Utilities.h"
+#include "../../include/Tools/Utilities.h"
 
 #include "../../include/DataStructures/BTree.h"
 #include "../../include/DataStructures/Reservations.h"

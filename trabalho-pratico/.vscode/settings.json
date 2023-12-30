@@ -39,6 +39,8 @@
         "ncurses.h": "c",
         "resource.h": "c",
         "time.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "validations.h": "c",
+        "compare_files.h": "c"
     }
 }

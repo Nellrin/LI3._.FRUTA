@@ -5,7 +5,7 @@
 
 #include "../../include/Catalogs/Catalog.h"
 #include "../../include/IO/Output.h"
-#include "../../include/Utilities.h"
+#include "../../include/Tools/Utilities.h"
 
 #include "../../include/Queries/7Query.h"
 

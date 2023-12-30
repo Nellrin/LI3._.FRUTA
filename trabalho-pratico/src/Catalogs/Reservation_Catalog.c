@@ -7,7 +7,7 @@
 #include "../../include/DataStructures/BTree.h"
 #include "../../include/Catalogs/Reservation_Catalog.h"
 #include "../../include/Catalogs/User_Catalog.h"
-#include "../../include/Utilities.h"
+#include "../../include/Tools/Utilities.h"
 
 ////////////////////////////////////////////////////////
 struct rnode{

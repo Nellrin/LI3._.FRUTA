@@ -8,7 +8,7 @@
 #include "../../include/DataStructures/BTree.h"
 #include "../../include/DataStructures/Stack.h"
 #include "../../include/Catalogs/Flight_Catalog.h"
-#include "../../include/Utilities.h"
+#include "../../include/Tools/Utilities.h"
 
 ////////////////////////////////////////////////////////
 struct f_almanac{
@@ -208,7 +208,6 @@ static void add_passengers_to_year(Year_Airport * year, int passengers, char * o
             year->amount++;
         }
     }
-
 void flight_almanac_add_flight(Flight_Almanac *almanac, char * id,char * airline, char * plane_model, char * origin, char * destination, char * schedule_departure_date,char * real_departure_date, char * schedule_arrival_date, unsigned int passengers){
     
     for(int i = 0; i < (int)strlen(origin);i++)
@@ -301,11 +300,8 @@ void flight_almanac_sort_airport_delays(Flight_Almanac *almanac){
     for(int i = 0; i < amount; i++){
                 for(int j = 0; j < airport_list[i]->amount; j++)
                 for(int k = j+1; k < airport_list[i]->amount; k++)
-                    if(airport_list[i]->delays[j]>airport_list[i]->delays[k]){
-                        int temp = airport_list[i]->delays[j];
-                        airport_list[i]->delays[j] = airport_list[i]->delays[k];
-                        airport_list[i]->delays[k] = temp;
-                    }
+                    if(airport_list[i]->delays[j]>airport_list[i]->delays[k])
+                    swap_ints(&airport_list[i]->delays[j],&airport_list[i]->delays[k]);
 
         med[i] = median(airport_list[i]->delays,airport_list[i]->amount);
         names[i] = strdup(airport_list[i]->id);
@@ -315,10 +311,7 @@ void flight_almanac_sort_airport_delays(Flight_Almanac *almanac){
     for(int i = 0; i < amount; i++)
     for(int j = i+1; j < amount; j++){
         if((med[i]<med[j]) || ((med[i]==med[j] && (strcmp(names[i],names[j])>0)))){
-            int temp = med[i];
-            med[i] = med[j];
-            med[j] = temp;
-
+            swap_ints(&med[i],&med[j]);
             swap_strings(&names[i],&names[j]);
         }
 
@@ -340,19 +333,12 @@ void flight_almanac_sort_airport_delays(Flight_Almanac *almanac){
 
         Year_Airport * y  = fhash_get(almanac->years,id_year,1,compare_node_year);
 
-        for(int j = 0; j < y->amount; j++){
-
+            for(int j = 0; j < y->amount; j++){
             for(int k = j+1; k < y->amount; k++){
                 if((y->passengers[j]<y->passengers[k]) || ((y->passengers[j]==y->passengers[k] && (strcasecmp(y->airports[j],y->airports[k])>0)))){
-                
-                int temp = y->passengers[j];
-                y->passengers[j] = y->passengers[k];
-                y->passengers[k] = temp;
-
-                swap_strings(&y->airports[k],&y->airports[j]);
+                    swap_ints(&y->passengers[j],&y->passengers[k]);
+                    swap_strings(&y->airports[k],&y->airports[j]);
                 }
-
-
             }
 
         }
@@ -361,7 +347,6 @@ void flight_almanac_sort_airport_delays(Flight_Almanac *almanac){
     }
 
 }
-
 void flight_almanac_get_airport_delays(Flight_Almanac *almanac, char *** list_of_names, int ** list_of_med, int * amount){
 
     (*amount) = almanac->amount_airports;
@@ -382,7 +367,6 @@ void flight_almanac_get_airport_delays(Flight_Almanac *almanac, char *** list_of
     *list_of_names = names;
     *list_of_med = med;
 }
-
 void flight_almanac_get_airport_years(Flight_Almanac *almanac, char * target, char *** list_of_names, int ** list_of_passengers, int * amount){
 
 
@@ -405,26 +389,3 @@ void flight_almanac_get_airport_years(Flight_Almanac *almanac, char * target, ch
     *list_of_passengers = passengers;
 }
 ////////////////////////////////////////////////////////
-
-
-
-
-// DUB 2763
-// LHR 2439
-// AMS 1999
-// MAN 1931
-// FRA 1909
-// VIE 1538
-// MAD 1537
-// CDG 1483
-// OSL 1315
-// FCO 1222
-// SVO 1191
-// ARN 1165
-// LIS 1126
-// KBP 1120
-// CPH 1108
-// IST 1049
-// ZRH 636
-// WAW 583
-// BCN 528
