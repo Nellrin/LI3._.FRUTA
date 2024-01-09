@@ -187,10 +187,6 @@ void read_query_file(Almanac * box, char * path,short test){
 
     char *line = NULL;
     size_t len = 0;
-
-
-
-
         
         FILE * file = create_file(path,"r");
 
@@ -224,7 +220,6 @@ void read_query_file(Almanac * box, char * path,short test){
             for(int i = 1;getline(&line, &len, file) != -1;i++) {
                 line[strlen(line)-1] = '\0';
                 
-
                 filter_querys(box,line,i);
             }
 

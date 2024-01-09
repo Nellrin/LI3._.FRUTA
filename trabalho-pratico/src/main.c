@@ -9,43 +9,46 @@
 #include "../include/IO/Interactive/Interactive.h"
 
 
-static void setting_up(char ** path){
+static Almanac * setting_up(char * path){
 
     Almanac * u = NULL;
 
-        u = set_up_almanac(path[1]);
+        u = set_up_almanac(path);
+        
+    if(u != NULL){
 
-    parser(path[1],"users",u,valid_user);
-    parser(path[1],"reservations",u,valid_reservation);
-    
-        almanac_count_passengers(u,path[1]);
+        parser(path,"users",u,valid_user);
+        parser(path,"reservations",u,valid_reservation);
+        
+            almanac_count_passengers(u,path);
 
-    parser(path[1],"flights",u,valid_flight);
-    parser(path[1],"passengers",u,valid_passenger);
-    
-    
+        parser(path,"flights",u,valid_flight);
+        parser(path,"passengers",u,valid_passenger);
+        
+            almanac_sort_flight_delays(u);
+    }
 
-        almanac_sort_flight_delays(u);
+    return u;
 
-
-    read_query_file(u,path[2],0);
-
-
-        free_almanac(u);
 }
 
 
 int main(int argc, char *argv[]){
-
     switch (argc){
         case 1:
-            interactive_mode();
-            setting_up(argv);
+            interactive_mode(setting_up);
+            // setting_up(argv);
             break;
 
 
         case 3:
-            setting_up(argv);
+            Almanac * u = setting_up(argv[1]);
+
+            if(u != NULL){
+                read_query_file(u,argv[2],0);
+
+                free_almanac(u);
+            }
             break;
 
         default:

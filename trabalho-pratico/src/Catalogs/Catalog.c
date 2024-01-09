@@ -79,6 +79,12 @@ Almanac * set_up_almanac(char * path){
 
     FILE *file = fopen(name, "r");
 
+        if(file == NULL){
+            free(name);
+            printf("\nDiretoria inexistente\n\n");
+            return NULL;
+        }
+
     int amount_f = aproximated_amount_of_lines_of_a_file(file);
     int amount_u = 4 * amount_f; 
     int amount_r = 6 * amount_u; 

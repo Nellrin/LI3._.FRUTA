@@ -1,15 +1,22 @@
-#ifndef INTERACTIVE_H
-#define INTERACTIVE_H
+#ifndef UI_H
+#define UI_H
 ///////////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////////
-// typedef struct almanac Almanac;
+#define MOVE_CURSOR(row, col) printf("\033[%d;%dH", (row), (col))
 ///////////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////////
-void interactive_mode(Almanac * (*f)(char *));
+int terminal_width();
+int terminal_height();
+
+void bottom_of_terminal();
+void better_UI(char ** list_strings, int amount);
+char ** line_to_lines(char * line, int * amount);
+
+void clear_terminal();
 ///////////////////////////////////////////////////////////////
 
 

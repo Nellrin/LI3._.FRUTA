@@ -70,3 +70,30 @@ int median(int * array, int amount){
     return array[amount / 2];
 }
 ///////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////
+char ** line_to_lines(char * line, int * amount){
+
+    char * copy = strdup(line);
+    char * copy_origin = copy;
+    char * token = NULL;
+
+    char ** list = malloc(sizeof(char *) * 256);
+
+    for(int i = 0; i < 256; i++)
+    list[i] = NULL;
+
+    int i;
+
+    for(i = 0; (token = strsep(&copy, ";")) &&  i < 256;i++)
+        list[i] = strdup(token);
+
+
+    (*amount) = i;
+    
+    free(copy_origin);
+
+    return list;
+}
+///////////////////////////////////////////////////////////////

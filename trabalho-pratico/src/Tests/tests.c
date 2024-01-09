@@ -31,8 +31,8 @@ static void setting_up(char ** path){
 
 
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-            // printf("\e[1m[Set up do Almanac]\e[m (%.3fs)\n", t);
-                // printf("Memória gasta na \e[1m[Criação do Almanac]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+            printf("\e[1m[Set up do Almanac]\e[m (%.3fs)\n", t);
+                printf("Memória gasta na \e[1m[Criação do Almanac]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
 
 
             clock_gettime(CLOCK_REALTIME, &start);
@@ -43,8 +43,8 @@ static void setting_up(char ** path){
             clock_gettime(CLOCK_REALTIME, &end);
 
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-            // printf("\e[1m[Parse de %d Users]\e[m (%.3fs)\n",amount, t);
-                // printf("Memória gasta no \e[1m[Parsing dos Users]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+            printf("\e[1m[Parse de %d Users]\e[m (%.3fs)\n",amount, t);
+                printf("Memória gasta no \e[1m[Parsing dos Users]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
 
 
             clock_gettime(CLOCK_REALTIME, &start);
@@ -55,8 +55,8 @@ static void setting_up(char ** path){
                 getrusage(RUSAGE_SELF, &depois);
             clock_gettime(CLOCK_REALTIME, &end);
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-            // printf("\e[1m[Parse de %d Reservas]\e[m (%.3fs)\n",amount, t);
-                // printf("Memória gasta no \e[1m[Parsing das Reservas]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+            printf("\e[1m[Parse de %d Reservas]\e[m (%.3fs)\n",amount, t);
+                printf("Memória gasta no \e[1m[Parsing das Reservas]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
                 
 
             clock_gettime(CLOCK_REALTIME, &start);
@@ -69,8 +69,8 @@ static void setting_up(char ** path){
             clock_gettime(CLOCK_REALTIME, &end);
 
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-            // printf("\e[1m[Parse de %d Voos]\e[m (%.3fs)\n",amount, t);
-                // printf("Memória gasta no \e[1m[Parsing dos Voos]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+            printf("\e[1m[Parse de %d Voos]\e[m (%.3fs)\n",amount, t);
+                printf("Memória gasta no \e[1m[Parsing dos Voos]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
 
 
             clock_gettime(CLOCK_REALTIME, &start);
@@ -82,8 +82,8 @@ static void setting_up(char ** path){
             clock_gettime(CLOCK_REALTIME, &end);
 
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-            // printf("\e[1m[Parse de %d Passageiros]\e[m (%.3fs)\n",amount, t);
-                // printf("Memória gasta no \e[1m[Parsing dos Passageiros]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+            printf("\e[1m[Parse de %d Passageiros]\e[m (%.3fs)\n",amount, t);
+                printf("Memória gasta no \e[1m[Parsing dos Passageiros]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
                                             
 
             clock_gettime(CLOCK_REALTIME, &start);
@@ -95,8 +95,8 @@ static void setting_up(char ** path){
             clock_gettime(CLOCK_REALTIME, &end);
 
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-            // printf("\n\e[1m[Sort do Almanac]\e[m (%.3fs)\n", t);
-                // printf("Memória gasta no \e[1m[Sorting do Almanac]\e[m: %.3f MB\n\n+──────────────────────────────────────────────────────\n", (double)(depois.ru_maxrss-antes.ru_maxrss));
+            printf("\n\e[1m[Sort do Almanac]\e[m (%.3fs)\n", t);
+                printf("Memória gasta no \e[1m[Sorting do Almanac]\e[m: %.3f MB\n\n+──────────────────────────────────────────────────────\n", (double)(depois.ru_maxrss-antes.ru_maxrss));
 
 
             clock_gettime(CLOCK_REALTIME, &start);
@@ -107,8 +107,8 @@ static void setting_up(char ** path){
                 getrusage(RUSAGE_SELF, &depois);
             clock_gettime(CLOCK_REALTIME, &end);
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-            // printf("+──────────────────────────────────────────────────────\n\e[1m[Execução Geral das Queries]\e[m (%.3fs)\n", t);
-                // // printf("Memória gasta na \e[1m[Execução Geral das Queries]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+            printf("+──────────────────────────────────────────────────────\n\e[1m[Execução Geral das Queries]\e[m (%.3fs)\n", t);
+                printf("Memória gasta na \e[1m[Execução Geral das Queries]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
 
 
             clock_gettime(CLOCK_REALTIME, &start);
@@ -118,8 +118,8 @@ static void setting_up(char ** path){
 
             clock_gettime(CLOCK_REALTIME, &end);
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-            // printf("\n\e[1m[Free Almanac]\e[m (%.3fs)\n", t);
-                // printf("\e[1m[Memória libertada ao dar Free ao Almanac]\e[m: %.3f MB\n\n", (double) (antes.ru_maxrss)/1000);
+            printf("\n\e[1m[Free Almanac]\e[m (%.3fs)\n", t);
+                printf("\e[1m[Memória libertada ao dar Free ao Almanac]\e[m: %.3f MB\n\n", (double) (antes.ru_maxrss)/1000);
 
 
 

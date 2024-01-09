@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -lncurses -O3 -march=native -mtune=native -I.
+CFLAGS = -O3 -march=native -mtune=native -I.
 
 SRC_DIR = src
 OBJ_DIR = obj

@@ -41,6 +41,11 @@
         "time.h": "c",
         "stdint.h": "c",
         "validations.h": "c",
-        "compare_files.h": "c"
+        "compare_files.h": "c",
+        "ui.h": "c",
+        "readline.h": "c",
+        "history.h": "c",
+        "unistd.h": "c",
+        "limits": "c"
     }
 }
