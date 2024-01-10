@@ -46,6 +46,8 @@
         "readline.h": "c",
         "history.h": "c",
         "unistd.h": "c",
-        "limits": "c"
+        "limits": "c",
+        "start_menu.h": "c",
+        "check_queries.h": "c"
     }
 }

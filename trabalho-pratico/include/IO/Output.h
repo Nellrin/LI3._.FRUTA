@@ -3,4 +3,5 @@
 
 FILE * create_file(char * title,char * type);
 void write_line(FILE * file, char * line);
+
 #endif
