@@ -28,6 +28,8 @@ static char * strcat_list(short F, double n){
 
 }
 static double get_revenue(void * box, const void * reservation, char * begin, char * end){
+    if(box == NULL) return 0;
+    
     char * res_begin = get_reservationBEGIN((Reservation*) reservation);
     char * res_end = get_reservationEND((Reservation*) reservation);
     char * user_id = get_reservationUSERID((Reservation*) reservation);
@@ -44,16 +46,12 @@ static double get_revenue(void * box, const void * reservation, char * begin, ch
     
 
     
-    if(!((strcmp(res_end,begin) < 0 || strcmp(res_begin,end) > 0)))
-    // if(get_userASTATUS(almanac_get_user(box,user_id))==1)
-    {
+    if(!((strcmp(res_end,begin) < 0 || strcmp(res_begin,end) > 0))){
         char *start = NULL;
 
         
-            if(strcmp(res_begin, begin) < 0){
-                start = begin;
-                // nights ++;
-            }
+            if(strcmp(res_begin, begin) < 0)
+            start = begin;
     
             else
             start = res_begin;

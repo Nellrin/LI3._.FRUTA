@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -O3 -march=native -mtune=native -I.
+CFLAGS = -Wall -Wextra  -pedantic -O3 -march=native -mtune=native -I.
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -112,3 +112,4 @@ valgrind: $(TARGET)
 
 clean:
 	rm -rf $(TARGET) Resultados/*
+	rm -rf $(TARGET) obj

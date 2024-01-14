@@ -34,21 +34,17 @@ static Almanac * setting_up(char * path){
 
 
 int main(int argc, char *argv[]){
+    Almanac * u = setting_up(argv[1]);
+    
     switch (argc){
         case 1:
             interactive_mode(setting_up);
-            // setting_up(argv);
             break;
 
-
         case 3:
-            Almanac * u = setting_up(argv[1]);
 
-            if(u != NULL){
-                read_query_file(u,argv[2],0);
-
-                free_almanac(u);
-            }
+            if(u != NULL)
+            read_query_file(u,argv[2],0);
             break;
 
         default:
@@ -56,6 +52,7 @@ int main(int argc, char *argv[]){
             break;
     }
 
+    free_almanac(u);
 
     return 0;
 }

@@ -27,20 +27,20 @@ Date_Counter *create_date() {
 ////////////////////////////////////////////////////////
 void date_add_users(void * a,int amount) {
 
-    ((Date_Counter *) a)->list[0]++;
+    ((Date_Counter *) a)->list[0]+=amount;
 
 }
 void date_add_flights(void * a,int amount) {
-    ((Date_Counter *) a)->list[1]++;
+    ((Date_Counter *) a)->list[1]+=amount;
 }
 void date_add_reservations(void * a,int amount) {
-    ((Date_Counter *) a)->list[2]++;
+    ((Date_Counter *) a)->list[2]+=amount;
 }
 void date_add_passengers(void * a,int amount){
     ((Date_Counter *) a)->list[3]+=amount;
 }
 void date_add_unique_passengers(void * a,int amount){
-    ((Date_Counter *) a)->list[4]++;
+    ((Date_Counter *) a)->list[4]+=amount;
 }
 void date_subtract_unique_passengers(void * a,int amount){
     ((Date_Counter *) a)->list[4]-=amount;

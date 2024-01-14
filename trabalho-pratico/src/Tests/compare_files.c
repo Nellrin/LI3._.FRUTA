@@ -12,7 +12,7 @@ int compare_files(short n_file,char * resultado_obtido, char * output_esperado) 
 
     if(file_obtido == NULL) {
         printf("+──────────────────────────────────────────────\n");
-        printf("|\e[1mFile %d\e[m\n|\n", n_file);
+        printf("|\033[1mFile %d\033[m\n|\n", n_file);
         printf("|Ficheiro %s inexistente\n", output_esperado);
         printf("+──────────────────────────────────────────────\n\n");
         
@@ -24,13 +24,13 @@ int compare_files(short n_file,char * resultado_obtido, char * output_esperado) 
 
 
 
-    for(int line = 1;fgets(esperado, sizeof(esperado), file_esperado) != NULL && fgets(obtido, sizeof(obtido), file_obtido) != NULL; line++){
+    for(int line = 1;fgets(esperado, 1024, file_esperado) != NULL && fgets(obtido, 1024, file_obtido) != NULL; line++){
         esperado[strlen(esperado)-1] = '\0';
         obtido[strlen(obtido)-1] = '\0';
 
         if(strcmp(esperado, obtido) != 0) {
             printf("+──────────────────────────────────────────────\n");
-            printf("|\e[1mFile %d\e[m\n|\n", n_file);
+            printf("|\033[1mFile %d\033[m\n|\n", n_file);
             printf("|Line %d\n",line);
             printf("|Output esperado: %s\n", esperado);
             printf("|Output obtido: %s\n", obtido);
@@ -46,7 +46,7 @@ int compare_files(short n_file,char * resultado_obtido, char * output_esperado) 
 
     if(fgets(esperado, sizeof(esperado), file_esperado) != NULL || fgets(obtido, sizeof(obtido), file_obtido) != NULL) {
         printf("+──────────────────────────────────────────────\n");
-        printf("|\e[1mFile %d\e[m\n|\n", n_file);
+        printf("|\033[1mFile %d\033[m\n|\n", n_file);
         printf("|Ficheiros diferem na quantidade de linhas ...\n");
         printf("+──────────────────────────────────────────────\n\n");
         fclose(file_esperado);

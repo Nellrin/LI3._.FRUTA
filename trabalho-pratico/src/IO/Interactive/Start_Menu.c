@@ -15,31 +15,32 @@ int start_menu(){
     
     whats_gonna_get_printed[0] = '\0';
 
-    strcat(whats_gonna_get_printed, "000@-1;"
-                                     "002@-1;"
-                                     "000+;"
-                                     "002+;"
-                                     "003|;"
-                                     "009@-1;"
-                                     "009+;"
-                                     "001|  \033[1mInteractive Mode\033[0m ;"
-                                     "004|   0. Exit;"
-                                     "005|      1. Execute Query;"
-                                     "006|      2. Check Queries;"
-                                     "007|      3. Add input.txt;"
-                                     "008|");
+    strcat(whats_gonna_get_printed, "000@-1\\"
+                                     "002@-1\\"
+                                     "000+\\"
+                                     "002+\\"
+                                     "003|\\"
+                                     "010@-1\\"
+                                     "010+\\"
+                                     "001|  \033[1mInteractive Mode\033[0m \\"
+                                     "004|   0. Exit\\"
+                                     "005|      1. Execute Query\\"
+                                     "006|      2. Check Queries\\"
+                                     "007|      3. Add input.txt\\"
+                                     "008|      4. Add dataset\\"
+                                     "009|");
 
     char ** list = line_to_lines(whats_gonna_get_printed,&amount);
 
 
-    while(option < 0 || option > 3){
+    while(option < 0 || option > 4){
 
     better_UI(list,amount);
 
             bottom_of_terminal();
-            printf("Executar [0..3]: ");
+            printf("Executar [0..4]: ");
 
-            if(fgets(input, sizeof(input), stdin)!=NULL)
+            if(fgets(input, 512, stdin)!=NULL)
                 if(isdigit(input[0]))
                     option = atoi(input);
 

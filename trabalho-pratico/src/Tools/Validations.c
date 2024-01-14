@@ -95,7 +95,7 @@ static short rating_validation(char * string){
     return 0;
 
 
-    if(general_number_validation(1,string,5));
+    if(general_number_validation(1,string,5))
     return (short)atoi(string);
 
     return -1;
@@ -202,7 +202,7 @@ int valid_user(Almanac * a, const char * string){
     && general_string_validation(list[10])
     && general_string_validation(list[11]) && account_status_validation(list[11])
     && email_validation(list[2])){
-        // almanac_add_user(a,list[0],list[1],list[4],strcmp(list[5],"F"),list[7],account_status_validation(list[11]),list[9],list[6]);
+        almanac_add_user(a,list[0],list[1],list[4],strcmp(list[5],"F"),list[7],account_status_validation(list[11]),list[9],list[6]);
         res ++;
     }
 

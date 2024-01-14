@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "../../../include/IO/Interactive/Add_Input.h"
 #include "../../../include/IO/Interactive/UI.h"
+#include "../../../include/IO/Interpreter.h"
+#include "../../../include/Catalogs/Catalog.h"
 ///////////////////////////////////////////////////////////////
 
 
@@ -23,20 +26,28 @@ static void copy_file(char *source_dir, char *destination_dir, int *amount) {
     fclose(source);
     fclose(destination);
 }
-int add_input(int * amount_queries){
+int add_input(Almanac * u, int * amount_queries){
 
-    char * input = malloc(sizeof(char) * 1024);
+    if(u!=NULL){
+        char * input = malloc(sizeof(char) * 1024);
 
-    printf("Already existing Queries: \033[1m%d\033[0m\n",(*amount_queries));
-    printf("\n[Input]\n|> ");
+        printf("Already existing Queries: \033[1m%d\033[0m\n",(*amount_queries));
+        printf("\n[Input]\n|> ");
 
-        if(scanf("%s",input)==1)
-            clear_terminal();
 
-        copy_file(input,"Resultados/input.txt", amount_queries);
+            if(fgets(input, 1024, stdin) != NULL)
+            input[strlen(input)-1] = '\0';
+                clear_terminal();
+        
+            if(access(input, F_OK) != -1){
+                copy_file(input,"Resultados/input.txt", amount_queries);
 
-    free(input);
+                read_query_file(u, "Resultados/input.txt",0);
+            }
 
-    return 1;
+        free(input);
+    }
+
+    return 10;
 }
 ///////////////////////////////////////////////////////////////

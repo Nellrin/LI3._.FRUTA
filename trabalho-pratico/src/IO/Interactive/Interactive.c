@@ -8,16 +8,11 @@
 #include "../../../include/IO/Interpreter.h"
 #include "../../../include/IO/Interactive/Interactive.h"
 #include "../../../include/IO/Interactive/UI.h"
+#include "../../../include/IO/Interactive/Add_Dataset.h"
 #include "../../../include/IO/Interactive/Add_Input.h"
 #include "../../../include/IO/Interactive/Start_Menu.h"
 #include "../../../include/IO/Interactive/Check_Queries.h"
-///////////////////////////////////////////////////////////////
-
-
-///////////////////////////////////////////////////////////////
-static void reset_input(){
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);}
+#include "../../../include/IO/Interactive/Query.h"
 ///////////////////////////////////////////////////////////////
 
 
@@ -26,37 +21,41 @@ void interactive_mode(Almanac * (*f)(char *)){
     
     clear_terminal();
     
-    char * path = malloc(sizeof(char)*256);
-    int amount_queries = 0, first_query_shown = 0;    
-    
-    
-    printf("[Dataset Directory]\n|> ");
-
-    if(scanf("%s",path) != 1){perror("Erro ao receber datasets");}
-    reset_input();
-
-    clear_terminal();
-    
+    int amount_queries = 0, first_query_shown = 0, selected_query = 0;        
     Almanac * u = NULL;
-    u = f(path);
 
     FILE * file = fopen("Resultados/input.txt","w");
     fclose(file);
-    free(path);
 
-        int option = 1;
+        int option = 10;
         while (option!=0){
             switch (option){
                 case 1:
-                    option = start_menu();
+                    option = execute_query(u,&amount_queries,&selected_query,&first_query_shown);
                     break;
 
                 case 2:
-                    option = check_query_menu(&amount_queries,&first_query_shown);
+                    option = check_query_menu(&amount_queries,&first_query_shown,&selected_query);
                     break;
 
                 case 3:
-                    option = add_input(&amount_queries);
+                    option = add_input(u,&amount_queries);
+                    break;
+                
+                case 4:
+                    option = add_dataset(&u,f);
+                    break;
+
+                case 5:
+                    option = show_query(selected_query,&first_query_shown);
+                    break;
+
+                // case 6:
+                //     option = show_query(selected_query,&first_query_shown);
+                //     break;
+                
+                case 10:
+                    option = start_menu();
                     break;
 
 

@@ -31,8 +31,8 @@ static void setting_up(char ** path){
 
 
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-            printf("\e[1m[Set up do Almanac]\e[m (%.3fs)\n", t);
-                printf("Memória gasta na \e[1m[Criação do Almanac]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+            printf("\033[1m[Set up do Almanac]\033[m (%.3fs)\n", t);
+                printf("Memória gasta na \033[1m[Criação do Almanac]\033[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
 
 
             clock_gettime(CLOCK_REALTIME, &start);
@@ -43,8 +43,8 @@ static void setting_up(char ** path){
             clock_gettime(CLOCK_REALTIME, &end);
 
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-            printf("\e[1m[Parse de %d Users]\e[m (%.3fs)\n",amount, t);
-                printf("Memória gasta no \e[1m[Parsing dos Users]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+            printf("\033[1m[Parse de %d Users]\033[m (%.3fs)\n",amount, t);
+                printf("Memória gasta no \033[1m[Parsing dos Users]\033[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
 
 
             clock_gettime(CLOCK_REALTIME, &start);
@@ -55,8 +55,8 @@ static void setting_up(char ** path){
                 getrusage(RUSAGE_SELF, &depois);
             clock_gettime(CLOCK_REALTIME, &end);
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-            printf("\e[1m[Parse de %d Reservas]\e[m (%.3fs)\n",amount, t);
-                printf("Memória gasta no \e[1m[Parsing das Reservas]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+            printf("\033[1m[Parse de %d Reservas]\033[m (%.3fs)\n",amount, t);
+                printf("Memória gasta no \033[1m[Parsing das Reservas]\033[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
                 
 
             clock_gettime(CLOCK_REALTIME, &start);
@@ -69,8 +69,8 @@ static void setting_up(char ** path){
             clock_gettime(CLOCK_REALTIME, &end);
 
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-            printf("\e[1m[Parse de %d Voos]\e[m (%.3fs)\n",amount, t);
-                printf("Memória gasta no \e[1m[Parsing dos Voos]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+            printf("\033[1m[Parse de %d Voos]\033[m (%.3fs)\n",amount, t);
+                printf("Memória gasta no \033[1m[Parsing dos Voos]\033[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
 
 
             clock_gettime(CLOCK_REALTIME, &start);
@@ -82,8 +82,8 @@ static void setting_up(char ** path){
             clock_gettime(CLOCK_REALTIME, &end);
 
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-            printf("\e[1m[Parse de %d Passageiros]\e[m (%.3fs)\n",amount, t);
-                printf("Memória gasta no \e[1m[Parsing dos Passageiros]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+            printf("\033[1m[Parse de %d Passageiros]\033[m (%.3fs)\n",amount, t);
+                printf("Memória gasta no \033[1m[Parsing dos Passageiros]\033[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
                                             
 
             clock_gettime(CLOCK_REALTIME, &start);
@@ -95,8 +95,8 @@ static void setting_up(char ** path){
             clock_gettime(CLOCK_REALTIME, &end);
 
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-            printf("\n\e[1m[Sort do Almanac]\e[m (%.3fs)\n", t);
-                printf("Memória gasta no \e[1m[Sorting do Almanac]\e[m: %.3f MB\n\n+──────────────────────────────────────────────────────\n", (double)(depois.ru_maxrss-antes.ru_maxrss));
+            printf("\n\033[1m[Sort do Almanac]\033[m (%.3fs)\n", t);
+                printf("Memória gasta no \033[1m[Sorting do Almanac]\033[m: %.3f MB\n\n+──────────────────────────────────────────────────────\n", (double)(depois.ru_maxrss-antes.ru_maxrss));
 
 
             clock_gettime(CLOCK_REALTIME, &start);
@@ -107,8 +107,8 @@ static void setting_up(char ** path){
                 getrusage(RUSAGE_SELF, &depois);
             clock_gettime(CLOCK_REALTIME, &end);
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-            printf("+──────────────────────────────────────────────────────\n\e[1m[Execução Geral das Queries]\e[m (%.3fs)\n", t);
-                printf("Memória gasta na \e[1m[Execução Geral das Queries]\e[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+            printf("+──────────────────────────────────────────────────────\n\033[1m[Execução Geral das Queries]\033[m (%.3fs)\n", t);
+                printf("Memória gasta na \033[1m[Execução Geral das Queries]\033[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
 
 
             clock_gettime(CLOCK_REALTIME, &start);
@@ -118,8 +118,8 @@ static void setting_up(char ** path){
 
             clock_gettime(CLOCK_REALTIME, &end);
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-            printf("\n\e[1m[Free Almanac]\e[m (%.3fs)\n", t);
-                printf("\e[1m[Memória libertada ao dar Free ao Almanac]\e[m: %.3f MB\n\n", (double) (antes.ru_maxrss)/1000);
+            printf("\n\033[1m[Free Almanac]\033[m (%.3fs)\n", t);
+                printf("\033[1m[Memória libertada ao dar Free ao Almanac]\033[m: %.3f MB\n\n", (double) (antes.ru_maxrss)/1000);
 
 
 
@@ -131,8 +131,18 @@ static void setting_up(char ** path){
 
 int main(int argc, char *argv[]){
 
-    if(argc==4)
-    setting_up(argv);
+    if(argc==4){
+
+        struct timespec start, end;
+        double t;
+
+        clock_gettime(CLOCK_REALTIME, &start);
+            setting_up(argv);
+        clock_gettime(CLOCK_REALTIME, &end);
+
+        t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
+        printf("\n\n\033[1m[Total Time needed]\033[m (%.3fs)\n", t);
+    }
 
     return 0;
 }

@@ -180,7 +180,7 @@ void filter_querys(Almanac * box, char * line, int number){
 ///////////////////////////////////////////////////////////////
 void read_query_file(Almanac * box, char * path,short test){
 
-    struct rusage antes,depois;
+    // struct rusage antes,depois;
     struct timespec start, end;
     double t;
 
@@ -205,7 +205,7 @@ void read_query_file(Almanac * box, char * path,short test){
                     // getrusage(RUSAGE_SELF, &depois);
                 clock_gettime(CLOCK_REALTIME, &end);
                 t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-                printf("\e[1m|   [Line %4d: Query %2d]\e[m (%.6fs)\n",i, atoi(line), t);
+                printf("\033[1m|   [Line %4d: Query %2d]\033[m (%.6fs)\n",(int)i, atoi(line), t);
                     // printf("(%ld KB)\n", depois.ru_maxrss-antes.ru_maxrss);
             }
 

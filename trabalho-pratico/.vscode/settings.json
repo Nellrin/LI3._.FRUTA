@@ -48,6 +48,17 @@
         "unistd.h": "c",
         "limits": "c",
         "start_menu.h": "c",
-        "check_queries.h": "c"
+        "check_queries.h": "c",
+        "add_input.h": "c",
+        "add_dataset.h": "c",
+        "query.h": "c",
+        "trie.h": "c",
+        "locale.h": "c",
+        "*.tcc": "c",
+        "deque": "c",
+        "string": "c",
+        "unordered_map": "c",
+        "vector": "c",
+        "numbers": "c"
     }
 }

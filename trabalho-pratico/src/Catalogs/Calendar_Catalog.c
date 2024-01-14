@@ -84,7 +84,7 @@ Calendar_Almanac * init_calendar_almanac(){
 
     a->amount_years = 0;
     a->id_years = NULL;
-    a->years = fhash_init(10);
+    a->years = fhash_init(30);
 
     return a;
 }
@@ -100,7 +100,26 @@ void free_calendar_almanac(Calendar_Almanac * a){
     free(a);
 }
 ////////////////////////////////////////////////////////
-
+// int get_date_users(Date_Counter * a) {
+//     int x = a->list[0];
+//     return x;
+// }
+// int get_date_flights(Date_Counter * a) {
+//     int x = a->list[1];
+//     return x;
+// }
+// int get_date_reservations(Date_Counter * a) {
+//     int x = a->list[2];
+//     return x;
+// }
+// int get_date_passengers(Date_Counter * a) {
+//     int x = a->list[3];
+//     return x;
+// }
+// int get_date_unique_passengers(Date_Counter * a) {
+//     int x = a->list[4];
+//     return x;
+// }
 
 ////////////////////////////////////////////////////////
 void calendar_add(Calendar_Almanac *a, char * date, int amount,short type, void (*f)(void*,int)){

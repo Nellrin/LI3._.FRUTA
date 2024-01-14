@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <time.h>
+#include <locale.h>
 
 
 #include "../../include/Tools/Utilities.h"
@@ -62,6 +63,51 @@ void swap_ints(int * a, int * b){
 
 
 ///////////////////////////////////////////////////////////////
+int compare_strings(char* str1, char* str2, char* id1, char* id2) {
+
+    int nameComparison = strcoll(str1, str2);
+    if (nameComparison == 0) {
+        // If names are equal, compare IDs
+        return strcoll(id1, id2);
+    }
+    return nameComparison;
+}
+
+int partition(char*** arr, char*** ids, int low, int high) {
+    char* pivot = (*arr)[high];
+    char* pivotId = (*ids)[high];
+    int i = low - 1;
+
+    for (int j = low; j <= high - 1; j++) {
+        if (compare_strings((*arr)[j], pivot, (*ids)[j], pivotId) < 0) {
+            i++;
+            swap_strings(&(*arr)[i], &(*arr)[j]);
+            swap_strings(&(*ids)[i], &(*ids)[j]);
+        }
+    }
+
+    swap_strings(&(*arr)[i + 1], &(*arr)[high]);
+    swap_strings(&(*ids)[i + 1], &(*ids)[high]);
+    return i + 1;
+}
+
+void quick_sort(char*** arr, char*** ids, int low, int high) {
+    if (low < high) {
+        int partitionIndex = partition(arr, ids, low, high);
+
+        quick_sort(arr, ids, low, partitionIndex - 1);
+        quick_sort(arr, ids, partitionIndex + 1, high);
+    }
+}
+
+void sort_strings(char*** arr, char*** ids, int count) {
+    setlocale(LC_COLLATE, "en_US.UTF-8"); 
+    quick_sort(arr, ids, 0, count - 1);
+}
+///////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////
 int median(int * array, int amount){
     if (amount % 2 == 0)
     return ((array[amount / 2 - 1] + array[amount / 2]) / 2.0);
@@ -86,7 +132,7 @@ char ** line_to_lines(char * line, int * amount){
 
     int i;
 
-    for(i = 0; (token = strsep(&copy, ";")) &&  i < 256;i++)
+    for(i = 0; (token = strsep(&copy, "\\")) &&  i < 256;i++)
         list[i] = strdup(token);
 
 
@@ -95,5 +141,32 @@ char ** line_to_lines(char * line, int * amount){
     free(copy_origin);
 
     return list;
+}
+int count_lines(const char *str){
+    FILE * file = fopen(str,"r");
+    
+    if(file == NULL) return 0;
+
+    int count = 0;
+    char * line = malloc(sizeof(char) * 256);
+    
+    while(fgets(line, 256, file) != NULL)
+    count ++;
+
+    fclose(file);
+    free(line);
+
+    return count;
+}
+int count_chars(const char *str, char c) {
+    int count = 0;
+
+    while (*str) {
+            if (*str == c)
+            count++;
+        str++;
+    }
+
+    return count;
 }
 ///////////////////////////////////////////////////////////////

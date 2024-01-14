@@ -12,6 +12,9 @@ int string_to_time(char * format,char *date1, char *date2);
 void swap_pointers(void ** s1, void ** s2);
 void swap_strings(char ** s1, char ** s2);
 void swap_ints(int * a, int * b);
+int count_lines(const char *str);
+int count_chars(const char *str, char c);
+void sort_strings(char*** arr, char*** ids, int count);
 ///////////////////////////////////////////////////////////////
 
 
