@@ -67,11 +67,6 @@ static void query1_reservation(void * entity, char ** result,char F){
         free(end_date);
         free(includes_breakfast);
 }
-
-// static void adapt_f (FILE *, void * data, void *, char **, char ***, double * amount, char){
-//     total_got_from_reservation(data,amount);
-// }
-
 static void query1_user(Almanac * box, char * string, void * entity, char ** result,char F){
         char * name = get_userNAME(entity);
         char * sex = NULL;
@@ -147,6 +142,8 @@ static void query1_flight(void * entity, char ** result,char F){
 
     char * rdeparture = get_flightRDEPARTURE(entity);
     int delay = string_to_time("%d/%d/%d %d:%d:%d",sdeparture,rdeparture);
+
+    printf("%s %s %s\n",origin ,sdeparture, rdeparture);
 
                     if(F)
                     snprintf(*result, MAX_RESULT ,

@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra  -pedantic -O3 -march=native -mtune=native -I.
+CFLAGS = -Wall -Wextra -Wunused-function -pedantic -O3 -march=native -mtune=native -I.
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -41,6 +41,7 @@ all: $(TARGET)
 
 programa-principal: $(OBJS_MAIN) $(OBJS_TOOLS) $(OBJS_DATA) $(OBJS_CATALOG) $(OBJS_QUERY) $(OBJS_INTERACTIVE) $(OBJS_IO)
 	$(CC) -o $@ $^ $(CFLAGS) -g
+	mkdir -p "Resultados"
 
 programa-testes: $(OBJS_TESTS) $(OBJS_TOOLS) $(OBJS_DATA) $(OBJS_CATALOG) $(OBJS_QUERY) $(OBJS_INTERACTIVE) $(OBJS_IO)
 	$(CC) -o $@ $^ $(CFLAGS) -g

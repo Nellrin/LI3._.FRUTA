@@ -86,8 +86,8 @@ Almanac * set_up_almanac(char * path){
         }
 
     int amount_f = aproximated_amount_of_lines_of_a_file(file);
-    int amount_u = 4 * amount_f; 
-    int amount_r = 6 * amount_u; 
+    int amount_u = 24 * amount_f; 
+    int amount_r = 24 * amount_f; 
 
 
         printf("\n\nFlights [%d]\nReservations [%d]\nUsers[%d]\n\n",amount_f,amount_r,amount_u);

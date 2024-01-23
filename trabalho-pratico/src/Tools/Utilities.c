@@ -65,12 +65,11 @@ void swap_ints(int * a, int * b){
 ///////////////////////////////////////////////////////////////
 int compare_strings(char* str1, char* str2, char* id1, char* id2) {
 
-    int nameComparison = strcoll(str1, str2);
-    if (nameComparison == 0) {
-        // If names are equal, compare IDs
+    int name_compare = strcoll(str1, str2);
+    if (name_compare == 0) {
         return strcoll(id1, id2);
     }
-    return nameComparison;
+    return name_compare;
 }
 
 int partition(char*** arr, char*** ids, int low, int high) {
@@ -93,10 +92,10 @@ int partition(char*** arr, char*** ids, int low, int high) {
 
 void quick_sort(char*** arr, char*** ids, int low, int high) {
     if (low < high) {
-        int partitionIndex = partition(arr, ids, low, high);
+        int partition_index = partition(arr, ids, low, high);
 
-        quick_sort(arr, ids, low, partitionIndex - 1);
-        quick_sort(arr, ids, partitionIndex + 1, high);
+        quick_sort(arr, ids, low, partition_index - 1);
+        quick_sort(arr, ids, partition_index + 1, high);
     }
 }
 

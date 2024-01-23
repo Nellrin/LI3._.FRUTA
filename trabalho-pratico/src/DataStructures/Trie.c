@@ -52,10 +52,11 @@ void insert_trie(TRie* trie, char* name, char* id) {
     TRie_Node* current = trie->root;
     int index = 0;
 
-    for (int i = 0; i < (int)strlen(name); i++) {
+    for (int i = 0; i < (int)strlen(name); i++){
+        if(name[i] < current->first_char || name[i] >= current->first_char + current->amount_chars) continue;
         index = name[i] - current->first_char;
 
-        if(index < 0) index = current->amount_chars -1;
+        // if(index < 0) index = current->amount_chars -1;
         if (current->children[index] == NULL)
         current->children[index] = init_trie_node(current->first_char,current->amount_chars);
         
@@ -80,38 +81,32 @@ void insert_trie(TRie* trie, char* name, char* id) {
     // }
 }
 
-static void name_getter(TRie_Node* trie, char *** ids, char *** names, char* prefix, int* count, int * compare){
+static void name_getter(TRie_Node* trie, char *** ids, char *** names, char* prefix, int* count){
     if (trie->local_entities>0)
         for(int i = 0; i < trie->local_entities; i++){
-            (*ids)[(*count)] = strdup(trie->ids[i]);
-            (*names)[(*count)] = strdup(trie->names[i]);
-            (*count)++;
+            if(strncmp(prefix,trie->names[i],strlen(prefix)) == 0){
+                (*ids)[(*count)] = strdup(trie->ids[i]);
+                (*names)[(*count)] = strdup(trie->names[i]);
+                (*count)++;
+            }
         }
 
     
-    for (int i = 0; i < trie->amount_chars -1; i++)
+    for (int i = 0; i < trie->amount_chars; i++)
         if (trie->children[i] != NULL)
-        name_getter(trie->children[i], ids, names, prefix, count, compare);
-
-    (*compare) = 1;
-        if (trie->children[trie->amount_chars - 1] != NULL)
-        name_getter(trie->children[trie->amount_chars - 1], ids, names, prefix, count, compare);
+        name_getter(trie->children[i], ids, names, prefix, count);
 }
 void lookup_prefix(TRie* trie, char *** ids, char *** names, char* prefix, int* count){
     
     TRie_Node* current = trie->root;
-    int compare = 0;
     for (int i = 0; i < (int)strlen(prefix); i++){
+        if(prefix[i] < current->first_char || prefix[i] > current->first_char + current->amount_chars) continue;
         int index = prefix[i] - current->first_char;
-
-        if(index < 0) index = current->amount_chars  -1;
 
         if (current->children[index] == NULL) {
             *count = 0;
             return;
         }
-
-        if(index == current->amount_chars  -1) compare = 1;
 
         current = current->children[index];
     }
@@ -119,10 +114,8 @@ void lookup_prefix(TRie* trie, char *** ids, char *** names, char* prefix, int* 
     
     (*names) = malloc(sizeof(char *) * (current->next_entities));
     (*ids) = malloc(sizeof(char *) * (current->next_entities));
-
-    name_getter(current,ids,names,prefix,count,&compare);
-
-    if(compare)
+   
+    name_getter(current,ids,names,prefix,count);
     sort_strings(names,ids,(*count));
 }
 

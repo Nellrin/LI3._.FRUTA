@@ -35,7 +35,7 @@ User_Almanac * init_user_almanac(int amount_users){
 
     a->global_user = fhash_init(amount_users);
 
-    a->prefix_tree = init_trie('-','z');
+    a->prefix_tree = init_trie('A','z');
 
     return a;
 }
