@@ -58,7 +58,6 @@ static void free_nodes(void * info){
 
     if(a != NULL){
 
-        // free(a->general_date_id);
         free_date(a->general_date);
 
             for(int i = 0; i < a->amount_of_general_dates_inside; i++)
@@ -102,6 +101,14 @@ void free_calendar_almanac(Calendar_Almanac * a){
 
 
 ////////////////////////////////////////////////////////
+/*dependendo do type dado, pode ser adicionado o amount a 
+um certo ano (type == 2), 
+um certo ano e mês (type == 1) 
+ou um certo ano, mês e dia (type == 0)
+
+o void (*f)(void*,int) serve para somar a um certo calendário
+o amount a users,reservations,flights,passengers ou
+unique passengers dependendo do type*/
 void calendar_add(Calendar_Almanac *a, char * date, int amount,short type, void (*f)(void*,int)){
 
 
@@ -358,6 +365,9 @@ void calendar_add(Calendar_Almanac *a, char * date, int amount,short type, void 
     }
 
 }
+/*obtém o número de unique passengers,passengers,reservations,flights e users
+de uma dada data (ano se num_arguments == 0, mês se num_arguments == 1 e 
+dia se num_arguments == 2)*/
 void calendar_get(Calendar_Almanac *a,char ** arguments,int num_arguments,int * amount,int ** year, int ** user, int ** fli, int ** res,int ** pas, int ** uni_pas){
 
         int * years = NULL;

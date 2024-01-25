@@ -84,7 +84,6 @@ void query9(FILE * file,Almanac * box, char * argument,  short F){
 
 
         lookup_prefix(users,&ids,&names,argument,&count);
-        // printf("SAFE\n\n");
         line_user(box,file,argument,names,ids,count,F);
 
 }

@@ -40,6 +40,37 @@ void push(Stack* stack, void* data) {
 
 
 ////////////////////////////////////////////////////////
+/*Dada uma Stack, e uma função específica para cada cenário (*f)
+vai à stack, cria uma lista de strings capaz de conter
+num_argumentos * quantidade de elementos presentes na stack,
+e, dependendo de como a função (*f) for feita,
+copiará informação específica de cada elemento da stack
+para o array,
+
+
+e.g.
+
+se quiser o id e nome de um user, posso especificar isso na função,
+e o array resultante poderá ter o seguinte aspeto
+
+num_argumentos == 2;
+
+(*amount) == num_elementos;
+num_elementos == 2;
+
+arr = malloc(2 * 2 * sizeof(char *))
+
+i == 0
+
+arr[0] == "gfaslgasi029740"
+arr[0 + 1] == "José"
+
+i += 2
+i == 2
+
+arr[2] == "IFLHSA83920417"
+arr[2 + 1] == "Maria"
+*/
 char ** stack_to_char_array(Stack * stack, int * amount, int argumentos, void (*f)(void *,char ***,int i,int argumentos)){
     if (stack == NULL || stack->size == 0) {
         *amount = 0;

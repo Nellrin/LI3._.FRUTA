@@ -117,6 +117,7 @@ Flight_Almanac * init_flight_almanac(int amount){
 ////////////////////////////////////////////////////////
 static void insert_flight(Airport * airport, void * flight, char * rdeparture, char * sdeparture){
 
+    
     insert(&(airport->flights),flight,compare_flight_date);
 
     if((airport->amount)%5 == 0){

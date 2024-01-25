@@ -119,8 +119,7 @@ void lookup_prefix(TRie* trie, char *** ids, char *** names, char* prefix, int* 
     (*names) = malloc(sizeof(char *) * (current->next_entities));
     (*ids) = malloc(sizeof(char *) * (current->next_entities));
 
-    // printf("Amount: %d\n",current->next_entities);
-   
+
     name_getter(current,ids,names,count);
     sort_strings(names,ids,(*count), compare_strings);
 }
@@ -150,8 +149,14 @@ void destroy_trie(TRie* trie){
 
 
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*tudo abaixo desta linha, foi uma tentativa de implementar
+uma maneira mais eficiente de verificação de unique passengers,
+onde se usaria a next entities para verificar se o user
+já esteve num voo num certo ano / mês / dia,
+infelizmente, não pude implementar porque, no estado em que está
+resulta em segmentation fault, e quando não dá segmentation fault
+ocupa cerca de 8Gb amais B)*/
 static Date_Node * init_date_node(int amount, int i) {
     Date_Node* node = (Date_Node*)malloc(sizeof(Date_Node));
     if (node != NULL) {

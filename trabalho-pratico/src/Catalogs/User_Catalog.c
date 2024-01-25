@@ -109,6 +109,12 @@ void user_almanac_add_flight(User_Almanac *almanac,char * id, void * flight, con
 int is_unique_passenger(User_Almanac *almanac,char * id, char * date){
     int n = 0;
 
+    /*vai buscar o nodo relacionado ao id do user desejado, e daí
+    usa a BTree relacionada com as datas de partida de diferentes
+    voos a que um user foi e vai recursivamente, ver de partida
+    a partida aquelas que têm o mesmo dia/mês/ano,
+    somando 1 ao n por cada um destes elementos semelhantes
+    à partida a ser comparada (date)*/
     Node * node = fhash_get(almanac->global_user,id,1,compare_node_user);
     general_btree_function(node->passenger_dates,date,&n);
 

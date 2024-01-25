@@ -72,6 +72,9 @@ void free_almanac(Almanac * a){
 
 
 ////////////////////////////////////////////////////////
+
+/*indica o número aproximado de linhas de um ficheiro, dado um certo cabeçalho, 
+dividindo o tamanho obtido ao usar ftell no fim do ficheiro pelo tamanho do cabeçalho*/
 static int aproximated_amount_of_lines_of_a_file(FILE *file, char * title) {
     int size;
 
@@ -129,7 +132,10 @@ Almanac * set_up_almanac(char * path){
     return init_almanac(amount_f,amount_u,amount_r,amount_p);
 
 }
-
+/*Lê todas as linhas do ficheiro do passengers.csv e conta
+todas as linhas válidas do csv, guardando a quantidade
+de inputs válidos por voo num array que associa o id do voo
+a um índice do array (almanac)->passenger*/
 void almanac_count_passengers(Almanac *almanac,char * path){
 
     char * passengers = malloc(sizeof(char) * 256);
@@ -165,7 +171,6 @@ void almanac_count_passengers(Almanac *almanac,char * path){
                     almanac->valid_passengers_list[almanac->valid_passengers_amount] = i;
                     almanac->valid_passengers_amount++;
                 }
-                // printf("(%d %d) ",almanac->valid_passengers_list[almanac->valid_passengers_amount-1], almanac->valid_passengers_amount);
             }
         }
         
@@ -181,21 +186,22 @@ void almanac_count_passengers(Almanac *almanac,char * path){
 
 void almanac_add_passengers(Almanac * almanac, char * user_id, char * flight_id){
 
+    /*a razão pelo qual o getter do schedule_departure devolver um const char *
+    em vez de devolver uma cópia do original schedule_departure é que,
+    ao armazenar diferentes schedule_departures numa árvore binária,
+    tornava-se mais complexo libertar a memória ocupada pela árvore binária
+    se contiver strings duplicadas, sendo que quando dou free a uma árvore binária,
+    dou free aos pointers, não à informação que contém, logo, é mais fácil
+    dizer que o getter devolve const char *, e fazer com que a árvore binária guarde
+    "a posição" do schedule_departure*/
     const char * sdeparture = get_flightSDEPARTURE(almanac_get_flight(almanac,flight_id));
     char * copy = strdup(sdeparture);
-    // sdeparture[strlen(sdeparture)-9] = '\0';
 
-    // int amount = 0;
-    // char ** list = user_almanac_get_flights(almanac->user,user_id,&amount);
-
+    
     calendar_add(almanac->counter,copy,1,is_unique_passenger(almanac->user,user_id,copy),date_add_unique_passengers);
 
     free(copy);
 
-    // for(int i = 0; i < amount; i++)
-    // free(list[i]); 
-
-    // free(list);
 
     user_almanac_add_flight(almanac->user,
                             user_id,
@@ -213,6 +219,9 @@ void almanac_add_flight(Almanac *almanac,char * id,char * airline, char * plane_
     flight_almanac_add_flight(almanac->flight,id,airline, plane_model, origin, destination, schedule_departure_date,real_departure_date, schedule_arrival_date, passengers);
 
     calendar_add(almanac->counter,schedule_departure_date,1,0,date_add_flights);
+    
+    /*em vez de adicionar passenger por passenger pelo passengers.csv, 
+    adiciono logo o número de passengers de um voo pelo flights.csv*/
     calendar_add(almanac->counter,schedule_departure_date,passengers,0,date_add_passengers);
 
 
@@ -233,13 +242,16 @@ unsigned int almanac_get_seats(Almanac *almanac, int target){
     return x;
 }
 
+/*Função inacabada / inválida, pouparia imenso tempo a não voltar a 
+validar passengers após a count_passengers sendo que esta já valida 
+o tamanho do user_id, flight_id, e a validez do usuário, assim 
+deixando necessário a validação do flight*/
 int almanac_get_valid_passenger(Almanac *almanac){
 
     
     if(almanac->valid_passengers_list[almanac->valid_passengers_id] == almanac->valid_passengers_start){
         almanac->valid_passengers_id++;
         almanac->valid_passengers_start++;
-    // printf("(%d)[%d] == %d\n",(almanac->valid_passengers_list[almanac->valid_passengers_id]),almanac->valid_passengers_id,almanac->valid_passengers_start);
         return 1;
     }
 
@@ -257,16 +269,13 @@ void * almanac_get_prefix(Almanac *almanac){
 
 
 void * almanac_get_flight(Almanac *almanac, char * target){
-    void * flight = flight_almanac_get_flight(almanac->flight,target);
-    return flight;
+    return flight_almanac_get_flight(almanac->flight,target);;
 }
 void * almanac_get_airport(Almanac *almanac, char * target){
-    void * airport = flight_almanac_get_airport_direct(almanac->flight,target);
-    return airport;
+    return flight_almanac_get_airport_direct(almanac->flight,target);;
 }
 void * almanac_get_airport_flights(Almanac *almanac, char * target){
-    void * airport = flight_almanac_get_airport_flights(almanac->flight,target);
-    return airport;
+    return flight_almanac_get_airport_flights(almanac->flight,target);
 }
 
 void almanac_get_airport_delays(Almanac *almanac, char *** list_of_names, int ** list_of_med, int * amount){
@@ -280,8 +289,7 @@ void almanac_sort_flight_delays(Almanac * almanac){
 }
 
 void * almanac_get_reservation(Almanac *almanac, char * target){
-    void * reservation = reservation_almanac_get_reservation(almanac->reservation,target);
-    return reservation;
+    return reservation_almanac_get_reservation(almanac->reservation,target);;
 }
 char ** almanac_get_hotel(Almanac *almanac, char * target, int * amount, int argumentos, void (*f)(void *,char ***,int i,int argumentos)){
     return reservation_almanac_get_hotel(almanac->reservation,target,amount,argumentos,f);
