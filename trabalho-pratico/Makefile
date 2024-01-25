@@ -42,6 +42,7 @@ all: $(TARGET)
 programa-principal: $(OBJS_MAIN) $(OBJS_TOOLS) $(OBJS_DATA) $(OBJS_CATALOG) $(OBJS_QUERY) $(OBJS_INTERACTIVE) $(OBJS_IO)
 	$(CC) -o $@ $^ $(CFLAGS) -g
 	mkdir -p "Resultados"
+	mkdir -p "Resultados/Tests"
 
 programa-testes: $(OBJS_TESTS) $(OBJS_TOOLS) $(OBJS_DATA) $(OBJS_CATALOG) $(OBJS_QUERY) $(OBJS_INTERACTIVE) $(OBJS_IO)
 	$(CC) -o $@ $^ $(CFLAGS) -g

@@ -105,7 +105,7 @@ Almanac * set_up_almanac(char * path){
     FILE *file_p = fopen(name_p, "r");
 
         if(file_f == NULL || file_r == NULL || file_u == NULL || file_p == NULL){
-            free(name_f);free(name_r);free(name_u);free(name_r);
+            free(name_f);free(name_r);free(name_u);free(name_p);
 
             if(file_f != NULL)fclose(file_f);
             if(file_r != NULL)fclose(file_r);

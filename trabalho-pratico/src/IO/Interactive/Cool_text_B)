@@ -1,0 +1,141 @@
+Paginação
+    De maneira a navegar pelos diferentes
+    menus (com exceção ao "Start Menu") 
+    no modo interativo, é necessário o 
+    utilizador ter em atenção o fundo do
+    ecrã onde se encontram diferentes
+    opções de interação com o programa
+    (Este terá de escrever as diferentes
+    letras no terminal para executar 
+    diferentes comandos)
+____________________________________________
+Opções
+    N -  Próxima Página 
+         (avança n linhas no ficheiro lido)
+
+    P -  Página Anterior 
+         (recua n linhas no ficheiro lido)
+
+    B -  Retornar ao Start Menu
+
+    J_ - Saltar para a linha x do ficheiro
+         lido
+
+         (E.g. J10 = salta para a linha 10)
+         
+    S_ - Mostrar a n-ésima Query do ficheiro
+         input
+
+         (E.g. S10 = salta para a linha 10)
+
+    R -  "Reinicia" o ficheiro de input
+____________________________________________
+Inserir Queries
+    Para inserir uma query, o único que
+    tem de fazer é escrever uma linha
+    no terminal com o mesmo formato das
+    linhas presentes num ficheiro normal
+    de input (com ou sem F):
+
+    E.g.
+    1 0000000678
+    1F JéssiTavares910
+    1 Book0000001504
+        (Mostrar várias características
+        de um user/flight/reservation)
+
+    2 JéssiTavares910 flights
+    2 JéssiTavares910 reservations
+    2 JéssiTavares910
+        (Mostrar voos, reservas,
+        ou ambos, de um certo user)
+
+    3 HTL1002
+        (Mostrar a média de ratings
+        dados a um certo hotel)
+
+    4F HTL1001
+        (Mostrar todas as reservas
+        feitas num certo hotel)
+
+5 LIS "2021/01/01 00:00:00" "2022/12/31 23:59:59"
+    (Mostrar os voos de um certo 
+    aeroporto entre duas datas)
+
+    6 2023 10
+        (Mostrar os top N aeroportos com 
+        mais passageiros, para um dado ano)
+
+    7 20
+        (Mostrar o top N aeroportos com 
+        a maior mediana de atrasos)
+
+    8 HTL1001 2023/05/02 2023/05/02
+        (Mostrar a receita total de um 
+        hotel entre duas datas (inclusive))
+
+    9 "João M"
+        (Mostrar todos os users cujo nome 
+        começa com um certo prefixo)
+
+    10 2023 10
+    10 2023
+    10
+    (Mostrar várias métricas gerais da aplicação
+    dado um certo mês e ano, um certo ano, ou
+    simplesmente mostrar globalmente estas
+    métricas)
+____________________________________________
+Inserir dataset
+    Para inserir o dataset, só é necessário
+    inserir o caminho de uma diretoria que 
+    contenha 4 CSV's: users.csv, 
+    reservations.csv, flights.csv, 
+    passengers.csv válidos.
+
+    Caso estes sejam todos válidos, será
+    possível executar queries e inserir
+    um input.txt
+
+    E.g.
+        "../../dataset/data"
+        "$(HOME)/dataset/data"
+____________________________________________
+Inserir input
+    Para inserir o input, só é necessário
+    inserir o caminho de uma diretoria que 
+    contenha um 'input.txt'
+____________________________________________
+Check Queries
+    Permite ver todas as queries do input
+    inserido ou as que foram adicionadas
+    recentemente, ainda é possível selecionar
+    uma querie relacionada ao número que tem
+    à esquerda atrás do char ')'.
+
+    E.g.
+            ...
+        20) 10
+        21) 2F JéssiTavares910 reservations
+            ...
+     ------------------------------------------
+      S21  (<--- seleciona a Query da linha 2)
+     ------------------------------------------
+____________________________________________
+Start Menu
+    Para navegar pelo menu é necessário
+    inserir um número de 0 a 5 no terminal,
+    estando estes relacionados a diferentes
+    interações que o utilizador pode ter com
+    o programa no modo interativo
+
+        0. Exit
+        1. Execute Query
+        2. Check Queries
+        3. Add input.txt
+        4. Add dataset
+        5. Instructions
+
+    Sendo apenas possível "Executar Query" e
+    "Add input.txt" após inserir um dataset
+    válido

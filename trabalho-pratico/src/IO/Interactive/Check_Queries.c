@@ -86,7 +86,7 @@ static int pick_option(char * input, int * selected_option, int * amount_of_quer
                 if(selected > 0 && selected <= (*amount_of_queries)){
                     (*selected_query) = selected;
                     (*first_query_shown) = 0;
-                    (*selected_option) = 5;
+                    (*selected_option) = 6;
                     return 1;
                 }
             }

@@ -34,7 +34,7 @@ static Almanac * setting_up(char * path){
 
 
 int main(int argc, char *argv[]){
-    Almanac * u = setting_up(argv[1]);
+    Almanac * u = NULL;
     
     switch (argc){
         case 1:
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]){
             break;
 
         case 3:
-
+            u = setting_up(argv[1]);
             if(u != NULL)
             read_query_file(u,argv[2],0);
             break;

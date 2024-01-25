@@ -14,6 +14,9 @@ static void setting_up(char ** path){
 
     Almanac * u = NULL;
 
+        FILE * file = fopen("Resultados/Performance.txt","a");
+        char * line = malloc(sizeof(char) * 1024);
+
 
             struct rusage antes,depois;
 
@@ -32,7 +35,9 @@ static void setting_up(char ** path){
 
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
             printf("\033[1m[Set up do Almanac]\033[m (%.3fs)\n", t);
-                printf("Memória gasta na \033[1m[Criação do Almanac]\033[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+            printf("Memória gasta na \033[1m[Criação do Almanac]\033[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+                snprintf(line,1024,"[Set up do Almanac]\nTempo gasto:    %04.6f s\nMemória gasta: %04.6f MB\n\n", t,(double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+                fputs(line,file);
 
 
             clock_gettime(CLOCK_REALTIME, &start);
@@ -45,6 +50,8 @@ static void setting_up(char ** path){
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
             printf("\033[1m[Parse de %d Users]\033[m (%.3fs)\n",amount, t);
                 printf("Memória gasta no \033[1m[Parsing dos Users]\033[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+                snprintf(line,1024,"\n    +────────────────────────────────\n    |[Parse de %d Users]\n    |Tempo gasto:    %04.6f s\n    |Memória gasta: %04.6f MB\n    |\n",amount, t, (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+                fputs(line,file);
 
 
             clock_gettime(CLOCK_REALTIME, &start);
@@ -57,7 +64,9 @@ static void setting_up(char ** path){
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
             printf("\033[1m[Parse de %d Reservas]\033[m (%.3fs)\n",amount, t);
                 printf("Memória gasta no \033[1m[Parsing das Reservas]\033[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
-                
+                snprintf(line,1024,"    |[Parse de %d Reservations]\n    |Tempo gasto:    %04.6f s\n    |Memória gasta: %04.6f MB\n    |\n",amount, t, (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+                fputs(line,file);
+
 
             clock_gettime(CLOCK_REALTIME, &start);
                 getrusage(RUSAGE_SELF, &antes);
@@ -71,7 +80,8 @@ static void setting_up(char ** path){
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
             printf("\033[1m[Parse de %d Voos]\033[m (%.3fs)\n",amount, t);
                 printf("Memória gasta no \033[1m[Parsing dos Voos]\033[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
-
+                snprintf(line,1024,"    |[Parse de %d Flights]\n    |Tempo gasto:    %04.6f s\n    |Memória gasta: %04.6f MB\n    |\n",amount, t, (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+                fputs(line,file);
 
             clock_gettime(CLOCK_REALTIME, &start);
                 getrusage(RUSAGE_SELF, &antes);
@@ -84,7 +94,8 @@ static void setting_up(char ** path){
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
             printf("\033[1m[Parse de %d Passageiros]\033[m (%.3fs)\n",amount, t);
                 printf("Memória gasta no \033[1m[Parsing dos Passageiros]\033[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
-                                            
+                snprintf(line,1024,"    |[Parse de %d Passengers]\n    |Tempo gasto:    %04.6f s\n    |Memória gasta: %04.6f MB\n    +────────────────────────────────\n\n",amount, t, (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+                fputs(line,file);
 
             clock_gettime(CLOCK_REALTIME, &start);
                 getrusage(RUSAGE_SELF, &antes);
@@ -96,8 +107,9 @@ static void setting_up(char ** path){
 
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
             printf("\n\033[1m[Sort do Almanac]\033[m (%.3fs)\n", t);
-                printf("Memória gasta no \033[1m[Sorting do Almanac]\033[m: %.3f MB\n\n+──────────────────────────────────────────────────────\n", (double)(depois.ru_maxrss-antes.ru_maxrss));
-
+                printf("Memória gasta no \033[1m[Sorting do Almanac]\033[m: %.3f MB\n\n\n", (double)(depois.ru_maxrss-antes.ru_maxrss));
+                snprintf(line,1024,"\n[Sorting do Almanac]\nTempo gasto:    %04.6f s\nMemória gasta: %04.6f MB\n\n", t, (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+                fputs(line,file);
 
             clock_gettime(CLOCK_REALTIME, &start);
                 getrusage(RUSAGE_SELF, &antes);
@@ -109,7 +121,8 @@ static void setting_up(char ** path){
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
             printf("+──────────────────────────────────────────────────────\n\033[1m[Execução Geral das Queries]\033[m (%.3fs)\n", t);
                 printf("Memória gasta na \033[1m[Execução Geral das Queries]\033[m: %.3f MB\n\n", (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
-
+                snprintf(line,1024,"[Execução Geral das Queries]\nTempo gasto:    %04.6f s\nMemória gasta: %04.6f MB\n\n", t, (double) (depois.ru_maxrss-antes.ru_maxrss)/1000);
+                fputs(line,file);
 
             clock_gettime(CLOCK_REALTIME, &start);
                 getrusage(RUSAGE_SELF, &antes);
@@ -120,10 +133,13 @@ static void setting_up(char ** path){
             t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
             printf("\n\033[1m[Free Almanac]\033[m (%.3fs)\n", t);
                 printf("\033[1m[Memória libertada ao dar Free ao Almanac]\033[m: %.3f MB\n\n", (double) (antes.ru_maxrss)/1000);
+                snprintf(line,1024,"\n\n\n[Memory]: %04.6f MB\n", (double) (antes.ru_maxrss)/1000);
+                fputs(line,file);
 
 
 
-
+        free(line);
+        fclose(file);
 
         compare_paths(path[3],path[2]);
 }
@@ -132,6 +148,8 @@ static void setting_up(char ** path){
 int main(int argc, char *argv[]){
 
     if(argc==4){
+        FILE * file = fopen("Resultados/Tests/Performance.txt","w");
+        fclose(file);
 
         struct timespec start, end;
         double t;
@@ -142,6 +160,14 @@ int main(int argc, char *argv[]){
 
         t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
         printf("\n\n\033[1m[Total Time needed]\033[m (%.3fs)\n", t);
+    
+        file = fopen("Resultados/Performance.txt","a");
+        char * line = malloc(sizeof(char) * 1024);
+        snprintf(line,1024,"[Time]: %.3f s\n", t);
+        fputs(line,file);
+
+        free(line);
+        fclose(file);
     }
 
     return 0;

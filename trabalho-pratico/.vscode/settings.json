@@ -60,6 +60,7 @@
         "unordered_map": "c",
         "vector": "c",
         "numbers": "c",
-        "sarrays.h": "c"
+        "sarrays.h": "c",
+        "instructions.h": "c"
     }
 }

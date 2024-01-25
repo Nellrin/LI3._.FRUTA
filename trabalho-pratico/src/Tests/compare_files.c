@@ -87,17 +87,32 @@ void compare_paths(char * path, char * inputs){
         correct_queries[atoi(line)-1] += compare_files(number_line,output_obtido,output_esperado);
         existing_queries[atoi(line)-1] ++;
     }
+        
+    FILE * tests = fopen("Resultados/Tests/Check_Queries","w");
+    char *s = malloc(sizeof(char) * 1024);
 
         printf("──────────────────────────────────────────────────\n");
-        for(int i = 0; i < 10; i++)
-        printf("    Query %2d:...............:(%3d/%3d)[%3d%%]\n",i+1,correct_queries[i],existing_queries[i],(100*correct_queries[i]/existing_queries[i]));
+        
+            snprintf(s,1024,"+────────────────────────────────────────────────+\n");
+            fputs(s,tests);   
+
+        for(int i = 0; i < 10; i++){
+            printf("    Query %2d:...............:(%3d/%3d)[%3d%%]\n",i+1,correct_queries[i],existing_queries[i],(100*correct_queries[i]/existing_queries[i]));
+
+            snprintf(s,1024,"|    Query %2d:...............:(%3d/%3d)[%3d%%]    |\n",i+1,correct_queries[i],existing_queries[i],(100*correct_queries[i]/existing_queries[i]));
+            fputs(s,tests);
+        }
+            snprintf(s,1024,"+────────────────────────────────────────────────+\n\n\n");
+            fputs(s,tests);
         printf("──────────────────────────────────────────────────\n");
 
 
     free(output_esperado);
     free(output_obtido);
     free(line);
+    free(s);
     free(existing_queries);
     free(correct_queries);
     fclose(queries_file);
+    fclose(tests);
 }

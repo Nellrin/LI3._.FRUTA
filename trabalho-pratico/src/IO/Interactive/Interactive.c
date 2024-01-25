@@ -12,6 +12,7 @@
 #include "../../../include/IO/Interactive/Add_Input.h"
 #include "../../../include/IO/Interactive/Start_Menu.h"
 #include "../../../include/IO/Interactive/Check_Queries.h"
+#include "../../../include/IO/Interactive/Instructions.h"
 #include "../../../include/IO/Interactive/Query.h"
 ///////////////////////////////////////////////////////////////
 
@@ -47,12 +48,12 @@ void interactive_mode(Almanac * (*f)(char *)){
                     break;
 
                 case 5:
-                    option = show_query(selected_query,&first_query_shown);
+                    option = instructions(&first_query_shown);
                     break;
 
-                // case 6:
-                //     option = show_query(selected_query,&first_query_shown);
-                //     break;
+                case 6:
+                    option = show_query(selected_query,&first_query_shown);
+                    break;
                 
                 case 10:
                     option = start_menu();
