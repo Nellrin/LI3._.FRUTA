@@ -60,11 +60,11 @@ User * set_user(char * id,char * name, char * birth_date, short sex, char * coun
 
 
 ////////////////////////////////////////////////////////
-char * get_userID(User * a){
-    return strdup(a->id);
+const char * get_userID(User * a){
+    return (a->id);
 }
-char * get_userNAME(User * a){
-    return strdup(a->name);
+const char * get_userNAME(User * a){
+    return (a->name);
 }
 char * get_userBDAY(User * a){
     return strdup(a->birth_date);
@@ -124,8 +124,8 @@ static int compare_prefix(char* a, char* b) {
 }
 
 int compare_user_prefix(const void *a, const void *b){
-    char * nameA = get_userNAME((User *)a);
-    char * nameB = get_userNAME((User *)b);
+    char * nameA = strdup(get_userNAME((User *)a));
+    char * nameB = strdup(get_userNAME((User *)b));
 
     tira_aspas(nameA);
     tira_aspas(nameB);
@@ -135,8 +135,8 @@ int compare_user_prefix(const void *a, const void *b){
     free(nameA);free(nameB);
     
     if(!res){
-        char * idA = get_userID((User *)a);
-        char * idB = get_userID((User *)b);
+        char * idA = strdup(get_userID((User *)a));
+        char * idB = strdup(get_userID((User *)b));
 
         res = compare_prefix(idA,idB);
         free(idA);free(idB);

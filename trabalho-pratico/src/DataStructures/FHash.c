@@ -38,7 +38,7 @@ static unsigned int hash(const char *str, unsigned int amount, short user){
         int c;
 
         while ((c = *str++))
-        hash = ((hash << 5) + hash) + c;    
+        hash = ((hash << 3) + hash) + c;    
         return hash%amount;
 
     break;

@@ -68,7 +68,7 @@ static void query1_reservation(void * entity, char ** result,char F){
         free(includes_breakfast);
 }
 static void query1_user(Almanac * box, char * string, void * entity, char ** result,char F){
-        char * name = get_userNAME(entity);
+        char * name = strdup(get_userNAME(entity));
         char * sex = NULL;
 
         if(!get_userSEX(entity))
@@ -82,26 +82,25 @@ static void query1_user(Almanac * box, char * string, void * entity, char ** res
         char * passport = get_userPASSPORT(entity);
         int number_of_flights = 0;
         int number_of_reservations = 0;
+        double total_spent = 0;
 
-                almanac_get_user_reservations_flights(box,string,&number_of_flights,&number_of_reservations);
+        char ** list = almanac_get_user_flights(box,string,&number_of_flights);
+        for(int i = 0; i < number_of_flights * 2; i+=2){
+            free(list[i]);
+            free(list[i+1]);
+        }
+        free(list);
 
+        list = almanac_get_user_reservations(box,string,&number_of_reservations);
+        for(int i = 0; i < number_of_reservations * 2; i+=2){
+            total_spent += total_got_from_reservation(almanac_get_reservation(box,list[i]));
+            free(list[i]);
+            free(list[i+1]);
+        }
 
-        double total_spent = do_something(almanac_get_user_reservations(box,string),total_got_from_reservation);
+        free(list);
         
-        // double total_spent = 0;
-        
-        // general_btree_function(almanac_get_user_reservations(box,string),NULL,NULL,NULL,NULL,&total_spent,0,adapt_f);
-
         int idade = (string_to_time("%d/%d/%d",age,CURRENT_DATE))/(365.25);
-
-            
-            // char * text = get_userID(almanac_get_user(box,"RodrigGonçalves260"));
-            
-            
-            // if(!strcmp(text,name))
-            // printf("%s\n\n\n",text);
-            // printf("%s\n",name);
-            // print_user(almanac_get_user(box,"RodrigGonçalves260"));
 
                         if(F)
                         snprintf(*result, MAX_RESULT ,
@@ -136,14 +135,12 @@ static void query1_flight(void * entity, char ** result,char F){
     char * plane_model = get_flightMODEL(entity);
     char * origin = get_flightORIGIN(entity);
     char * destination = get_flightDESTINATION(entity);
-    char * sdeparture = get_flightSDEPARTURE(entity);
+    char * sdeparture = strdup(get_flightSDEPARTURE(entity));
     char * sarrival = get_flightSARRIVAL(entity);
     unsigned int passengers = get_flightPASSENGERS(entity);
 
     char * rdeparture = get_flightRDEPARTURE(entity);
     int delay = string_to_time("%d/%d/%d %d:%d:%d",sdeparture,rdeparture);
-
-    printf("%s %s %s\n",origin ,sdeparture, rdeparture);
 
                     if(F)
                     snprintf(*result, MAX_RESULT ,
@@ -188,7 +185,7 @@ char * query1(Almanac * box, char * string, short F){
     }
     
     if(user_verifier(string))
-    if(almanac_get_user_node(box,string)!=NULL){
+    if(almanac_get_user(box,string)!=NULL){
 
         void * entity = almanac_get_user(box,string);
 

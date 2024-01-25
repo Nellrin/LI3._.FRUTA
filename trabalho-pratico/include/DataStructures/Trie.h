@@ -6,6 +6,8 @@
 ////////////////////////////////////////////////////////
 typedef struct trie_node TRie_Node;
 typedef struct trie TRie;
+typedef struct date_node Date_Node;
+typedef struct trie_date TRie_Date;
 ////////////////////////////////////////////////////////
 
 
@@ -14,6 +16,14 @@ TRie * init_trie(char start, char end);
 void insert_trie(TRie* trie, char* name, char* id);
 void lookup_prefix(TRie* trie, char *** ids, char *** names, char* prefix, int* count);
 void destroy_trie(TRie *trie);
+////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
+TRie_Date * init_trie_date();
+void add_date(TRie_Date * trie, char * date);
+int get_date(TRie_Date * trie, short year, short month, short day);
+void destroy_date_trie(TRie_Date * trie);
 ////////////////////////////////////////////////////////
 
 

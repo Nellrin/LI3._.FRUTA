@@ -72,13 +72,13 @@ int compare_strings(char* str1, char* str2, char* id1, char* id2) {
     return name_compare;
 }
 
-int partition(char*** arr, char*** ids, int low, int high) {
+static int partition(char*** arr, char*** ids, int low, int high, int (*f)(char*,char*,char*,char*)) {
     char* pivot = (*arr)[high];
     char* pivotId = (*ids)[high];
     int i = low - 1;
 
     for (int j = low; j <= high - 1; j++) {
-        if (compare_strings((*arr)[j], pivot, (*ids)[j], pivotId) < 0) {
+        if (f((*arr)[j], pivot, (*ids)[j], pivotId) < 0) {
             i++;
             swap_strings(&(*arr)[i], &(*arr)[j]);
             swap_strings(&(*ids)[i], &(*ids)[j]);
@@ -90,18 +90,18 @@ int partition(char*** arr, char*** ids, int low, int high) {
     return i + 1;
 }
 
-void quick_sort(char*** arr, char*** ids, int low, int high) {
+static void quick_sort(char*** arr, char*** ids, int low, int high, int (*f)(char*,char*,char*,char*)) {
     if (low < high) {
-        int partition_index = partition(arr, ids, low, high);
+        int partition_index = partition(arr, ids, low, high,f);
 
-        quick_sort(arr, ids, low, partition_index - 1);
-        quick_sort(arr, ids, partition_index + 1, high);
+        quick_sort(arr, ids, low, partition_index - 1, f);
+        quick_sort(arr, ids, partition_index + 1, high, f);
     }
 }
 
-void sort_strings(char*** arr, char*** ids, int count) {
+void sort_strings(char*** arr, char*** ids, int count, int (*f)(char*,char*,char*,char*)) {
     setlocale(LC_COLLATE, "en_US.UTF-8"); 
-    quick_sort(arr, ids, 0, count - 1);
+    quick_sort(arr, ids, 0, count - 1, f);
 }
 ///////////////////////////////////////////////////////////////
 

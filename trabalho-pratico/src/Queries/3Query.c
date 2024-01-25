@@ -26,24 +26,30 @@ static char * strcat_list(short F, double n){
     return line;
 
 }
-static char * query3_getter(Almanac * box, char * argument, char F){
-    char * result = NULL;
-    int nr = almanac_get_hotel_num_res(box,argument);
-    
-    void * hotels = almanac_get_hotel(box,argument);
-    double value = do_something(hotels, get_reservationRATING);
-    
-    value /= nr;
-    result = strcat_list(F,value);
 
-    return result;
+static void get_all_ratings(void * a, char *** list, int i, int argumentos){
+    double number = get_reservationRATING((Reservation *)a);
+    (*list)[i*argumentos] = malloc(sizeof(char) * 20);
+    snprintf((*list)[i*argumentos],20,"%.3f",number);
 }
+
 
 
 char * query3(Almanac * box, char * argument, short F){
 
-    if(almanac_get_hotel(box,argument)!=NULL)
-    return query3_getter(box,argument,F);
+    int amount = 0;
+    char ** lines = almanac_get_hotel(box,argument,&amount,1,get_all_ratings);
 
-    return NULL;
+    if(lines==NULL) return NULL;
+
+    double result = 0;
+
+    for(int i = 0; i < amount; i++){
+        result += strtod(lines[i],NULL);
+        free(lines[i]);
+    }
+
+    free(lines);
+
+    return strcat_list(F,result/amount);
 }

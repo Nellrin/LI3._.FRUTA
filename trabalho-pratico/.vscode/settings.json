@@ -59,6 +59,7 @@
         "string": "c",
         "unordered_map": "c",
         "vector": "c",
-        "numbers": "c"
+        "numbers": "c",
+        "sarrays.h": "c"
     }
 }

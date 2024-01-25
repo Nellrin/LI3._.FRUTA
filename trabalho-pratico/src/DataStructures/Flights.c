@@ -77,8 +77,8 @@ char * get_flightORIGIN(Flight * a){
 char * get_flightDESTINATION(Flight * a){
     return strdup(a->destination);
 }
-char * get_flightSDEPARTURE(Flight * a){
-    return strdup(a->schedule_departure_date);
+const char * get_flightSDEPARTURE(Flight * a){
+    return (a->schedule_departure_date);
 }
 char * get_flightSARRIVAL(Flight * a){
     return strdup(a->schedule_arrival_date);
@@ -104,19 +104,11 @@ int compare_flight(const char *id, const void *info){
 
 
 int compare_flight_date(const void *a, const void *b){
-    char * flightA = get_flightSDEPARTURE((Flight *)a);
-    char * flightB = get_flightSDEPARTURE((Flight *)b);
 
-    int res = strcmp(flightB,flightA);
-    free(flightA);free(flightB);
+    int res = strcmp(((Flight *)b)->schedule_departure_date,((Flight *)a)->schedule_departure_date);
     
-    if(!res){
-        char * idA = get_flightID((Flight *)a);
-        char * idB = get_flightID((Flight *)b);
-
-        res = strcmp(idA,idB);
-        free(idA);free(idB);
-    }
+    if(!res)
+    res = strcmp(((Flight *)a)->id,((Flight *)b)->id);
 
     return res;
 }

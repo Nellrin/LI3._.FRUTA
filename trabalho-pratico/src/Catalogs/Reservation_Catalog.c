@@ -4,7 +4,7 @@
 
 #include "../../include/DataStructures/Reservations.h"
 #include "../../include/DataStructures/FHash.h"
-#include "../../include/DataStructures/BTree.h"
+#include "../../include/DataStructures/Stack.h"
 #include "../../include/Catalogs/Reservation_Catalog.h"
 #include "../../include/Catalogs/User_Catalog.h"
 #include "../../include/Tools/Utilities.h"
@@ -12,8 +12,7 @@
 ////////////////////////////////////////////////////////
 struct rnode{
     short id;
-    int amount;
-    BTree * reserva;
+    Stack * reserva;
 };
 
 struct r_almanac{
@@ -27,25 +26,19 @@ struct r_almanac{
 static int compare_node(const char * id, const void * info){
     const RNode *Node = (const RNode *)info;
     
-    char * helpy = malloc(sizeof(char)*20);
-    snprintf(helpy,20,"HTL%d",Node->id);
-    short res = (strcmp(id,helpy) == 0);
-    free(helpy);
-
-    return res;
+    return (Node->id == atoi(id+3));
 }
 static RNode * init_node(short hotel_id){
     RNode * a = malloc(sizeof(RNode));
     a->id = (hotel_id);
-    a->reserva = NULL;
-    a->amount = 0;
+    a->reserva = init_stack();
 
     return a;
 }
 static void free_nodes(void * info){
     RNode * a = (RNode *)info;
 
-    free_tree(a->reserva);
+    free_stack(a->reserva);
 
     free(a);
 }
@@ -86,8 +79,7 @@ void reservation_almanac_add_reservation(Reservation_Almanac *almanac, User_Alma
         fhash_add(almanac->hotels,finder,node,1);
     }
 
-        insert(&(node->reserva),reservation,compare_reservation_date);
-        node->amount++;
+        push((node->reserva),reservation);
 
 
     user_almanac_add_reservation(user,user_id,reservation);
@@ -104,16 +96,10 @@ void reservation_almanac_add_reservation(Reservation_Almanac *almanac, User_Alma
 void * reservation_almanac_get_reservation(Reservation_Almanac *almanac, char * target){
     return fhash_get(almanac->reservations,target,0,compare_reservation);
 }
-static void * helpy(void * info){
-    RNode * a = (RNode *)info;
-    return a->reserva;
-}
-void * reservation_almanac_get_hotel(Reservation_Almanac *almanac, char * target){
-    void * result = fhash_get(almanac->hotels,target,1,compare_node);
-    return helpy(result);
-}
-int reservation_almanac_get_hotel_num_res(Reservation_Almanac *almanac, char * target){
-    void * result = fhash_get(almanac->hotels,target,1,compare_node);
-    return (((RNode *)result)->amount);
+char ** reservation_almanac_get_hotel(Reservation_Almanac *almanac, char * target, int * amount, int argumentos, void (*f)(void *,char ***,int i,int argumentos)){
+    RNode * result = fhash_get(almanac->hotels,target,1,compare_node);
+    
+    if(result == NULL) return NULL;
+    return stack_to_char_array(result->reserva,amount,argumentos,f);
 }
 ////////////////////////////////////////////////////////

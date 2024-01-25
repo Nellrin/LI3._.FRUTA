@@ -33,7 +33,7 @@ int compare_files(short n_file,char * resultado_obtido, char * output_esperado) 
             printf("|\033[1mFile %d\033[m\n|\n", n_file);
             printf("|Line %d\n",line);
             printf("|Output esperado: %s\n", esperado);
-            printf("|Output obtido: %s\n", obtido);
+            printf("|Output obtido:   %s\n", obtido);
             printf("+──────────────────────────────────────────────\n\n");
 
             fclose(file_obtido);

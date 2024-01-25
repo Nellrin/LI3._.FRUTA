@@ -120,9 +120,9 @@ int valid_passenger(Almanac * a, const char * string){
     list[i] = strdup(token);
 
 
-
+    // if(almanac_get_valid_passenger(a))
     if(general_string_validation(list[0])&&general_string_validation(list[1]))
-    if(almanac_get_user_node(a,list[1])!=NULL)
+    if(almanac_get_user(a,list[1])!=NULL)
     if(almanac_get_flight(a,list[0])!=NULL){
         almanac_add_passengers(a,list[1],list[0]);
         res++;
@@ -231,7 +231,7 @@ int valid_reservation(Almanac * a, const char * string){
     
     if(general_string_validation(list[0])
     && general_string_validation(list[1]))
-        if(almanac_get_user_node(a,list[1]) != NULL)
+        if(almanac_get_user(a,list[1]) != NULL)
         if(general_string_validation(list[2])
         && general_string_validation(list[3])
         && general_string_validation(list[4]) && general_number_validation(1,list[4],5)

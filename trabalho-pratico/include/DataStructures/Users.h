@@ -18,8 +18,8 @@ User * set_user(char * id,char * name, char * birth_date, short sex, char * coun
 
 
 ////////////////////////////////////////////////////////
-char * get_userID(User * a);
-char * get_userNAME(User * a);
+const char * get_userID(User * a);
+const char * get_userNAME(User * a);
 char * get_userBDAY(User * a);
 short get_userSEX(User * a);
 char * get_userCOUNTRY(User * a);

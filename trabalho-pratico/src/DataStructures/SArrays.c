@@ -69,7 +69,6 @@ void get_strings(SArray * list, char *** strings, int * amount){
     if(list == NULL) return;
     SNode * current = list->array;
     
-    (*amount) = list->amount;
     (*strings) = realloc((*strings), sizeof(char *) * ((*amount) + list->amount));
 
     for(unsigned int i = 0; i < list->amount; i++, (*amount)++){

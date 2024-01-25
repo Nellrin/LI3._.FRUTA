@@ -21,21 +21,34 @@ typedef struct almanac{
     User_Almanac * user;
     Reservation_Almanac * reservation;
     Flight_Almanac * flight;
+
     int * passenger;
+    int valid_passengers_amount;
+    int valid_passengers_start;
+    int valid_passengers_id;
+    int * valid_passengers_list;
+    
     Calendar_Almanac * counter;
 }Almanac;
 ////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////
-Almanac * init_almanac(int amount_f, int amount_u, int amount_r){
+static Almanac * init_almanac(int amount_f, int amount_u, int amount_r, int amount_p){
     Almanac * a = malloc(sizeof(Almanac));
 
     a->passenger = malloc(sizeof(int) * amount_f);
+    a->valid_passengers_list = malloc(sizeof(int) * amount_p);
+
+    for(int i = 0; i < amount_p; i++)
+        a->valid_passengers_list[i] = 0;
 
     for(int i = 0; i < amount_f; i++)
         a->passenger[i] = 0;
 
+    a->valid_passengers_id = 0;
+    a->valid_passengers_amount = 0;
+    a->valid_passengers_start = 0;
     a->user = init_user_almanac(amount_u);
     a->reservation = init_reservation_almanac(amount_r);
     a->flight = init_flight_almanac(amount_f);
@@ -49,6 +62,7 @@ void free_almanac(Almanac * a){
         free_reservation_almanac(a->reservation);
         free_user_almanac(a->user);
         free(a->passenger);
+        free(a->valid_passengers_list);
         free_calendar_almanac(a->counter);
     
         free(a);
@@ -58,7 +72,7 @@ void free_almanac(Almanac * a){
 
 
 ////////////////////////////////////////////////////////
-static int aproximated_amount_of_lines_of_a_file(FILE *file) {
+static int aproximated_amount_of_lines_of_a_file(FILE *file, char * title) {
     int size;
 
     int start = ftell(file);
@@ -67,35 +81,52 @@ static int aproximated_amount_of_lines_of_a_file(FILE *file) {
     size = ftell(file);
     fseek(file, start, SEEK_SET);
 
-    int length = strlen("id;airline;plane_model;seats;ori;des;schedule_departure_date;schedule_arrival_date;real_departure_date;real_arrival_date");
+    int length = strlen(title);
 
     return (size/length);
 }
 
 Almanac * set_up_almanac(char * path){
 
-    char * name = malloc(sizeof(char) * 256);
-    snprintf(name, 256, "%s/flights.csv",path);
+    char * name_f = malloc(sizeof(char) * 256);
+    char * name_r = malloc(sizeof(char) * 256);
+    char * name_u = malloc(sizeof(char) * 256);
+    char * name_p = malloc(sizeof(char) * 256);
+    
+    
+    snprintf(name_f, 256, "%s/flights.csv",path);
+    snprintf(name_r, 256, "%s/reservations.csv",path);
+    snprintf(name_u, 256, "%s/users.csv",path);
+    snprintf(name_p, 256, "%s/passengers.csv",path);
 
-    FILE *file = fopen(name, "r");
+    FILE *file_f = fopen(name_f, "r");
+    FILE *file_r = fopen(name_r, "r");
+    FILE *file_u = fopen(name_u, "r");
+    FILE *file_p = fopen(name_p, "r");
 
-        if(file == NULL){
-            free(name);
-            printf("\nDiretoria inexistente\n\n");
+        if(file_f == NULL || file_r == NULL || file_u == NULL || file_p == NULL){
+            free(name_f);free(name_r);free(name_u);free(name_r);
+
+            if(file_f != NULL)fclose(file_f);
+            if(file_r != NULL)fclose(file_r);
+            if(file_u != NULL)fclose(file_u);
+            if(file_p != NULL)fclose(file_p);
+
+            printf("\nDiretoria inválida\n\n");
             return NULL;
         }
 
-    int amount_f = aproximated_amount_of_lines_of_a_file(file);
-    int amount_u = 24 * amount_f; 
-    int amount_r = 24 * amount_f; 
-
+    int amount_f = aproximated_amount_of_lines_of_a_file(file_f,"id;airline;plane_model;seats;ori;des;schedule_departure_date;schedule_arrival_date;real_departure_date;real_arrival_date");
+    int amount_u = aproximated_amount_of_lines_of_a_file(file_u,"id;name;sex;pass;ccid;name;sex;pass;cc");
+    int amount_r = aproximated_amount_of_lines_of_a_file(file_r,"id;user;htarsin;end;ppn;breakfast;ratingid;user;htlid;name;stars;tax;begin;end;ppn;breakfast;ratingid;user;htlid;name;stars;tax;begin;end;ppn;breakfast;rating");
+    int amount_p = aproximated_amount_of_lines_of_a_file(file_p,"flight_id;user_id");
 
         printf("\n\nFlights [%d]\nReservations [%d]\nUsers[%d]\n\n",amount_f,amount_r,amount_u);
 
-    free(name);
-    fclose(file);
+            free(name_f);free(name_r);free(name_u);free(name_p);
+            fclose(file_f);fclose(file_r);fclose(file_u);fclose(file_p);
 
-    return init_almanac(amount_f,amount_u,amount_r);
+    return init_almanac(amount_f,amount_u,amount_r,amount_p);
 
 }
 
@@ -115,7 +146,7 @@ void almanac_count_passengers(Almanac *almanac,char * path){
     FILE * file = fopen(passengers, "r");
 
 
-    while (getline(&line, &len, file) != -1) {
+    for(int i = 0; getline(&line, &len, file) != -1; i++) {
 
         flight_id = NULL;
         user_id = NULL;
@@ -127,12 +158,14 @@ void almanac_count_passengers(Almanac *almanac,char * path){
 
         if(strlen(user_id)>0){
             user_id[strlen(user_id)-1] = '\0';
-            if(almanac_get_user_node(almanac,user_id) != NULL){
+            if(user_almanac_get_individual_user(almanac->user,user_id) != NULL){
 
                 if(strlen(flight_id)> 0){
                     (almanac)->passenger[atoi(flight_id)-1]++;
-
+                    almanac->valid_passengers_list[almanac->valid_passengers_amount] = i;
+                    almanac->valid_passengers_amount++;
                 }
+                // printf("(%d %d) ",almanac->valid_passengers_list[almanac->valid_passengers_amount-1], almanac->valid_passengers_amount);
             }
         }
         
@@ -145,83 +178,29 @@ void almanac_count_passengers(Almanac *almanac,char * path){
     fclose(file);
 }
 
-static void get_sdepartures(void * Flight, char *** g_list,char *** b_list, int * amount){
-
-    char * date = NULL;
-    
-    switch ((*amount)){
-        case 0:
-        
-                date = get_flightSDEPARTURE(Flight);
-
-
-                (*amount) += (strncmp((*g_list)[0],date,10)==0);    //mesmo dia
-                (*amount) += (strncmp((*g_list)[0],date,7)==0);     //mesmo mes
-                (*amount) += (strncmp((*g_list)[0],date,4)==0);     //mesmo ano
-
-                free(date);
-
-            break;
-        case 1:
-        
-                date = get_flightSDEPARTURE(Flight);
-
-
-                (*amount) += (strncmp((*g_list)[0],date,10)==0);    //mesmo dia
-                (*amount) += (strncmp((*g_list)[0],date,7)==0);     //mesmo mes
-
-                free(date);
-
-            break;
-        case 2:
-        
-                date = get_flightSDEPARTURE(Flight);
-
-
-                (*amount) += (strncmp((*g_list)[0],date,10)==0);    //mesmo dia
-
-                free(date);
-
-            break;
-
-        default:
-            break;
-        }
-        (*b_list) = (*g_list);
-}
 
 void almanac_add_passengers(Almanac * almanac, char * user_id, char * flight_id){
 
-    int amount = 0;
-    user_almanac_get_amount_flights(almanac->user,user_id,&amount);
+    const char * sdeparture = get_flightSDEPARTURE(almanac_get_flight(almanac,flight_id));
+    char * copy = strdup(sdeparture);
+    // sdeparture[strlen(sdeparture)-9] = '\0';
 
-    char * sdeparture = get_flightSDEPARTURE(almanac_get_flight(almanac,flight_id));
+    // int amount = 0;
+    // char ** list = user_almanac_get_flights(almanac->user,user_id,&amount);
 
-    sdeparture[strlen(sdeparture)-9] = '\0';
+    calendar_add(almanac->counter,copy,1,is_unique_passenger(almanac->user,user_id,copy),date_add_unique_passengers);
 
-        if(amount>0){
-            char ** list = malloc(sizeof(char *));
-            list[0] = sdeparture;
-            amount = 0;
+    free(copy);
 
-            get_tlines(almanac_get_user_flights(almanac,user_id),&list,&list,&amount,get_sdepartures);
+    // for(int i = 0; i < amount; i++)
+    // free(list[i]); 
 
+    // free(list);
 
-
-            calendar_add(almanac->counter,sdeparture,1,amount,date_add_unique_passengers);
-
-            free(list);
-        }
-
-        else
-        calendar_add(almanac->counter,sdeparture,1,0,date_add_unique_passengers);
-
-
-
-
-    user_almanac_add_flight(almanac->user,user_id,almanac_get_flight(almanac,flight_id)); 
-
-    free(sdeparture);
+    user_almanac_add_flight(almanac->user,
+                            user_id,
+                            almanac_get_flight(almanac,flight_id),
+                            sdeparture); 
 
 }
 void almanac_add_user(Almanac *almanac,char * id, char *name, char *birth_date, short sex, char *country_code, short account_status, char *account_creation, char * passport){
@@ -250,17 +229,32 @@ void almanac_add_reservation(Almanac *almanac,char *id, short id_hotel, char *us
 
 ////////////////////////////////////////////////////////
 unsigned int almanac_get_seats(Almanac *almanac, int target){
-    return almanac->passenger[target];
+    unsigned int x = almanac->passenger[target];
+    return x;
 }
+
+int almanac_get_valid_passenger(Almanac *almanac){
+
+    
+    if(almanac->valid_passengers_list[almanac->valid_passengers_id] == almanac->valid_passengers_start){
+        almanac->valid_passengers_id++;
+        almanac->valid_passengers_start++;
+    // printf("(%d)[%d] == %d\n",(almanac->valid_passengers_list[almanac->valid_passengers_id]),almanac->valid_passengers_id,almanac->valid_passengers_start);
+        return 1;
+    }
+
+
+    almanac->valid_passengers_start++;
+    return 0;
+}
+
 void * almanac_get_user(Almanac *almanac, char * target){
     return user_almanac_get_individual_user(almanac->user,target);
 }
 void * almanac_get_prefix(Almanac *almanac){
     return user_almanac_get_prefix(almanac->user);
 }
-void * almanac_get_user_node(Almanac *almanac, char * target){
-    return user_almanac_get_user(almanac->user,target);
-}
+
 
 void * almanac_get_flight(Almanac *almanac, char * target){
     void * flight = flight_almanac_get_flight(almanac->flight,target);
@@ -274,10 +268,7 @@ void * almanac_get_airport_flights(Almanac *almanac, char * target){
     void * airport = flight_almanac_get_airport_flights(almanac->flight,target);
     return airport;
 }
-void ** almanac_get_all_airport(Almanac *almanac, int * amount){
-    void ** airports = flight_almanac_get_airport_general(almanac->flight,amount);
-    return airports;
-}
+
 void almanac_get_airport_delays(Almanac *almanac, char *** list_of_names, int ** list_of_med, int * amount){
     flight_almanac_get_airport_delays(almanac->flight,list_of_names,list_of_med,amount);
 }
@@ -292,31 +283,19 @@ void * almanac_get_reservation(Almanac *almanac, char * target){
     void * reservation = reservation_almanac_get_reservation(almanac->reservation,target);
     return reservation;
 }
-void * almanac_get_hotel(Almanac *almanac, char * target){
-    void * hotel = reservation_almanac_get_hotel(almanac->reservation,target);
-    return hotel;
-}
-int almanac_get_hotel_num_res(Almanac *almanac, char * target){
-    int hotel = reservation_almanac_get_hotel_num_res(almanac->reservation,target);
-    return hotel;
+char ** almanac_get_hotel(Almanac *almanac, char * target, int * amount, int argumentos, void (*f)(void *,char ***,int i,int argumentos)){
+    return reservation_almanac_get_hotel(almanac->reservation,target,amount,argumentos,f);
 }
 
-void * almanac_get_user_flights(Almanac * almanac, char * target){
-    return user_almanac_use_flights(almanac->user, target);
+char ** almanac_get_user_reservations(Almanac * almanac, char * target, int * amount){
+    return user_almanac_get_reservations(almanac->user,target,amount);
 }
-void * almanac_get_user_reservations(Almanac * almanac, char * target){
-    return user_almanac_use_reservations(almanac->user, target);
+char ** almanac_get_user_flights(Almanac * almanac, char * target, int * amount){
+    return user_almanac_get_flights(almanac->user,target,amount);
 }
 
-void almanac_get_user_reservations_flights(Almanac * almanac, char * target, int * n_flights, int * n_reservations){
 
-    user_almanac_get_amount_flights(almanac->user,target,n_flights);
-    user_almanac_get_amount_reservations(almanac->user,target,n_reservations);
-
-}
 void almanac_get_dates(Almanac * almanac,char ** arguments,int num_arguments,int * amount,int ** year, int ** user, int ** fli, int ** res,int ** pas, int ** uni_pas){
-
     calendar_get(almanac->counter,arguments,num_arguments,amount,year, user, fli, res,pas, uni_pas);
-
 }
 ////////////////////////////////////////////////////////

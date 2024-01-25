@@ -31,7 +31,7 @@ void * flight_almanac_get_flight(Flight_Almanac *almanac, char * target);
 void * flight_almanac_get_airport_direct(Flight_Almanac *almanac, char * target);
 void * flight_almanac_get_airport_flights(Flight_Almanac *almanac, char * target);
 
-void ** flight_almanac_get_airport_general(Flight_Almanac *almanac, int * amount);
+// char ** flight_almanac_get_airport_general(Flight_Almanac *almanac, int * amount);
 void flight_almanac_sort_airport_delays(Flight_Almanac *almanac);
 void flight_almanac_get_airport_delays(Flight_Almanac *almanac, char *** list_of_names, int ** list_of_med, int * amount);
 void flight_almanac_get_airport_years(Flight_Almanac *almanac, char * target, char *** list_of_names, int ** list_of_passengers, int * amount);

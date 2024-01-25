@@ -17,7 +17,7 @@ static void str_flights(FILE * file,void * flight,char ** arguments,int * n, cha
 
 
     char * id = get_flightID(flight);
-    char * sdeparture = get_flightSDEPARTURE(flight);
+    char * sdeparture = strdup(get_flightSDEPARTURE(flight));
     char * destination = get_flightDESTINATION(flight);
     char * airline = get_flightAIRLINE(flight);
     char * plane_model = get_flightMODEL(flight);
@@ -75,8 +75,7 @@ static void query5_getter(FILE * file,Almanac * box, char ** arguments, char F){
     void * airport_flights = almanac_get_airport_flights(box,arguments[1]);
 
     int nf = 0;
-    get_every_node2(file,airport_flights,arguments,&nf,F,str_flights);
-    
+    get_every_node(file,airport_flights,arguments,&nf,F,str_flights);
 }
 
 

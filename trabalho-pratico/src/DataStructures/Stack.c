@@ -40,21 +40,21 @@ void push(Stack* stack, void* data) {
 
 
 ////////////////////////////////////////////////////////
-void ** stack_to_array(Stack *stack, int *numMembers) {
+char ** stack_to_char_array(Stack * stack, int * amount, int argumentos, void (*f)(void *,char ***,int i,int argumentos)){
     if (stack == NULL || stack->size == 0) {
-        *numMembers = 0;
+        *amount = 0;
         return NULL;
     }
 
-    void **members = malloc(stack->size * sizeof(void *));
+    *amount = stack->size;
+    char **members = malloc(stack->size  * argumentos * sizeof(char *));
     Stack_Node *current = stack->top;
     
     for(int i = 0;current != NULL; i++) {
-        members[i] = current->data;
+        f(current->data,&members,i,argumentos);
         current = current->next;
     }
 
-    *numMembers = stack->size;
     return members;
 }
 ////////////////////////////////////////////////////////

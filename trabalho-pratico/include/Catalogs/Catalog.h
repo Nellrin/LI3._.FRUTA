@@ -15,7 +15,7 @@ typedef struct almanac Almanac;
 
 
 ////////////////////////////////////////////////////////
-Almanac * init_almanac(int amount_f, int amount_u, int amount_r);
+// Almanac * init_almanac(int amount_f, int amount_u, int amount_r);
 Almanac * set_up_almanac(char * path);
 void free_almanac(Almanac * a);
 ////////////////////////////////////////////////////////
@@ -40,26 +40,21 @@ void * almanac_get_flight(Almanac *almanac, char * target);
 void * almanac_get_airport(Almanac *almanac, char * target);
 void * almanac_get_airport_flights(Almanac *almanac, char * target);
 
-void ** almanac_get_all_airport(Almanac *almanac, int * amount);
 void almanac_get_airport_delays(Almanac *almanac, char *** list_of_names, int ** list_of_med, int * amount);
 void almanac_sort_flight_delays(Almanac * almanac);
 void almanac_get_airport_year(Almanac *almanac,char * target, char *** list_of_names, int ** list_of_passengers, int * amount);
 
-
+int almanac_get_valid_passenger(Almanac *almanac);
 
 void * almanac_get_reservation(Almanac *almanac, char * target);
-void * almanac_get_hotel(Almanac *almanac, char * target);
-int almanac_get_hotel_num_res(Almanac *almanac, char * target);
+char ** almanac_get_hotel(Almanac *almanac, char * target, int * amount, int argumentos, void (*f)(void *,char ***,int i,int argumentos));
 
 
 
-void * almanac_get_user_node(Almanac *almanac, char * target);
 void * almanac_get_prefix(Almanac *almanac);
 void * almanac_get_user(Almanac *almanac, char * target);
-void almanac_get_user_reservations_flights(Almanac * almanac, char * target, int * n_flights, int * n_reservations);
-// void almanac_get_user_amount_flights(Almanac * almanac, char * target, int * n_flights);
-void * almanac_get_user_flights(Almanac * almanac, char * target);
-void * almanac_get_user_reservations(Almanac * almanac, char * target);
+char ** almanac_get_user_flights(Almanac * almanac, char * target, int * amount);
+char ** almanac_get_user_reservations(Almanac * almanac, char * target, int * amount);
 
 
 void almanac_get_dates(Almanac * almanac,char ** arguments,int num_arguments,int * amount,int ** year, int ** user, int ** fli, int ** res,int ** pas, int ** uni_pas);

@@ -18,7 +18,7 @@ void push(Stack*, void*);
 
 
 ////////////////////////////////////////////////////////
-void ** stack_to_array(Stack *, int *);
+char ** stack_to_char_array(Stack * stack, int * amount, int argumentos, void (*f)(void *,char ***,int i,int argumentos));
 ////////////////////////////////////////////////////////
 
 #endif

@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -11,34 +11,12 @@
 #include "../../include/DataStructures/Flights.h"
 #include "../../include/DataStructures/Reservations.h"
 #include "../../include/Queries/2Query.h"
+#include "../../include/Tools/Utilities.h"
 
 
+static char * strcat_list(char ** list_id,char ** list_dates, short F, int n, short mixed){
 
-
-static void line_flight(void * a, char *** list_id, char *** list_dates, int * n){
-    Flight * f = (Flight *) a;
-
-    (*list_id)[(*n)] = get_flightID(f);
-    (*list_dates)[(*n)] = get_flightSDEPARTURE(f);
-    
-    (*list_dates)[(*n)][10] = '\0';
-    
-
-    (*n) ++;
-
-}
-static void line_reservation(void * a, char *** list_id, char *** list_dates, int * n){
-    Reservation * f = (Reservation *) a;
-
-    (*list_id)[(*n)] = get_reservationID(f);
-    (*list_dates)[(*n)] = get_reservationBEGIN(f);
-        
-    (*n) ++;
-}
-
-static char * strcat_list( char ** list_id,char ** list_dates, short F, int n, short mixed){
-
-    char * line = malloc(sizeof(char) * 20000);
+    char * line = malloc(sizeof(char) * 200 * n);
     char * x = malloc(sizeof(char) * 20);
     line[0] = '\0';
     
@@ -53,7 +31,7 @@ static char * strcat_list( char ** list_id,char ** list_dates, short F, int n, s
                 strcat(line, "id: ");
                 strcat(line, list_id[i]);
                 strcat(line, "\ndate: ");
-                strcat(line, list_dates[i]);
+                strncat(line, list_dates[i],10);
 
                     if(mixed){
                         if(strstr(list_id[i],"Book")!=NULL)
@@ -75,7 +53,7 @@ static char * strcat_list( char ** list_id,char ** list_dates, short F, int n, s
         for(int i = 0; i < n; i++){
             strcat(line,list_id[i]);
             strcat(line,";");
-            strcat(line,list_dates[i]);
+            strncat(line,list_dates[i],10);
 
             if(mixed){
                 if(strstr(list_id[i],"Book")!=NULL)
@@ -92,130 +70,98 @@ static char * strcat_list( char ** list_id,char ** list_dates, short F, int n, s
     return line;
 
 }
+
+static int good_strcmp(char* str1, char* str2, char* id1, char* id2){
+
+    int res = strcmp(str2,str1);
+
+    if(!res)
+    res = strcmp(id1,id2);
+
+    return res;
+}
+
 static char * query2_getter(Almanac * box, char ** arguments,int n_arguments,char F){
-    int nf = 0,nr = 0;
+    
     char * result = NULL;
     
-    almanac_get_user_reservations_flights(box,arguments[1],&nf,&nr);
-    
-    char **list_flights_id = malloc(sizeof(char *) * nf);
-    char **list_flights_dates = malloc(sizeof(char *) * nf);
-    char **list_reservations_id = malloc(sizeof(char *) * nr);
-    char **list_reservations_dates = malloc(sizeof(char *) * nr);
+    if(n_arguments == 3){
+        char ** list = NULL;
+        int n = 0;
+                        if(!strcmp(arguments[2],"flights"))
+                        list = almanac_get_user_flights(box,arguments[1],&n);
+                            
+                        if(!strcmp(arguments[2],"reservations"))
+                        list = almanac_get_user_reservations(box,arguments[1],&n);
+        
+        
+        char ** ids = malloc(sizeof(char *) * n);
+        char ** dates = malloc(sizeof(char *) * n);
 
-    nf = 0;
-    nr = 0;
+                        for(int i = 0; i < n*2; i+=2){
+                            ids[i/2] = list[i];
+                            dates[i/2] = list[i+1];
+                        }
 
-    void * flights = almanac_get_user_flights(box,arguments[1]);
-    void * reservations = almanac_get_user_reservations(box,arguments[1]);
+                        free(list);
 
-    get_tlines(flights, &list_flights_id,&list_flights_dates, &nf, line_flight);
-    get_tlines(reservations, &list_reservations_id,&list_reservations_dates, &nr, line_reservation);
+        sort_strings(&dates,&ids,n,good_strcmp);
+        result = strcat_list(ids,dates,F,n,0);
 
 
-                    if(n_arguments == 3){
-                                    if(!strcmp(arguments[2],"flights")){
-                                    result = strcat_list(list_flights_id,list_flights_dates,F,nf,0);
+                        for(int i = 0; i < n; i++){
+                            free(ids[i]);
+                            free(dates[i]);
+                        }
 
-                                        for(int i = 0; i < nf; i++){
-                                            free(list_flights_id[i]);
-                                            free(list_flights_dates[i]);
-                                        }
+                        free(ids);
+                        free(dates);
 
-                                        for(int i = 0; i < nr; i++){
-                                            free(list_reservations_id[i]);
-                                            free(list_reservations_dates[i]);
-                                        }
+        return result;
+    }
 
-                                        free(list_flights_id);
-                                        free(list_flights_dates);
-                                        free(list_reservations_id);
-                                        free(list_reservations_dates);
+    if(n_arguments == 2){
 
-                                        return result;
-                                    }
+        int nf = 0;
+        int nr = 0;
+        
+        char **list_flights = almanac_get_user_flights(box,arguments[1],&nf);
+        char **list_reservations = almanac_get_user_reservations(box,arguments[1],&nr);
+            
+            
+            int nt = nf + nr;
 
-                                    else if(!strcmp(arguments[2],"reservations")){
-                                        
-                                    result = strcat_list(list_reservations_id,list_reservations_dates,F,nr,0);
-                                    
-                                        for(int i = 0; i < nf; i++){
-                                            free(list_flights_id[i]);
-                                            free(list_flights_dates[i]);
-                                        }
 
-                                        for(int i = 0; i < nr; i++){
-                                            free(list_reservations_id[i]);
-                                            free(list_reservations_dates[i]);
-                                        }
+            char **merge_id = malloc(sizeof(char *) * nt);
+            char **merge_dates = malloc(sizeof(char *) * nt);
 
-                                        free(list_flights_id);
-                                        free(list_flights_dates);
-                                        free(list_reservations_id);
-                                        free(list_reservations_dates);
-                                    
-                                        return result;
-                                    }
-                    }
+        for(int i = 0; i < nf * 2; i+=2){
+            merge_id[i/2] = list_flights[i];
+            merge_dates[i/2] = list_flights[i+1];
+        }
 
-            if(n_arguments == 2){
-                    int nt = nf + nr;
-                    char **merge_id = malloc(sizeof(char *) * nt);
-                    char **merge_dates = malloc(sizeof(char *) * nt);
+        for(int i = 0; i < nr * 2; i+=2){
+            merge_id[nf + i/2] = list_reservations[i];
+            merge_dates[nf + i/2] = list_reservations[i+1];
 
-                    memcpy(merge_id, list_reservations_id, sizeof(char *) * nr);
-                    memcpy(merge_id + nr, list_flights_id, sizeof(char *) * nf);
+        }
 
-                    memcpy(merge_dates, list_reservations_dates, sizeof(char *) * nr);
-                    memcpy(merge_dates + nr, list_flights_dates, sizeof(char *) * nf);
+                sort_strings(&merge_dates,&merge_id,nt,good_strcmp);             
 
-                        for (int i = 0; i < nt; i++)
-                        for (int j = i + 1; j < nt; j++) {
-                            if(
-                                    (strcmp(merge_dates[i], merge_dates[j]) < 0)
-                                    || 
-                                    (
-                                        (!strcmp(merge_dates[i], merge_dates[j]))
-                                        
-                                        && 
+            result = strcat_list(merge_id,merge_dates,F,nt,1);
+            
+                                for(int i = 0; i < nt; i++){
+                                    free(merge_id[i]);
+                                    free(merge_dates[i]);
+                                }
+                                
+                        free(list_flights);
+                        free(list_reservations);
+                        free(merge_id);
+                        free(merge_dates);
 
-                                        (
-                                            ((strstr(merge_id[i], "Book") != NULL) && (strstr(merge_id[j], "Book") == NULL)) 
-                                            
-                                            || 
-                                            
-                                            ((strstr(merge_id[i], "Book") != NULL) && (strstr(merge_id[j], "Book") != NULL) && (strcmp(merge_id[i], merge_id[j])>0))
-                                        )
-                                        
-                                    )
-                                ) {
-                                swap_pointers((void *)(&merge_dates[i]), (void *)(&merge_dates[j]));
-                                swap_pointers((void *)(&merge_id[i]), (void *)(&merge_id[j]));
-                            }
-                        }                            
-
-                    result = strcat_list(merge_id,merge_dates,F,nt,1);
-                    
-                                        for(int i = 0; i < nf; i++){
-                                            free(list_flights_id[i]);
-                                            free(list_flights_dates[i]);
-                                        }
-                                        
-
-                                        for(int i = 0; i < nr; i++){
-                                            free(list_reservations_id[i]);
-                                            free(list_reservations_dates[i]);
-                                        }
-
-                                        free(list_flights_id);
-                                        free(list_flights_dates);
-                                        free(list_reservations_id);
-                                        free(list_reservations_dates);
-                                        free(merge_id);
-                                        free(merge_dates);
-
-                    return result;
-                }
+            return result;
+        }
 
     return NULL;
 }
@@ -223,8 +169,7 @@ static char * query2_getter(Almanac * box, char ** arguments,int n_arguments,cha
 
 char * query2(Almanac * box, char ** arguments,  int n_arguments, short F){
 
-
-    if(almanac_get_user_node(box,arguments[1])!=NULL)
+    if(almanac_get_user(box,arguments[1])!=NULL)
     if(get_userASTATUS(almanac_get_user(box,arguments[1]))==1)
             return query2_getter(box,arguments,n_arguments,F);
 

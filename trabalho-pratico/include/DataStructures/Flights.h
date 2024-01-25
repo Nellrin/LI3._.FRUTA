@@ -23,7 +23,7 @@ char * get_flightAIRLINE(Flight * a);
 char * get_flightMODEL(Flight * a);
 char * get_flightORIGIN(Flight * a);
 char * get_flightDESTINATION(Flight * a);
-char * get_flightSDEPARTURE(Flight * a);
+const char * get_flightSDEPARTURE(Flight * a);
 char * get_flightSARRIVAL(Flight * a);
 char * get_flightRDEPARTURE(Flight * a);
 int get_flightPASSENGERS(Flight * a);

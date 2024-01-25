@@ -11,7 +11,6 @@
 #include "../../include/DataStructures/Users.h"
 #include "../../include/Queries/8Query.h"
 
-
 static char * strcat_list(short F, double n){
 
     char * line = malloc(sizeof(char) * 100);
@@ -27,52 +26,6 @@ static char * strcat_list(short F, double n){
     return line;
 
 }
-static double get_revenue(void * box, const void * reservation, char * begin, char * end){
-    if(box == NULL) return 0;
-    
-    char * res_begin = get_reservationBEGIN((Reservation*) reservation);
-    char * res_end = get_reservationEND((Reservation*) reservation);
-    char * user_id = get_reservationUSERID((Reservation*) reservation);
-
-
-    double result = 0;
-    int nights = 0;    
-
-
-    if(strcmp(begin,end)>0){
-        swap_pointers((void *)(&begin),(void *)(&end));
-        printf("YE\n");
-    }
-    
-
-    
-    if(!((strcmp(res_end,begin) < 0 || strcmp(res_begin,end) > 0))){
-        char *start = NULL;
-
-        
-            if(strcmp(res_begin, begin) < 0)
-            start = begin;
-    
-            else
-            start = res_begin;
-
-
-        char *finish = NULL;
-        
-            if(strcmp(res_end, end) > 0){
-                finish = end;
-                nights =1;
-            }
-            
-            else
-            finish = res_end;
-
-        nights += string_to_time("%d/%d/%d",start, finish);
-
-
-        result = nights * get_reservationPPN((Reservation*) reservation);
-
-    
 /*
          
         +-----------------------+                       +-----------------------+-----------------------+ 
@@ -87,30 +40,61 @@ static double get_revenue(void * box, const void * reservation, char * begin, ch
         receitas entre 2023/10/01 a 2023/10/02, deverá ser retornado 200€ (duas noites). Por outro lado, caso 
         a reserva seja entre 2023/10/01 a 2023/10/02, deverá ser retornado 100€ (uma noite).
 */
-    }
+static double bill_collector(char ** list, char * start, char * end, int amount){
+    char * S1 = NULL;
+    char * S2 = NULL;
+    double result = 0;
+    int nights = 0;
 
-    free(user_id);
-    free(res_begin); 
-    free(res_end); 
-
-    return result;
-}
-static char * query8_getter(Almanac * box, char ** arguments, char F){
-    char * result = NULL;
-
-        void * hotels = almanac_get_hotel(box,arguments[1]);
-        double value = money_trees(box,hotels,arguments[2],arguments[3], get_revenue);
+    for(int i = 0; i < amount * 3; i+=3){
+        nights = 0;
         
-        result = strcat_list(F,value);
+        if(!((strcmp(list[i + 1],start) < 0 || strcmp(list[i],end) > 0))){
 
+            if(strcmp(list[i], start) < 0) S1 = start;
+            else S1 = list[i];
+        
+                        if(strcmp(list[i + 1], end) > 0){
+                            S2 = end;
+                            nights = 1;
+                        }
+                        else S2 = list[i + 1];
+
+
+            nights += string_to_time("%d/%d/%d",S1, S2);
+
+
+            result += nights * atoi(list[i + 2]);
+        }
+    }
     return result;
 }
+static void get_them_bands(void * a, char *** list, int i, int argumentos){
+    (*list)[i*argumentos] = get_reservationBEGIN((Reservation*) a);
+    (*list)[i*argumentos + 1] = get_reservationEND((Reservation*) a);
 
-
+    (*list)[i*argumentos + 2] = malloc(sizeof(char) * 8);
+    snprintf((*list)[i*argumentos + 2],8,"%d",get_reservationPPN((Reservation*) a));
+}
 char * query8(Almanac * box, char ** arguments, short F){
 
-    if(almanac_get_hotel(box,arguments[1])!=NULL)
-    return query8_getter(box,arguments,F);
+    int amount = 0;
+    char ** lines = almanac_get_hotel(box,arguments[1],&amount,3,get_them_bands);
 
-    return NULL;
+    if(lines==NULL) return NULL;
+
+    if(strcmp(arguments[2],arguments[3])>0)
+    swap_strings((&arguments[2]),(&arguments[3]));
+
+    char * result = strcat_list(F,bill_collector(lines,arguments[2],arguments[3],amount));
+
+    for(int i = 0; i < amount * 3; i +=3){
+        free(lines[i]);
+        free(lines[i + 1]);
+        free(lines[i + 2]);
+    }
+
+    free(lines);
+
+    return result;
 }

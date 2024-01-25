@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../../include/DataStructures/BTree.h"
 ////////////////////////////////////////////////////////
@@ -46,153 +47,65 @@ void free_tree(BTree *root){
 
 
 ////////////////////////////////////////////////////////
-// BTree *search(BTree *root, char *key, int (*compare)(const void *, const char *)) {
-//     if (root == NULL || compare(key, root->data) == 0)
-//     return root;
-
-//     if (compare(root->data, key) < 0)
-//     return search(root->left, key, compare);
-    
-//     else
-//     return search(root->right, key, compare);
-// }
-double do_something(BTree *root, double (*f)(void *)){
-    if (root == NULL)
-    return 0;
-
-    return (do_something(root->left,f)) + (f(root->data)) + (do_something(root->right,f));
-}
-double money_trees(void * box,BTree *root, char * start, char * end, double (*f)(void *,const void *, char *, char *)){
-    if (root == NULL)
-    return 0;
-
-    return (money_trees(box,root->left,start,end,f)) + (f(box,root->data,start,end)) + (money_trees(box,root->right,start,end,f));
-}
-void get_tlines(BTree * root, char *** list_id,char *** list_dates, int * n, void (*f)(void *, char ***,char ***, int *)){
+void get_every_node(FILE * file,BTree * root, char ** arguments,int * n,char F, void (*f)(FILE * file,void *,char **, int *, char)){
 
     if(root->left!=NULL)
-    get_tlines(root->left,list_id,list_dates,n,f);
-    
-    f(root->data,list_id,list_dates,n);
-
-    if(root->right!=NULL)    
-    get_tlines(root->right,list_id,list_dates,n,f);
-}
-void get_prefix(FILE * file,BTree * root, char * prefix, int * n,char F, void (*f)(FILE *, void *, int *,char, char *), short (*g)(void*,char*)){
-
-    if(root->left!=NULL)
-    // if((g(root->left->data,prefix)) || (!g(root->data,prefix)))
-    get_prefix(file,root->left,prefix, n,F, f,g);    
-    
-    f(file,root->data,n,F,prefix);
-
-    if(root->right!=NULL)
-    // if((g(root->right->data,prefix)) || (!g(root->data,prefix)))
-    get_prefix(file,root->right,prefix, n,F, f,g);
-}
-void get_every_node(FILE * file,BTree * root, int * n,char F, void (*f)(FILE * file,void *, int *, char)){
-
-    if(root->left!=NULL)
-    get_every_node(file,root->left,n,F,f);
-    
-    f(file,root->data,n,F);
-
-    if(root->right!=NULL)
-    get_every_node(file,root->right,n,F,f);
-}
-void get_every_node2(FILE * file,BTree * root, char ** arguments,int * n,char F, void (*f)(FILE * file,void *,char **, int *, char)){
-
-    if(root->left!=NULL)
-    get_every_node2(file,root->left,arguments,n,F,f);
+    get_every_node(file,root->left,arguments,n,F,f);
     
     f(file,root->data,arguments,n,F);
 
     if(root->right!=NULL)
-    get_every_node2(file,root->right,arguments,n,F,f);
+    get_every_node(file,root->right,arguments,n,F,f);
 }
 
 
-void general_btree_function(BTree * root, FILE * file, void * box,char ** arguments,char *** resulting_list,double * n,char F, void (*f)(FILE * ,void *,void *,char **,char ***, double *, char)){
-    if(root->left!=NULL)
-    general_btree_function(root->left,file,box,arguments,resulting_list,n,F,f);
-    
-    f(file,root->data,box,arguments,resulting_list,n,F);
+void general_btree_function(BTree * root, char * argument,int * n){
+    if(root == NULL) return;
 
-    if(root->right!=NULL)
-    general_btree_function(root->right,file,box,arguments,resulting_list,n,F,f);
+    int date_day = strncmp(argument,root->data,10);
+        switch ((*n)){
+            case 0:
+                (*n) += (date_day==0);    //mesmo dia
+                (*n) += (strncmp(argument,root->data,7)==0);     //mesmo mes
+                (*n) += (strncmp(argument,root->data,4)==0);     //mesmo ano
+
+            break;
+        case 1:
+                (*n) += (date_day==0);    //mesmo dia
+                (*n) += (strncmp(argument,root->data,7)==0);     //mesmo mes
+
+            break;
+        case 2:
+                (*n) += (date_day==0);    //mesmo dia
+            break;
+
+        default:
+            break;
+        }
+
+
+
+
+    if(root->left!=NULL && (*n) < 3){
+        if((date_day == 0)){
+            if(strncmp(argument,(root->left)->data,4) >= 0)
+            general_btree_function(root->left,argument,n);
+        }
+
+        else
+        general_btree_function(root->left,argument,n);
+    }
+    
+    
+
+    if(root->right!=NULL && (*n) < 3){
+        if((date_day == 0)){
+            if(strncmp(argument,(root->right)->data,4) >= 0)
+            general_btree_function(root->right,argument,n);
+        }
+
+        else
+        general_btree_function(root->right,argument,n);
+    }
 }
-////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-////////////////////////////////////////////////////////
-// BTree *search(BTree *root, char *key, int (*compare)(const void *, const char *)) {
-//     if (root == NULL || compare(key, root->data) == 0)
-//     return root;
-
-//     if (compare(root->data, key) < 0)
-//     return search(root->left, key, compare);
-    
-//     else
-//     return search(root->right, key, compare);
-// }
-// double do_something(BTree *root, double (*f)(void *)){
-//     if (root == NULL)
-//     return 0;
-
-//     return (do_something(root->left,f)) + (f(root->data)) + (do_something(root->right,f));
-// }
-// double money_trees(void * box,BTree *root, char * start, char * end, double (*f)(void *,const void *, char *, char *)){
-//     if (root == NULL)
-//     return 0;
-
-//     return (money_trees(box,root->left,start,end,f)) + (f(box,root->data,start,end)) + (money_trees(box,root->right,start,end,f));
-// }
-// void get_tlines(BTree * root, char *** list_id,char *** list_dates, int * n, void (*f)(void *, char ***,char ***, int *)){
-
-//     if(root->left!=NULL)
-//     get_tlines(root->left,list_id,list_dates,n,f);
-    
-//     f(root->data,list_id,list_dates,n);
-
-//     if(root->right!=NULL)    
-//     get_tlines(root->right,list_id,list_dates,n,f);
-// }
-// void get_prefix(FILE * file,BTree * root, char * prefix, int * n,char F, void (*f)(FILE *, void *, int *,char, char *), short (*g)(void*,char*)){
-
-//     if(root->left!=NULL)
-//     // if((g(root->left->data,prefix)) || (!g(root->data,prefix)))
-//     get_prefix(file,root->left,prefix, n,F, f,g);    
-    
-//     f(file,root->data,n,F,prefix);
-
-//     if(root->right!=NULL)
-//     // if((g(root->right->data,prefix)) || (!g(root->data,prefix)))
-//     get_prefix(file,root->right,prefix, n,F, f,g);
-// }
-// void get_every_node(FILE * file,BTree * root, int * n,char F, void (*f)(FILE * file,void *, int *, char)){
-
-//     if(root->left!=NULL)
-//     get_every_node(file,root->left,n,F,f);
-    
-//     f(file,root->data,n,F);
-
-//     if(root->right!=NULL)
-//     get_every_node(file,root->right,n,F,f);
-// }
-// void get_every_node2(FILE * file,BTree * root, char ** arguments,int * n,char F, void (*f)(FILE * file,void *,char **, int *, char)){
-
-//     if(root->left!=NULL)
-//     get_every_node2(file,root->left,arguments,n,F,f);
-    
-//     f(file,root->data,arguments,n,F);
-
-//     if(root->right!=NULL)
-//     get_every_node2(file,root->right,arguments,n,F,f);
-// }
 ////////////////////////////////////////////////////////
