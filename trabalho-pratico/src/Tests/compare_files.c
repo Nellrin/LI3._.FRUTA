@@ -6,9 +6,10 @@
 
 #include "../../include/Tests/compare_files.h"
 
-int compare_files(short n_file,char * resultado_obtido, char * output_esperado) {
+int compare_files(FILE * file, short n_file,char * resultado_obtido, char * output_esperado) {
     FILE *file_obtido = fopen(resultado_obtido, "r");
     FILE *file_esperado = fopen(output_esperado, "r");
+    char * s = malloc(sizeof(char) * 1024);
 
     if(file_obtido == NULL) {
         printf("+──────────────────────────────────────────────\n");
@@ -16,6 +17,12 @@ int compare_files(short n_file,char * resultado_obtido, char * output_esperado) 
         printf("|Ficheiro %s inexistente\n", output_esperado);
         printf("+──────────────────────────────────────────────\n\n");
         
+            snprintf(s,1024,"+──────────────────────────────────────────────\n"
+                            "|File %d\n|\n"
+                            "|Ficheiro %s inexistente\n"
+                            "+──────────────────────────────────────────────\n\n",n_file,output_esperado);
+            fputs(s,file);   
+            free(s);
         return 0;
     }
 
@@ -36,9 +43,18 @@ int compare_files(short n_file,char * resultado_obtido, char * output_esperado) 
             printf("|Output obtido:   %s\n", obtido);
             printf("+──────────────────────────────────────────────\n\n");
 
+            snprintf(s,1024,"+──────────────────────────────────────────────\n"
+                            "|File %d\n|\n"
+                            "|Line %d\n"
+                            "|Output esperado: %s\n"
+                            "|Output obtido:   %s\n"
+                            "+──────────────────────────────────────────────\n\n",n_file,line,esperado,obtido);
+            fputs(s,file);   
+
             fclose(file_obtido);
             fclose(file_esperado);
             free(esperado);
+            free(s);
             free(obtido);
             return 0;
         }
@@ -51,6 +67,14 @@ int compare_files(short n_file,char * resultado_obtido, char * output_esperado) 
         printf("+──────────────────────────────────────────────\n\n");
         fclose(file_esperado);
         fclose(file_obtido);
+
+            snprintf(s,1024,"+──────────────────────────────────────────────\n"
+                            "|File %d\n|\n"
+                            "|Ficheiros diferem na quantidade de linhas ...\n"
+                            "+──────────────────────────────────────────────\n\n",n_file);
+            fputs(s,file); 
+
+        free(s);
         free(esperado);
         free(obtido);
         return 0;
@@ -60,6 +84,7 @@ int compare_files(short n_file,char * resultado_obtido, char * output_esperado) 
     fclose(file_esperado);
     free(esperado);
     free(obtido);
+    free(s);
     return 1;
 }
 
@@ -80,15 +105,15 @@ void compare_paths(char * path, char * inputs){
     char * output_esperado = malloc(sizeof(char) * 1024);
     char * output_obtido = malloc(sizeof(char) * 1024);
 
+    FILE * tests = fopen("Resultados/Tests/Check_Queries","w");
     for(int number_line = 1;getline(&line, &len, queries_file) != -1; number_line++){
         snprintf(output_esperado,1024,"%s/command%d_output.txt",path,number_line);
         snprintf(output_obtido,1024,"Resultados/command%d_output.txt",number_line);
 
-        correct_queries[atoi(line)-1] += compare_files(number_line,output_obtido,output_esperado);
+        correct_queries[atoi(line)-1] += compare_files(tests,number_line,output_obtido,output_esperado);
         existing_queries[atoi(line)-1] ++;
     }
         
-    FILE * tests = fopen("Resultados/Tests/Check_Queries","w");
     char *s = malloc(sizeof(char) * 1024);
 
         printf("──────────────────────────────────────────────────\n");
