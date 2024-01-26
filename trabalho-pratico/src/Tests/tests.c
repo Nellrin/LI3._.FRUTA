@@ -14,7 +14,7 @@ static void setting_up(char ** path){
 
     Almanac * u = NULL;
 
-        FILE * file = fopen("Resultados/Performance.txt","a");
+        FILE * file = fopen("Resultados/Tests/Performance.txt","a");
         char * line = malloc(sizeof(char) * 1024);
 
 
@@ -161,7 +161,7 @@ int main(int argc, char *argv[]){
         t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
         printf("\n\n\033[1m[Total Time needed]\033[m (%.3fs)\n", t);
     
-        file = fopen("Resultados/Performance.txt","a");
+        file = fopen("Resultados/Tests/Performance.txt","a");
         char * line = malloc(sizeof(char) * 1024);
         snprintf(line,1024,"[Time]: %.3f s\n", t);
         fputs(line,file);

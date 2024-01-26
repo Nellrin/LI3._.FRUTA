@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Wunused-function -pedantic -O3 -march=native -mtune=native -I.
+CFLAGS = -Wall -fopenmp -Wextra -Wunused-function -pedantic -O3 -march=native -mtune=native -I.
 
 SRC_DIR = src
 OBJ_DIR = obj
