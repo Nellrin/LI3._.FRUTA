@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <omp.h>
 
 #include "../include/Catalogs/Catalog.h"
 #include "../include/Tools/Validations.h"
@@ -16,37 +15,17 @@ static Almanac * setting_up(char * path){
 
         u = set_up_almanac(path);
         
-
     if(u != NULL){
-        parser(path,"users",u,valid_user);
-        #pragma omp parallel sections
-        {
-            #pragma omp section
-            {
-                parser(path,"reservations",u,valid_reservation);
-            }
 
-            #pragma omp section
-            {
-                almanac_count_passengers(u,path);
-            }
-        }
+        parser(path,"users",u,valid_user);
+        parser(path,"reservations",u,valid_reservation);
+        
+            almanac_count_passengers(u,path);
 
         parser(path,"flights",u,valid_flight);
-
-        #pragma omp parallel sections
-        {
-            #pragma omp section
-            {
-                parser(path,"passengers",u,valid_passenger);
-            }
-            #pragma omp section
-            {
-                almanac_sort_flight_delays(u);
-            }
-        }
+        parser(path,"passengers",u,valid_passenger);
         
-            
+            almanac_sort_flight_delays(u);
     }
 
     return u;
