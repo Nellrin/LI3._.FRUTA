@@ -189,6 +189,7 @@ void read_query_file(Almanac * box, char * path,short test){
     size_t len = 0;
     char *s = NULL;
     double * times = NULL;
+    int * amount = NULL; 
 
         FILE * file = create_file(path,"r");
         FILE * tests = fopen("Resultados/Tests/Performance_Queries","w");
@@ -196,11 +197,13 @@ void read_query_file(Almanac * box, char * path,short test){
 
     switch (test){
     case 1: 
-    
+        amount = malloc(sizeof(int) * 10);
         times = malloc(sizeof(double) * 10);
         
-        for(int i = 0; i < 10; i++)
-        times[i] = 0;
+        for(int i = 0; i < 10; i++){
+            times[i] = 0;
+            amount[i] = 0;
+        }
 
         s = malloc(sizeof(char) * 1024);
                 snprintf(s,1024,"[Tempo de Execução das Queries]\n\n+─────────+──────────+──────────────\n");
@@ -219,6 +222,7 @@ void read_query_file(Almanac * box, char * path,short test){
 
                 t = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
                 times[atoi(line)-1] += t;
+                amount[atoi(line)-1]++;
                 printf("\033[1m|   [Line %4d: Query %2d]\033[m (%.6fs)\n",(int)i, atoi(line), t);
 
                 snprintf(s,1024,"|Line %4d| Query %2d | %.6fs \n",(int)i, atoi(line), t);
@@ -231,7 +235,7 @@ void read_query_file(Almanac * box, char * path,short test){
                 fputs(s,tests);
 
                 for(int i = 0; i < 10; i++){
-                    snprintf(s,1024,"|  %2d   | %.6f \n",1+i, times[i]);
+                    snprintf(s,1024,"|  %2d   | %.6f \n",1+i, times[i]/amount[i]);
                     fputs(s,tests);
                 }
 
@@ -244,6 +248,7 @@ void read_query_file(Almanac * box, char * path,short test){
             free(line);
             free(s);
             free(times);
+            free(amount);
             fclose(file);
             fclose(tests);
 
